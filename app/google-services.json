@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "630871499523",
+    "firebase_url": "https://currexez.firebaseio.com",
+    "project_id": "currexez",
+    "storage_bucket": "currexez.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630871499523:android:1524cdb436b36d71",
+        "android_client_info": {
+          "package_name": "com.example.kangwenn.currexez"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "630871499523-u22cbr696hareaaa487bjbon8me55okr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kangwenn.currexez",
+            "certificate_hash": "0a58edfce0d6797d4a2886ae4eef6a7519f447e7"
+          }
+        },
+        {
+          "client_id": "630871499523-rntnabhqci947raoedqpeflvvbcnmnnc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdwBgndMU94VrbQH30S2W00d3RTK7tUEA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "630871499523-rntnabhqci947raoedqpeflvvbcnmnnc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
