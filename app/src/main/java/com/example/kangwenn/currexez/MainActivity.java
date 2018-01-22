@@ -1,6 +1,7 @@
 package com.example.kangwenn.currexez;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -20,14 +21,11 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,HomepageFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +51,6 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        MobileAds.initialize(this,"ca-app-pub-2148688310360459~5245440096");
         Fragment fragment = new HomepageFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, fragment, "homepage").commit();
     }
@@ -113,7 +110,7 @@ public class MainActivity extends AppCompatActivity
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Intent i = new Intent(MainActivity.this, LauncherActivity.class);
+                                Intent i = new Intent(getApplicationContext(), LauncherActivity.class);
                                 startActivity(i);
                                 finish();
                             } else {
@@ -131,5 +128,10 @@ public class MainActivity extends AppCompatActivity
     @MainThread
     private void showToast(@StringRes int errorMessageRes) {
         Toast.makeText(getApplicationContext(), errorMessageRes, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

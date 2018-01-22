@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
@@ -32,6 +33,7 @@ public class LauncherActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setTheme(R.style.AppTheme);
         setContentView(R.layout.login);
+        MobileAds.initialize(this,"ca-app-pub-2148688310360459~5245440096");
     }
 
     @Override
