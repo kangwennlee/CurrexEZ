@@ -1,8 +1,13 @@
 package com.example.kangwenn.currexez;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.MainThread;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,6 +17,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -40,6 +53,9 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        MobileAds.initialize(this,"ca-app-pub-2148688310360459~5245440096");
+        Fragment fragment = new HomepageFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, fragment, "homepage").commit();
     }
 
     @Override
@@ -90,12 +106,30 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_logout) {
+            AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Intent i = new Intent(MainActivity.this, LauncherActivity.class);
+                                startActivity(i);
+                                finish();
+                            } else {
+                                showToast(R.string.sign_out_failed);
+                            }
+                        }
+                    });
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @MainThread
+    private void showToast(@StringRes int errorMessageRes) {
+        Toast.makeText(getApplicationContext(), errorMessageRes, Toast.LENGTH_LONG).show();
     }
 }
