@@ -1,12 +1,14 @@
 package com.example.kangwenn.currexez;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -33,6 +35,7 @@ public class HomepageFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private AdView mAdView;
+    ImageButton mRate,mCalculator,mPurchase,mHotel,mHistory,mProfile;
 
     public HomepageFragment() {
         // Required empty public constructor
@@ -74,6 +77,19 @@ public class HomepageFragment extends Fragment {
         mAdView = v.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("E4F7CE788C71C5DC44498B08E010C9AB").build();
         mAdView.loadAd(adRequest);
+        mRate = v.findViewById(R.id.imageButtonRate);
+        mCalculator = v.findViewById(R.id.imageButtonCalculator);
+        mPurchase = v.findViewById(R.id.imageButtonPurchase);
+        mHotel = v.findViewById(R.id.imageButtonHotel);
+        mHistory= v.findViewById(R.id.imageButtonHistory);
+        mProfile= v.findViewById(R.id.imageButtonProfile);
+        mPurchase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(),PurchaseCurrency.class);
+                startActivity(i);
+            }
+        });
         return v;
     }
 

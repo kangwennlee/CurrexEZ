@@ -64,7 +64,7 @@
                 android:background="@drawable/blackborder">
 
                 <ImageButton
-                    android:id="@+id/imageButtonPayMerchant"
+                    android:id="@+id/imageButtonRate"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:src="@drawable/ic_trending_up_black_24dp"
@@ -92,7 +92,7 @@
             android:background="@drawable/blackborder">
 
             <ImageButton
-                android:id="@+id/imageButtonPayFriend"
+                android:id="@+id/imageButtonCalculator"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:src="@drawable/ic_assessment_black_24dp"
@@ -134,7 +134,7 @@
                 android:background="@drawable/blackborder">
 
                 <ImageButton
-                    android:id="@+id/imageButtonNewFriend"
+                    android:id="@+id/imageButtonPurchase"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:src="@drawable/ic_monetization_on_black_24dp"
@@ -161,7 +161,7 @@
             android:background="@drawable/blackborder">
 
             <ImageButton
-                android:id="@+id/imageButtonTopUp"
+                android:id="@+id/imageButtonHotel"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:src="@drawable/ic_hotel_black_24dp"
@@ -229,7 +229,7 @@
             android:background="@drawable/blackborder">
 
             <ImageButton
-                android:id="@+id/imageButtonFriendList"
+                android:id="@+id/imageButtonProfile"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:src="@drawable/ic_person_black_24dp"
