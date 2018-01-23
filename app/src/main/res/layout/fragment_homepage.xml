@@ -7,44 +7,9 @@
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
-        android:id="@+id/userProfile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <ImageButton
-            android:id="@+id/imageViewProfile"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/com_facebook_profile_picture_blank_square"
-            android:contentDescription="Profile Picture"
-            android:adjustViewBounds="true"/>
-
-        <TextView
-            android:id="@+id/textViewName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="User Name"
-            android:textStyle="bold"
-            android:textSize="15sp"/>
-
-        <TextView
-            android:id="@+id/textViewAmount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="Balance"
-            android:textStyle="bold"
-            android:textSize="13sp"/>
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/functionLayout"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_below="@+id/userProfile"
         android:orientation="horizontal"
         android:baselineAligned="false"
         android:layout_marginTop="5dp">

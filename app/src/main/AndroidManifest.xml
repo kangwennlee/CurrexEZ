@@ -29,6 +29,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".PurchaseCurrency" />
+        <activity android:name=".UserProfile"></activity>
     </application>
 
 </manifest>
