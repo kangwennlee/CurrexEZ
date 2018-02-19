@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context="com.example.kangwenn.currexez.PurchaseCurrency"
         android:gravity="top"
+        android:orientation="vertical"
+        android:paddingEnd="20dp"
         android:paddingStart="20dp"
-        android:paddingEnd="20dp">
+        tools:context="com.example.kangwenn.currexez.PurchaseCurrency">
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select a currency"
             android:layout_marginTop="20dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:drawableLeft="@drawable/ic_attach_money_black_24dp" />
+            android:drawableLeft="@drawable/ic_attach_money_black_24dp"
+            android:text="Select a currency"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <Spinner
-            android:id="@+id/spinner2"
+            android:id="@+id/spinnerSelectCurr"
             android:layout_width="wrap_content"
             android:layout_height="50dp" />
 
@@ -31,10 +31,10 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter Amount"
             android:layout_marginTop="20dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:drawableLeft="@drawable/ic_attach_money_black_24dp"
+            android:text="Enter Amount"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
             />
 
         <EditText
@@ -49,11 +49,11 @@
             android:id="@+id/textView10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:drawableLeft="@drawable/ic_credit_card_black_24dp"
             android:text="Select Payment Method"
             android:textAlignment="viewStart"
-            android:layout_marginTop="20dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:drawableLeft="@drawable/ic_credit_card_black_24dp"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <RadioButton
             android:id="@+id/radioButton"
@@ -72,8 +72,8 @@
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Proceed to payment"
-            android:layout_marginTop="300dp"/>
+            android:layout_marginTop="300dp"
+            android:text="Proceed to payment" />
 
 
     </LinearLayout>

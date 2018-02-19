@@ -90,7 +90,8 @@ public class HomepageFragment extends Fragment {
         mCalculator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent i = new Intent(getContext(), CurrencyCalculator.class);
+                startActivity(i);
             }
         });
         mPurchase.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +119,8 @@ public class HomepageFragment extends Fragment {
         mProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent i = new Intent(getContext(), UserProfile.class);
+                startActivity(i);
             }
         });
         return v;
