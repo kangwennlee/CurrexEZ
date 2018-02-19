@@ -27,15 +27,12 @@ public class HomepageFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    ImageButton mRate, mCalculator, mPurchase, mHotel, mHistory, mProfile;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     private OnFragmentInteractionListener mListener;
-
     private AdView mAdView;
-    ImageButton mRate,mCalculator,mPurchase,mHotel,mHistory,mProfile;
 
     public HomepageFragment() {
         // Required empty public constructor
@@ -86,7 +83,8 @@ public class HomepageFragment extends Fragment {
         mRate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent i = new Intent(getContext(), CurrencyRates.class);
+                startActivity(i);
             }
         });
         mCalculator.setOnClickListener(new View.OnClickListener() {

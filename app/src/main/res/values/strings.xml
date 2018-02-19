@@ -21,4 +21,39 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="USD">US dollar</string>
+    <string name="JPY">Japanese yen</string>
+    <string name="BGN">Bulgarian lev</string>
+    <string name="CZK">Czech koruna</string>
+    <string name="DKK">Danish krone</string>
+    <string name="GBP">Pound sterling</string>
+    <string name="HUF">Hungarian forint</string>
+    <string name="PLN">Polish zloty</string>
+    <string name="RON">Romanian leu</string>
+    <string name="SEK">Swedish krona</string>
+    <string name="CHF">Swiss franc</string>
+    <string name="ISK">Icelandic krona</string>
+    <string name="NOK">Norwegian krone</string>
+    <string name="HRK">Croatian kuna</string>
+    <string name="RUB">Russian rouble</string>
+    <string name="TRY">Turkish lira</string>
+    <string name="AUD">Australian dollar</string>
+    <string name="BRL">Brazilian real</string>
+    <string name="CAD">Canadian dollar</string>
+    <string name="CNY">Chinese yuan renminbi</string>
+    <string name="HKD">Hong Kong dollar</string>
+    <string name="IDR">Indonesian rupiah</string>
+    <string name="ILS">Israeli shekel</string>
+    <string name="INR">Indian rupee</string>
+    <string name="KRW">South Korean won</string>
+    <string name="MXN">Mexican peso</string>
+    <string name="MYR">Malaysian ringgit</string>
+    <string name="NZD">New Zealand dollar</string>
+    <string name="PHP">Philippine piso</string>
+    <string name="SGD">Singapore dollar</string>
+    <string name="THB">Thai baht</string>
+    <string name="ZAR">South African rand</string>
+
 </resources>

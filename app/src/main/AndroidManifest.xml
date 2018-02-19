@@ -29,7 +29,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".PurchaseCurrency" />
-        <activity android:name=".UserProfile"></activity>
+        <activity android:name=".UserProfile" />
+        <activity android:name=".CurrencyRates"></activity>
     </application>
 
 </manifest>
