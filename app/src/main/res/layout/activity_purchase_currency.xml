@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:drawableLeft="@drawable/ic_attach_money_black_24dp"
-            android:text="Select a currency"
+            android:text="Select a currency to purchase"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <Spinner
@@ -33,17 +33,35 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:drawableLeft="@drawable/ic_attach_money_black_24dp"
-            android:text="Enter Amount"
+            android:text="Enter amount you wish to purchase"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             />
 
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Enter Amount"
-            android:inputType="numberDecimal" />
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/editTextPurAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="8"
+                android:hint="Enter Amount"
+                android:inputType="numberDecimal" />
+
+            <TextView
+                android:id="@+id/textViewCurrency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/textViewPrice"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp" />
 
         <TextView
             android:id="@+id/textView10"
@@ -55,26 +73,30 @@
             android:textAlignment="viewStart"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
-        <RadioButton
-            android:id="@+id/radioButton"
+        <RadioGroup
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:duplicateParentState="false"
-            android:text="Credit Card" />
+            android:layout_height="wrap_content">
 
-        <RadioButton
-            android:id="@+id/radioButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Online Payment" />
+            <RadioButton
+                android:id="@+id/radioButtonCredit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:duplicateParentState="false"
+                android:text="Credit Card" />
+
+            <RadioButton
+                android:id="@+id/radioButtonOnline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Online Payment" />
+        </RadioGroup>
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/buttonProceed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="300dp"
+            android:layout_marginTop="20dp"
             android:text="Proceed to payment" />
-
 
     </LinearLayout>
 
