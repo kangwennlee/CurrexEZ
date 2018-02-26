@@ -8,49 +8,66 @@
     tools:context="com.example.kangwenn.currexez.UserProfile">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <EditText
-            android:id="@+id/editTextName"
+            android:id="@+id/etName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Name" />
+
+            android:hint="@string/nameHint"/>
 
         <Spinner
             android:id="@+id/spinnerNation"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:dropDownWidth="match_parent"
+            android:spinnerMode="dialog"
+            />
 
         <DatePicker
-            android:id="@+id/datePicker2"
+            android:id="@+id/dpUserBirthday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <EditText
-            android:id="@+id/editText4"
+            android:id="@+id/etPhoneNum"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="phone"
-            android:text="Phone Number" />
+
+            android:hint="@string/PhoneNumberHint"/>
 
         <EditText
-            android:id="@+id/editText5"
+            android:id="@+id/etAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Address" />
+
+            android:hint="@string/addressHint"/>
 
         <EditText
-            android:id="@+id/editText6"
+            android:id="@+id/etPassport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="IC/Passport" />
+
+            android:hint="@string/passportHint"/>
+
+
+        <Button
+            android:id="@+id/btnConfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/btnConfirmUser"/>
 
     </LinearLayout>
+
 </ScrollView>
