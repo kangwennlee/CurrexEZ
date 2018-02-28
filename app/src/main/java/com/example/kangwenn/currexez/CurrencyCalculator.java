@@ -1,6 +1,7 @@
 package com.example.kangwenn.currexez;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -40,6 +41,9 @@ public class CurrencyCalculator extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, currName);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCurrency.setAdapter(adapter);
+        Intent intent = getIntent();
+        int position = intent.getIntExtra("currency", 0);
+        spinnerCurrency.setSelection(position);
         try {
             Double amount = Double.parseDouble(editTextAmount.getText().toString());
             float currRate = sharedPref.getFloat(currencyName[spinnerCurrency.getSelectedItemPosition()], 0);

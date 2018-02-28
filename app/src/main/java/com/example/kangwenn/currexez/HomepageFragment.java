@@ -2,6 +2,7 @@ package com.example.kangwenn.currexez;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -28,6 +30,7 @@ public class HomepageFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     ImageButton mRate, mCalculator, mPurchase, mHotel, mHistory, mProfile;
+    TextView currencyScroll;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -74,6 +77,7 @@ public class HomepageFragment extends Fragment {
         mAdView = v.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("E4F7CE788C71C5DC44498B08E010C9AB").build();
         mAdView.loadAd(adRequest);
+        currencyScroll = v.findViewById(R.id.currencyscroll);
         mRate = v.findViewById(R.id.imageButtonRate);
         mCalculator = v.findViewById(R.id.imageButtonCalculator);
         mPurchase = v.findViewById(R.id.imageButtonPurchase);
@@ -123,6 +127,19 @@ public class HomepageFragment extends Fragment {
                 startActivity(i);
             }
         });
+        SharedPreferences sharedPref = getContext().getSharedPreferences("com.example.kangwenn.RATES", Context.MODE_PRIVATE);
+        String[] currencyName = {"USD", "AUD", "CNY", "THB", "JPY", "GBP", "KRW", "HKD", "SGD"};
+        String text = "Last updated: " + sharedPref.getString("date", null) + "\n";
+        try {
+            for (int i = 0; i < currencyName.length; i++) {
+                float currRate = sharedPref.getFloat(currencyName[i], 0);
+                String string = getResources().getString(getResources().getIdentifier(currencyName[i], "string", getContext().getPackageName()));
+                text += string + " : " + currRate + "\n";
+            }
+            currencyScroll.setText(text);
+        } catch (RuntimeException e) {
+
+        }
         return v;
     }
 
