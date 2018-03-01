@@ -18,7 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class UserProfile extends AppCompatActivity implements View.OnClickListener {
+public class EditProfile extends AppCompatActivity implements View.OnClickListener {
 
     //component view var
     private EditText etName,etPhoneNum,etAddress,etPassport;
@@ -38,7 +38,7 @@ public class UserProfile extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_profile);
+        setContentView(R.layout.activity_edit_profile);
 
         //set the firebase var
         firebaseAuth = FirebaseAuth.getInstance();
@@ -68,7 +68,7 @@ public class UserProfile extends AppCompatActivity implements View.OnClickListen
         btnConfirm =  findViewById(R.id.btnConfirm);
         btnConfirm.setOnClickListener(this);
 
-        progressDialog = new ProgressDialog(UserProfile.this);
+        progressDialog = new ProgressDialog(EditProfile.this);
     }
 
 
@@ -93,7 +93,7 @@ public class UserProfile extends AppCompatActivity implements View.OnClickListen
                 if (databaseError == null){
                     progressDialog.dismiss();
                 }else{
-                    Toast.makeText(UserProfile.this,databaseError.toString(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditProfile.this, databaseError.toString(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
