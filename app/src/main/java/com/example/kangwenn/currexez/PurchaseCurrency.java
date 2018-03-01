@@ -262,6 +262,7 @@ public class PurchaseCurrency extends AppCompatActivity {
             //TextView v = findViewById(R.id.encrypted_message);
             //v.setVisibility(View.VISIBLE);
             //v.setText(Base64.encodeToString(encrypted, 0 /* flags */));
+            //FirebaseDatabase hereee
             Toast.makeText(this, "Successfully purchased!", Toast.LENGTH_SHORT).show();
             finish();
         }

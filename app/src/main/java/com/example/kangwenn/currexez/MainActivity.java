@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity
             Intent i = new Intent(getApplicationContext(), CurrencyRates.class);
             startActivity(i);
         } else if (id == R.id.nav_profile) {
-            Intent i = new Intent(getApplicationContext(), EditProfile.class);
+            Intent i = new Intent(getApplicationContext(), UserProfile.class);
             startActivity(i);
         } else if (id == R.id.nav_logout) {
             AuthUI.getInstance()

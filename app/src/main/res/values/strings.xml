@@ -21,7 +21,7 @@
 
     <string name="cancel">Cancel</string>
     <string name="use_password">Use password</string>
-    <string name="sign_in">Sign in</string>
+    <string name="finger_title">Fingerprint Authentication</string>
     <string name="ok">OK</string>
     <string name="password">Password</string>
     <string name="fingerprint_description">Confirm fingerprint to continue</string>
@@ -89,7 +89,7 @@
     <string name="addressHint">Address</string>
     <string name="passportHint">IC/Passport</string>
     <string name="btnConfirmUser">Confirm</string>
-    
+
     <!--String Array -->
     <string-array name="national">
         <item>--Choose Your Country--</item>

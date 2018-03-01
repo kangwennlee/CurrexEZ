@@ -92,6 +92,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 if (databaseError == null){
                     progressDialog.dismiss();
+                    Toast.makeText(EditProfile.this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
+                    finish();
                 }else{
                     Toast.makeText(EditProfile.this, databaseError.toString(), Toast.LENGTH_SHORT).show();
                 }

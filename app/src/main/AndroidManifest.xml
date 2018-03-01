@@ -31,7 +31,8 @@
         <activity android:name=".PurchaseCurrency" />
         <activity android:name=".EditProfile" />
         <activity android:name=".CurrencyRates" />
-        <activity android:name=".CurrencyCalculator"></activity>
+        <activity android:name=".CurrencyCalculator" />
+        <activity android:name=".UserProfile"></activity>
     </application>
 
 </manifest>
