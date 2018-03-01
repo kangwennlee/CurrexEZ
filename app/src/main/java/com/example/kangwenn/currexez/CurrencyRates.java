@@ -17,7 +17,7 @@ import java.util.Date;
 public class CurrencyRates extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
     ListView listView;
-    TextView textDate;
+    TextView textDate, textHeading;
     String[] currencyName = {"USD", "AUD", "CNY", "THB", "JPY", "GBP", "KRW", "HKD", "SGD"};
 
     @Override
@@ -26,6 +26,7 @@ public class CurrencyRates extends AppCompatActivity {
         setContentView(R.layout.activity_currency_rates);
         listView = findViewById(R.id.currencyList);
         textDate = findViewById(R.id.textDate);
+        textHeading = findViewById(R.id.textHeading);
         retrieveRates();
         swipeRefreshLayout = findViewById(R.id.swiperefresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -52,8 +53,9 @@ public class CurrencyRates extends AppCompatActivity {
     protected void retrieveRates() {
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("com.example.kangwenn.RATES", Context.MODE_PRIVATE);
         Date currentDate = new Date(System.currentTimeMillis());
+        textHeading.setText("Rate for " + sharedPref.getString("date", null) +"\n1 Malaysian Ringgit you buy:");
         String text = "";
-        textDate.setText("Last updated: " + currentDate.toString());
+        textDate.setText("Last refreshed: " + currentDate.toString());
         String[] currencyN = new String[currencyName.length];
         try {
             for (int i = 0; i < currencyName.length; i++) {

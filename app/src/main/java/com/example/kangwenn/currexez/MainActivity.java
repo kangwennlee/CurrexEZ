@@ -20,6 +20,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -31,13 +33,15 @@ import com.android.volley.toolbox.Volley;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,HomepageFragment.OnFragmentInteractionListener {
-
+    TextView userName, userEmail;
+    ImageView userProfilePic;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,6 +118,18 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        userName = findViewById(R.id.textUserName);
+        userEmail = findViewById(R.id.textUserEmail);
+        userProfilePic = findViewById(R.id.imageViewUserPic);
+        String name = "", email = "";
+        try{
+            name = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+            email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        }catch (NullPointerException e){
+
+        }
+        userName.setText(name);
+        userEmail.setText(email);
         return true;
     }
 
@@ -138,16 +154,21 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
+        if (id == R.id.nav_rate) {
+            Intent i = new Intent(getApplicationContext(), CurrencyRates.class);
+            startActivity(i);
+        } else if (id == R.id.nav_calculator) {
+            Intent i = new Intent(getApplicationContext(), CurrencyCalculator.class);
+            startActivity(i);
+        } else if (id == R.id.nav_purchase) {
+            Intent i = new Intent(getApplicationContext(), PurchaseCurrency.class);
+            startActivity(i);
+        } else if (id == R.id.nav_history) {
+            Intent i = new Intent(getApplicationContext(), CurrencyRates.class);
+            startActivity(i);
+        } else if (id == R.id.nav_profile) {
+            Intent i = new Intent(getApplicationContext(), UserProfile.class);
+            startActivity(i);
         } else if (id == R.id.nav_logout) {
             AuthUI.getInstance()
                     .signOut(this)
@@ -164,7 +185,6 @@ public class MainActivity extends AppCompatActivity
                         }
                     });
         }
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

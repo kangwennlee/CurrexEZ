@@ -7,14 +7,12 @@
     tools:context="com.example.kangwenn.currexez.CurrencyRates">
 
     <TextView
-        android:id="@+id/textView11"
+        android:id="@+id/textHeading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="10dp"
         android:paddingLeft="10dp"
-        android:text="1 Malaysian Ringgit you buys:"
         android:textColor="@color/black"
+        android:layout_marginTop="2dp"
         android:textSize="15sp" />
 
     <android.support.v4.widget.SwipeRefreshLayout

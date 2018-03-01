@@ -129,7 +129,7 @@ public class HomepageFragment extends Fragment {
         });
         SharedPreferences sharedPref = getContext().getSharedPreferences("com.example.kangwenn.RATES", Context.MODE_PRIVATE);
         String[] currencyName = {"USD", "AUD", "CNY", "THB", "JPY", "GBP", "KRW", "HKD", "SGD"};
-        String text = "Last updated: " + sharedPref.getString("date", null) + "\n";
+        String text = "Rate for " + sharedPref.getString("date", null) + "\n";
         try {
             for (int i = 0; i < currencyName.length; i++) {
                 float currRate = sharedPref.getFloat(currencyName[i], 0);

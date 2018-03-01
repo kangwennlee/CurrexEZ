@@ -209,7 +209,8 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_below="@+id/functionLayout3">
+        android:layout_below="@+id/functionLayout3"
+        android:layout_marginTop="5dp">
 
         <TextView
             android:id="@+id/currencyscroll"
