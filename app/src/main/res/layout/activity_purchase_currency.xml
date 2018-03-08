@@ -24,7 +24,7 @@
 
         <Spinner
             android:id="@+id/spinnerSelectCurr"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="50dp" />
 
         <TextView
@@ -44,10 +44,11 @@
 
             <EditText
                 android:id="@+id/editTextPurAmount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
                 android:ems="8"
                 android:hint="Enter Amount"
+                android:focusable="false"
                 android:inputType="numberDecimal" />
 
             <TextView
@@ -81,14 +82,14 @@
             <RadioButton
                 android:id="@+id/radioButtonCredit"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:duplicateParentState="false"
                 android:text="Credit Card" />
 
             <RadioButton
                 android:id="@+id/radioButtonOnline"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:text="Online Payment" />
         </RadioGroup>
 

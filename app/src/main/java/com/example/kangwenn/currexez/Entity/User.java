@@ -8,16 +8,16 @@ public class User {
     private String userID;
     private String name;
     private String nation;
-    private String brithday;
+    private String birthday;
     private String phoneNumber;
     private String address;
     private String icAndPassport;
 
-    public User(String userID, String name, String nation, String brithday, String phoneNumber, String address, String icAndPassport) {
+    public User(String userID, String name, String nation, String birthday, String phoneNumber, String address, String icAndPassport) {
         this.userID = userID;
         this.name = name;
         this.nation = nation;
-        this.brithday = brithday;
+        this.birthday = birthday;
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.icAndPassport = icAndPassport;
@@ -47,12 +47,12 @@ public class User {
         this.nation = nation;
     }
 
-    public String getBrithday() {
-        return brithday;
+    public String getBirthday() {
+        return birthday;
     }
 
-    public void setBrithday(String brithday) {
-        this.brithday = brithday;
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 
     public String getPhoneNumber() {

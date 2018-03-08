@@ -1,5 +1,6 @@
 package com.example.kangwenn.currexez;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,16 +19,19 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 public class EditProfile extends AppCompatActivity implements View.OnClickListener {
 
     //component view var
-    private EditText etName,etPhoneNum,etAddress,etPassport;
+    private EditText etName,etPhoneNum,etAddress,etPassport,etBirthday;
     private Spinner spNation;
     private String spValue;
-    private DatePicker dpUserBirthday;
-    private int day,month,year;
     private Button btnConfirm;
     private ProgressDialog progressDialog;
+    Calendar myCalendar;
 
     // Firebase var
     private FirebaseAuth firebaseAuth;
@@ -50,6 +54,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         etPhoneNum = findViewById(R.id.etPhoneNum);
         etAddress = findViewById(R.id.etAddress);
         etPassport = findViewById(R.id.etPassport);
+        etBirthday = findViewById(R.id.Birthday);
 
         //set the spinner text value
         spNation = findViewById(R.id.spinnerNation);
@@ -59,10 +64,25 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         spNation.setAdapter(adapter);
 
         //find and set the DatePicker view component
-        dpUserBirthday = findViewById(R.id.dpUserBirthday);
-        day = dpUserBirthday.getDayOfMonth();
-        month = dpUserBirthday.getMonth();
-        year = dpUserBirthday.getYear();
+        myCalendar = Calendar.getInstance();
+        etBirthday.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                          int dayOfMonth) {
+                        // TODO Auto-generated method stub
+                        myCalendar.set(Calendar.YEAR, year);
+                        myCalendar.set(Calendar.MONTH, monthOfYear);
+                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        updateLabel();
+                    }
+
+                };
+            }
+        });
 
         //find the Button view component
         btnConfirm =  findViewById(R.id.btnConfirm);
@@ -78,7 +98,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         String address = etAddress.getText().toString();
         String passport = etPassport.getText().toString();
         spValue = spNation.getSelectedItem().toString();
-        String brithday = checkDigit(day)+"/"+checkDigit(month)+"/"+year;
+        String birthday = etBirthday.getText().toString();
 
         //get the user UID
         String id = currentFirebaseUser.getUid();
@@ -86,7 +106,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         progressDialog.setMessage("Uploading...");
         progressDialog.show();
 
-        User user = new User(id, name, spValue, brithday, phoneNum, address, passport);
+        User user = new User(id, name, spValue, birthday, phoneNum, address, passport);
         databaseUser.child(id).setValue(user, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -112,5 +132,12 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     public String checkDigit(int number) {
         return number<=9 ? "0"+number:
                 String.valueOf(number);
+    }
+
+    private void updateLabel() {
+        String myFormat = "MM/dd/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        etBirthday.setText(sdf.format(myCalendar.getTime()));
     }
 }
