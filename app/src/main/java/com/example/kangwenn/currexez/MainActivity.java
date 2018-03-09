@@ -65,13 +65,13 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         retrieveCurrencyRates();
-        Fragment fragment = new HomepageFragment();
-        getFragmentManager().beginTransaction().replace(R.id.frame_container, fragment, "homepage").commit();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Fragment fragment = new HomepageFragment();
+        this.getFragmentManager().beginTransaction().replace(R.id.frame_container, fragment, "homepage").commit();
     }
 
     protected void retrieveCurrencyRates() {
