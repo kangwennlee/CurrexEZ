@@ -123,6 +123,10 @@ public class LauncherActivity extends AppCompatActivity{
             }
 
             showToast(R.string.unknown_sign_in_response);
+        } else if (requestCode == 101) {
+            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(i);
+            finish();
         }
     }
     @MainThread

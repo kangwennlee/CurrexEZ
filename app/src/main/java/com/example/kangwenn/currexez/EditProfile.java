@@ -121,27 +121,29 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                etAddress.setText(dataSnapshot.child("address").getValue().toString());
-                String birthday = dataSnapshot.child("birthday").getValue().toString();
-                etBirthday.setText(birthday);
-                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy", Locale.US);
-                try {
-                    Date date = formatter.parse(birthday);
-                    myCalendar.setTime(date);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                if (dataSnapshot.exists()) {
+                    etAddress.setText(dataSnapshot.child("address").getValue().toString());
+                    String birthday = dataSnapshot.child("birthday").getValue().toString();
+                    etBirthday.setText(birthday);
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy", Locale.US);
+                    try {
+                        Date date = formatter.parse(birthday);
+                        myCalendar.setTime(date);
 
-                etPassport.setText(dataSnapshot.child("icAndPassport").getValue().toString());
-                etName.setText(dataSnapshot.child("name").getValue().toString());
-                int position = 0;
-                for (int i = 0; i < nation.length; i++) {
-                    if (nation[i].equals(dataSnapshot.child("nation").getValue().toString())) {
-                        position = i;
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
+                    etPassport.setText(dataSnapshot.child("icAndPassport").getValue().toString());
+                    etName.setText(dataSnapshot.child("name").getValue().toString());
+                    int position = 0;
+                    for (int i = 0; i < nation.length; i++) {
+                        if (nation[i].equals(dataSnapshot.child("nation").getValue().toString())) {
+                            position = i;
+                        }
+                    }
+                    spNation.setSelection(position);
+                    etPhoneNum.setText(dataSnapshot.child("phoneNumber").getValue().toString());
                 }
-                spNation.setSelection(position);
-                etPhoneNum.setText(dataSnapshot.child("phoneNumber").getValue().toString());
             }
 
             @Override

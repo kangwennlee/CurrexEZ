@@ -76,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Enter your IC/Passport" />
+            android:text="Enter your Identity Card Number" />
 
         <EditText
             android:id="@+id/etPassport"
@@ -92,7 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Enter your address as stated in IC/Passport" />
+            android:text="Enter your address as stated in IC" />
 
         <EditText
             android:id="@+id/etAddress"

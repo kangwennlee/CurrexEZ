@@ -87,7 +87,7 @@
     <string name="nameHint">Full Name</string>
     <string name="PhoneNumberHint">Phone Number</string>
     <string name="addressHint">Address</string>
-    <string name="passportHint">IC/Passport</string>
+    <string name="passportHint">IC Number</string>
     <string name="btnConfirmUser">Confirm</string>
 
     <!--String Array -->
