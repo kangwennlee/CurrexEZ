@@ -25,14 +25,13 @@ import java.util.Locale;
 
 public class EditProfile extends AppCompatActivity implements View.OnClickListener {
 
+    Calendar myCalendar;
     //component view var
     private EditText etName,etPhoneNum,etAddress,etPassport,etBirthday;
     private Spinner spNation;
     private String spValue;
     private Button btnConfirm;
     private ProgressDialog progressDialog;
-    Calendar myCalendar;
-
     // Firebase var
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseUser;
@@ -65,22 +64,21 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
         //find and set the DatePicker view component
         myCalendar = Calendar.getInstance();
-        etBirthday.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel();
+            }
 
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                          int dayOfMonth) {
-                        // TODO Auto-generated method stub
-                        myCalendar.set(Calendar.YEAR, year);
-                        myCalendar.set(Calendar.MONTH, monthOfYear);
-                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        updateLabel();
-                    }
-
-                };
+        };
+        etBirthday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(EditProfile.this, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
 

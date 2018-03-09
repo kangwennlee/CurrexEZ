@@ -29,8 +29,8 @@
             android:id="@+id/textView13"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Select your nationality"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="20dp"
+            android:text="Select your nationality" />
 
         <Spinner
             android:id="@+id/spinnerNation"
@@ -48,16 +48,19 @@
 
         <EditText
             android:id="@+id/Birthday"
-            android:hint="Birthday"
             android:layout_width="match_parent"
-            android:layout_height="50dp" />
+            android:layout_height="50dp"
+            android:clickable="true"
+            android:focusable="false"
+            android:hint="Birthday"
+            android:longClickable="false" />
 
         <TextView
             android:id="@+id/textView18"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="TextView" />
+            android:text="Enter your mobile phone number" />
 
         <EditText
             android:id="@+id/etPhoneNum"
@@ -69,27 +72,11 @@
             android:inputType="phone" />
 
         <TextView
-            android:id="@+id/textView19"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="TextView" />
-
-        <EditText
-            android:id="@+id/etAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/addressHint"
-
-            android:inputType="textPersonName" />
-
-        <TextView
             android:id="@+id/textView20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="TextView" />
+            android:text="Enter your IC/Passport" />
 
         <EditText
             android:id="@+id/etPassport"
@@ -98,6 +85,21 @@
             android:ems="10"
             android:hint="@string/passportHint"
 
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/textView19"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Enter your address as stated in IC/Passport" />
+
+        <EditText
+            android:id="@+id/etAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/addressHint"
             android:inputType="textPersonName" />
 
 
