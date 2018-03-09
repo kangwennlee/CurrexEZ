@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Enter your mobile phone number" />
+            android:text="Enter your mobile phone number (numbers only)" />
 
         <EditText
             android:id="@+id/etPhoneNum"
@@ -76,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Enter your Identity Card Number" />
+            android:text="Enter your Identity Card Number (xxxxxx-xx-xxxx)" />
 
         <EditText
             android:id="@+id/etPassport"

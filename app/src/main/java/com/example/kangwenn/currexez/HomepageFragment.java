@@ -117,7 +117,8 @@ public class HomepageFragment extends Fragment {
         mHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent i = new Intent(getContext(), PurchaseHistory.class);
+                startActivity(i);
             }
         });
         mProfile.setOnClickListener(new View.OnClickListener() {

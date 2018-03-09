@@ -34,7 +34,9 @@
         <activity android:name=".CurrencyCalculator" />
         <activity android:name=".UserProfile" />
         <activity android:name=".AboutUs" />
-        <activity android:name=".PurchaseHistory"></activity>
+        <activity android:name=".PurchaseHistory" />
+        <activity android:name=".SuccessPaymentActivity" />
+        <activity android:name=".CardPayment"></activity>
     </application>
 
 </manifest>
