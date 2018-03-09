@@ -141,7 +141,7 @@ public class PurchaseCurrency extends AppCompatActivity {
             currName[i] = string;
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, currName);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.spinner_item);
         spinnerSelectCurr.setAdapter(adapter);
         editTextPurAmount.addTextChangedListener(new TextWatcher() {
             @Override
@@ -156,7 +156,7 @@ public class PurchaseCurrency extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (editTextPurAmount.getText().toString().isEmpty() || Integer.valueOf(editTextPurAmount.getText().toString()).equals(0)) {
+                if (editTextPurAmount.getText().toString().isEmpty() || Double.valueOf(editTextPurAmount.getText().toString()).equals(0)) {
                     textViewTotal.setText("");
                     buttonProceed.setEnabled(false);
                 } else {
