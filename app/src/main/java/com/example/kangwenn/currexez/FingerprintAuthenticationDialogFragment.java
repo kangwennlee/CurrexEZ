@@ -242,7 +242,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
         // Callback from FingerprintUiHelper. Let the activity know that authentication was
         // successful.
         mActivity.onPurchased(true /* withFingerprint */, mCryptoObject);
-        dismiss();
+        //dismiss();
     }
 
     @Override

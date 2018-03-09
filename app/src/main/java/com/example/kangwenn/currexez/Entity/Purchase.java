@@ -6,12 +6,14 @@ package com.example.kangwenn.currexez.Entity;
 
 public class Purchase {
     private String currency;
-    private Double amount;
+    private Long amount;
+    private Long amountInRM;
     private String payMethod;
 
-    public Purchase(String currency, Double amount, String payMethod) {
+    public Purchase(String currency, Long amount, Long amountInRM, String payMethod) {
         this.currency = currency;
         this.amount = amount;
+        this.amountInRM = amountInRM;
         this.payMethod = payMethod;
     }
 
@@ -23,12 +25,20 @@ public class Purchase {
         this.currency = currency;
     }
 
-    public Double getAmount() {
+    public Long getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(Long amount) {
         this.amount = amount;
+    }
+
+    public Long getAmountInRM() {
+        return amountInRM;
+    }
+
+    public void setAmountInRM(Long amountInRM) {
+        this.amountInRM = amountInRM;
     }
 
     public String getPayMethod() {

@@ -26,6 +26,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.kangwenn.currexez.Entity.Purchase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -63,6 +70,10 @@ public class PurchaseCurrency extends AppCompatActivity {
     private KeyGenerator mKeyGenerator;
     private SharedPreferences mSharedPreferences;
 
+    private FirebaseAuth firebaseAuth;
+    private DatabaseReference databaseUser;
+    private FirebaseUser currentFirebaseUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +86,10 @@ public class PurchaseCurrency extends AppCompatActivity {
         radioButtonCredit = findViewById(R.id.radioButtonCredit);
         radioButtonOnline = findViewById(R.id.radioButtonOnline);
         radioGroup = findViewById(R.id.radioGroupMethod);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        databaseUser = FirebaseDatabase.getInstance().getReference("PurchaseHistory");
+        currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         try {
             mKeyStore = KeyStore.getInstance("AndroidKeyStore");
@@ -263,9 +278,34 @@ public class PurchaseCurrency extends AppCompatActivity {
             //v.setVisibility(View.VISIBLE);
             //v.setText(Base64.encodeToString(encrypted, 0 /* flags */));
             //FirebaseDatabase hereee
-            Toast.makeText(this, "Successfully purchased!", Toast.LENGTH_SHORT).show();
+            storePurchase();
             finish();
         }
+    }
+
+    public void storePurchase(){
+        String currency = spinnerSelectCurr.getSelectedItem().toString();
+        Long purchaseAmount = Long.parseLong(editTextPurAmount.getText().toString());
+        Long purchaseAmountInRM = Long.parseLong(textViewTotal.getText().toString().substring(23));
+
+        int selectID = radioGroup.getCheckedRadioButtonId();
+        RadioButton radioButton = findViewById(selectID);
+        String selectRadioButtonValue = radioButton.getText().toString();
+
+        //get the user UID
+        String id = currentFirebaseUser.getUid();
+
+        Purchase purchase = new Purchase(currency,purchaseAmount,purchaseAmountInRM,selectRadioButtonValue);
+        databaseUser.child(id).setValue(purchase, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError == null){
+                    Toast.makeText(PurchaseCurrency.this, "Successfully purchased!", Toast.LENGTH_SHORT).show();
+                }else{
+
+                }
+            }
+        });
     }
 
     /**
