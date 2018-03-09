@@ -106,7 +106,9 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         etBirthday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(EditProfile.this, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                DatePickerDialog mDatePicker = new DatePickerDialog(EditProfile.this, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
+                mDatePicker.getDatePicker().setMaxDate(System.currentTimeMillis());
+                mDatePicker.show();
             }
         });
 
@@ -184,6 +186,10 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View view) {
         //Validation here
+        String regxforIC = "^\\d{6}-\\d{2}-\\d{4}$";
+        String regxforPhoneNum = "^6?01\\d{8}$";
+
+
         if (!etName.getText().toString().isEmpty() &&
                 !etPhoneNum.getText().toString().isEmpty() &&
                 !etPassport.getText().toString().isEmpty() &&
@@ -191,7 +197,13 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                 !etAddress.getText().toString().isEmpty() &&
                 !etBirthday.getText().toString().isEmpty() &&
                 spNation.getSelectedItemPosition() != 0) {
-            uploadInformation();
+            if(!etPassport.getText().toString().matches(regxforIC)){
+                Toast.makeText(EditProfile.this, "Please enter correct format of Malaysia IC", Toast.LENGTH_SHORT).show();
+            }else if(!etPhoneNum.getText().toString().matches(regxforPhoneNum)){
+                Toast.makeText(EditProfile.this, "Please enter correct format of Malaysia Phone Number", Toast.LENGTH_SHORT).show();
+            }else{
+                uploadInformation();
+            }
         } else {
             Toast.makeText(EditProfile.this, "Please complete the form", Toast.LENGTH_SHORT).show();
         }
