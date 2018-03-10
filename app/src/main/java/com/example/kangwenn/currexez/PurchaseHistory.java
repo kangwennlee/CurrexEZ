@@ -48,11 +48,10 @@ public class PurchaseHistory extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds : dataSnapshot.getChildren() ){
                     Purchase purchase = ds.getValue(Purchase.class);
-
-                    String date = ds.getKey().toString().substring(0,4) + "/" + ds.getKey().toString().substring(4,6) + "/" + ds.getKey().toString().substring(6,8);
+                    String date = ds.getKey().substring(0,4) + "/" + ds.getKey().substring(4,6) + "/" + ds.getKey().substring(6,8);
                     //String month = ds.getKey().toString().substring(4,5);
                     //String date = ds.getKey().toString().substring(6,7);
-                    String time = ds.getKey().toString().substring(9,11) + ":" + ds.getKey().toString().substring(11,13) + ":" +ds.getKey().toString().substring(12,14);
+                    String time = ds.getKey().substring(9,11) + ":" + ds.getKey().substring(11,13) + ":" +ds.getKey().substring(12,14);
 
                     String values = "Currency : " + purchase.getCurrency()
                                     + "\nPuchase Amount : " + round(purchase.getAmount(),2)
@@ -75,7 +74,8 @@ public class PurchaseHistory extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getApplicationContext(), SuccessPaymentActivity.class);
-                intent.putExtra("currency", arrayList.get(i));
+                String string = arrayList.get(i);
+                intent.putExtra("purchase", string);
                 startActivity(intent);
             }
         });

@@ -129,4 +129,8 @@
         <item>United State</item>
         <item>Vietnam</item>
     </string-array>
+
+    <string name="invalid">Card invalid</string>
+    <string name="scan_with_card_io">Scan with card.io</string>
+    <string name="error">Please select a card</string>
 </resources>

@@ -2,6 +2,7 @@ package com.example.kangwenn.currexez;
 
 import android.app.KeyguardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
@@ -52,6 +53,8 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+
+import static com.example.kangwenn.currexez.PurchaseHistory.round;
 
 public class PurchaseCurrency extends AppCompatActivity {
     static final String DEFAULT_KEY_NAME = "default_key";
@@ -281,8 +284,22 @@ public class PurchaseCurrency extends AppCompatActivity {
             //TextView v = findViewById(R.id.encrypted_message);
             //v.setVisibility(View.VISIBLE);
             //v.setText(Base64.encodeToString(encrypted, 0 /* flags */));
+            if(radioButtonCredit.isChecked()){
+                Intent i = new Intent(this,CardPayment.class);
+                startActivityForResult(i,150);
+            }else{
+                storePurchase();
+            }
             //FirebaseDatabase hereee
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode==151){
             storePurchase();
+        }else{
+            Toast.makeText(getApplicationContext(), "Payment Cancelled!", Toast.LENGTH_LONG).show();
             finish();
         }
     }
@@ -299,19 +316,30 @@ public class PurchaseCurrency extends AppCompatActivity {
         //get the user UID
         String id = currentFirebaseUser.getUid();
 
-        Purchase purchase = new Purchase(currency,purchaseAmount,purchaseAmountInRM,selectRadioButtonValue);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        final Purchase purchase = new Purchase(currency,purchaseAmount,purchaseAmountInRM,selectRadioButtonValue);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss",Locale.US);
         String date = sdf.format(new Date());
+        String time = date.substring(9,11) + ":" + date.substring(11,13) + ":" + date.substring(12,14);
+        final String values = "Currency : " + purchase.getCurrency()
+                + "\nPuchase Amount : " + round(purchase.getAmount(),2)
+                + "\nPuchase Amount In MYR : " + round(purchase.getAmountInRM(),2)
+                + "\nPayment Method : " + purchase.getPayMethod()
+                + "\nDate : " + date + "\nTime : " + time;
         databaseUser.child(id).child(date).setValue(purchase, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 if (databaseError == null){
-                    Toast.makeText(PurchaseCurrency.this, "Successfully purchased!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(),SuccessPaymentActivity.class);
+                    intent.putExtra("purchase",values);
+                    Toast.makeText(getApplicationContext(), "Payment Successful!", Toast.LENGTH_LONG).show();
+                    startActivity(intent);
                 }else{
+                    Toast.makeText(getApplicationContext(), "Database failed. Please contact our customer service", Toast.LENGTH_LONG).show();
 
                 }
             }
         });
+        finish();
     }
 
     /**

@@ -93,6 +93,41 @@
                 android:text="Online Payment" />
         </RadioGroup>
 
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:drawableLeft="@drawable/ic_credit_card_black_24dp"
+            android:text="Select Collection Date"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+
+        <EditText
+            android:id="@+id/editText2"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:clickable="true"
+            android:focusable="false"
+            android:hint="Date"
+            android:longClickable="false" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:drawableLeft="@drawable/ic_credit_card_black_24dp"
+            android:text="Select Collection Location"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+        <EditText
+            android:id="@+id/editText3"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:inputType="textPersonName"
+            android:hint="Location" />
+
         <Button
             android:id="@+id/buttonProceed"
             android:layout_width="wrap_content"
