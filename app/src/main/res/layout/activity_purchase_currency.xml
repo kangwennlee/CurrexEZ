@@ -84,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:duplicateParentState="false"
-                android:text="Credit Card" />
+                android:text="Debit Card" />
 
             <RadioButton
                 android:id="@+id/radioButtonOnline"

@@ -42,6 +42,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import javax.crypto.BadPaddingException;
@@ -66,6 +68,8 @@ public class PurchaseCurrency extends AppCompatActivity {
     Button buttonProceed;
     RadioButton radioButtonCredit, radioButtonOnline;
     RadioGroup radioGroup;
+    Double total;
+
     private KeyStore mKeyStore;
     private KeyGenerator mKeyGenerator;
     private SharedPreferences mSharedPreferences;
@@ -178,7 +182,7 @@ public class PurchaseCurrency extends AppCompatActivity {
                     try {
                         Double amount = Double.parseDouble(editTextPurAmount.getText().toString());
                         float currRate = sharedPref.getFloat(currencyName[spinnerSelectCurr.getSelectedItemPosition()], 0);
-                        Double total = amount / currRate;
+                        total = amount / currRate;
                         textViewTotal.setText("This will cost you: RM " + String.format(Locale.US, "%.2f", total));
                     } catch (NumberFormatException e) {
 
@@ -196,7 +200,7 @@ public class PurchaseCurrency extends AppCompatActivity {
                 try {
                     Double amount = Double.parseDouble(editTextPurAmount.getText().toString());
                     float currRate = sharedPref.getFloat(currencyName[position], 0);
-                    Double total = amount / currRate;
+                    total = amount / currRate;
                     textViewTotal.setText("This will cost you: RM " + String.format(Locale.US, "%.2f", total));
                 } catch (NumberFormatException e) {
 
@@ -285,8 +289,8 @@ public class PurchaseCurrency extends AppCompatActivity {
 
     public void storePurchase(){
         String currency = spinnerSelectCurr.getSelectedItem().toString();
-        Long purchaseAmount = Long.parseLong(editTextPurAmount.getText().toString());
-        Long purchaseAmountInRM = Long.parseLong(textViewTotal.getText().toString().substring(23));
+        Double purchaseAmount = Double.parseDouble(editTextPurAmount.getText().toString());
+        Double purchaseAmountInRM = total;
 
         int selectID = radioGroup.getCheckedRadioButtonId();
         RadioButton radioButton = findViewById(selectID);
@@ -296,7 +300,9 @@ public class PurchaseCurrency extends AppCompatActivity {
         String id = currentFirebaseUser.getUid();
 
         Purchase purchase = new Purchase(currency,purchaseAmount,purchaseAmountInRM,selectRadioButtonValue);
-        databaseUser.child(id).setValue(purchase, new DatabaseReference.CompletionListener() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String date = sdf.format(new Date());
+        databaseUser.child(id).child(date).setValue(purchase, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 if (databaseError == null){
