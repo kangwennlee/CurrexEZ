@@ -176,6 +176,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         progressDialog.setMessage("Uploading...");
         progressDialog.show();
 
+        mFirebaseAnalytics.setUserProperty("nationality", spValue);
+
         User user = new User(id, name, spValue, birthday, phoneNum, address, passport);
         databaseUser.child(id).setValue(user, new DatabaseReference.CompletionListener() {
             @Override
