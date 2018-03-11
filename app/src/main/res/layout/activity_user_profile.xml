@@ -3,10 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.kangwenn.currexez.UserProfile"
     android:padding="15dp"
     android:stretchColumns="1"
-    >
+    tools:context="com.example.kangwenn.currexez.UserProfile">
 
     <TableRow
         android:layout_width="match_parent"
@@ -100,6 +99,19 @@
 
         <TextView
             android:id="@+id/textViewUserPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Photo of IC:" />
+
+        <ImageView
+            android:id="@+id/imageViewIC"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </TableRow>

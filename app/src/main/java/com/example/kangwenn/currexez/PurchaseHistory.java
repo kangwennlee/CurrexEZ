@@ -24,16 +24,23 @@ import java.util.ArrayList;
 
 public class PurchaseHistory extends AppCompatActivity {
 
-    private ListView puchaseHistoryListView;
-
-    private DatabaseReference databaseReference, currentUser;
     FirebaseUser mCurrentUser;
     String userID;
-
+    private ListView puchaseHistoryListView;
+    private DatabaseReference databaseReference, currentUser;
     private ArrayList<String> arrayList = new ArrayList<String>();
     private ArrayAdapter<String> adapter;
 
     private FirebaseAnalytics mFirebaseAnalytics;
+
+    //round the double value
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +54,7 @@ public class PurchaseHistory extends AppCompatActivity {
         currentUser = databaseReference.child(userID);
         puchaseHistoryListView = findViewById(R.id.puchaseHistoryListView);
 
-        currentUser.addValueEventListener(new ValueEventListener() {
+        currentUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds : dataSnapshot.getChildren() ){
@@ -90,15 +97,6 @@ public class PurchaseHistory extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mFirebaseAnalytics.logEvent("click_history",null);
-    }
-
-    //round the double value
-    public static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
-
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
-        return bd.doubleValue();
     }
 
 

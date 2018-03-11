@@ -1,12 +1,15 @@
 package com.example.kangwenn.currexez;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -15,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 
 public class UserProfile extends AppCompatActivity {
     Button editProfile;
@@ -22,6 +26,7 @@ public class UserProfile extends AppCompatActivity {
     DatabaseReference databaseReference, currentUser;
     FirebaseUser mCurrentUser;
     String userID;
+    ImageView imageView;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
@@ -44,11 +49,18 @@ public class UserProfile extends AppCompatActivity {
         userIC = findViewById(R.id.textViewUserIC);
         userNation = findViewById(R.id.textViewUserNationality);
         userPhone = findViewById(R.id.textViewUserPhone);
+        imageView = findViewById(R.id.imageViewIC);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("User");
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mCurrentUser.getUid();
         currentUser = databaseReference.child(userID);
-        currentUser.addValueEventListener(new ValueEventListener() {
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mFirebaseAnalytics.logEvent("click_user_profile", null);
+        currentUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 userAddress.setText(dataSnapshot.child("address").getValue().toString());
@@ -57,6 +69,15 @@ public class UserProfile extends AppCompatActivity {
                 userName.setText(dataSnapshot.child("name").getValue().toString());
                 userNation.setText(dataSnapshot.child("nation").getValue().toString());
                 userPhone.setText(dataSnapshot.child("phoneNumber").getValue().toString());
+                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                FirebaseStorage.getInstance().getReference().child("IC").child(uid).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        BitmapDownloaderTask task = new BitmapDownloaderTask(imageView);
+                        task.execute(uri.toString());
+                    }
+                });
+
             }
 
             @Override
@@ -64,11 +85,5 @@ public class UserProfile extends AppCompatActivity {
 
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mFirebaseAnalytics.logEvent("click_user_profile",null);
     }
 }
