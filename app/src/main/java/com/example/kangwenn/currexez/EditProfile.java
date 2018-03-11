@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kangwenn.currexez.Entity.User;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -45,13 +46,20 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseUser;
     private FirebaseUser currentFirebaseUser;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mFirebaseAnalytics.logEvent("click_edit_profile",null);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
-
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         //set the firebase var
         firebaseAuth = FirebaseAuth.getInstance();
         databaseUser = FirebaseDatabase.getInstance().getReference("User");

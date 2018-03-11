@@ -32,7 +32,15 @@ import com.android.volley.toolbox.Volley;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,6 +49,10 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,HomepageFragment.OnFragmentInteractionListener {
     TextView userName, userEmail;
     ImageView userProfilePic;
+    FirebaseUser currentFirebaseUser;
+    private DatabaseReference mReference;
+    private FirebaseAnalytics mFirebaseAnalytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,12 +76,38 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         retrieveCurrencyRates();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mFirebaseAnalytics.logEvent("app_destroy",null);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        mFirebaseAnalytics.logEvent("click_home",null);
+        mReference = FirebaseDatabase.getInstance().getReference("User");
+        currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        Query query = mReference.child(currentFirebaseUser.getUid());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    Intent i = new Intent(getApplicationContext(), EditProfile.class);
+                    startActivity(i);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         Fragment fragment = new HomepageFragment();
         this.getFragmentManager().beginTransaction().replace(R.id.frame_container, fragment, "homepage").commit();
     }
@@ -177,6 +215,7 @@ public class MainActivity extends AppCompatActivity
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
+                                mFirebaseAnalytics.logEvent("logout",null);
                                 Intent i = new Intent(getApplicationContext(), LauncherActivity.class);
                                 startActivity(i);
                                 finish();

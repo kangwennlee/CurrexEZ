@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 
 /**
@@ -36,6 +37,7 @@ public class HomepageFragment extends Fragment {
     private String mParam2;
     private OnFragmentInteractionListener mListener;
     private AdView mAdView;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     public HomepageFragment() {
         // Required empty public constructor
@@ -66,7 +68,6 @@ public class HomepageFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
 
     @Override
@@ -84,6 +85,8 @@ public class HomepageFragment extends Fragment {
         mHotel = v.findViewById(R.id.imageButtonHotel);
         mHistory= v.findViewById(R.id.imageButtonHistory);
         mProfile= v.findViewById(R.id.imageButtonProfile);
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this.getContext());
         mRate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,6 +114,7 @@ public class HomepageFragment extends Fragment {
                 String url = "https://www.agoda.com";
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
+                mFirebaseAnalytics.logEvent("click_browser",null);
                 startActivity(i);
             }
         });

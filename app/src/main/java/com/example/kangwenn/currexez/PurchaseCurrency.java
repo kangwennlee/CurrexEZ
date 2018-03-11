@@ -1,5 +1,6 @@
 package com.example.kangwenn.currexez;
 
+import android.app.DatePickerDialog;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -28,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kangwenn.currexez.Entity.Purchase;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
@@ -44,6 +47,7 @@ import java.security.NoSuchProviderException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -66,12 +70,14 @@ public class PurchaseCurrency extends AppCompatActivity {
     String[] currencyName = {"USD", "AUD", "CNY", "THB", "JPY", "GBP", "KRW", "HKD", "SGD"};
     String[] currName = new String[currencyName.length];
     Spinner spinnerSelectCurr;
-    EditText editTextPurAmount;
+    EditText editTextPurAmount,editTextDate,editTextLocation;
     TextView textViewTotal, textViewName;
     Button buttonProceed;
     RadioButton radioButtonCredit, radioButtonOnline;
     RadioGroup radioGroup;
     Double total;
+    Calendar myCalendar;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     private KeyStore mKeyStore;
     private KeyGenerator mKeyGenerator;
@@ -93,7 +99,10 @@ public class PurchaseCurrency extends AppCompatActivity {
         radioButtonCredit = findViewById(R.id.radioButtonCredit);
         radioButtonOnline = findViewById(R.id.radioButtonOnline);
         radioGroup = findViewById(R.id.radioGroupMethod);
-
+        editTextDate = findViewById(R.id.editTextCollectionDate);
+        editTextLocation = findViewById(R.id.editTextCollectionLocation);
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         firebaseAuth = FirebaseAuth.getInstance();
         databaseUser = FirebaseDatabase.getInstance().getReference("PurchaseHistory");
         currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -157,6 +166,7 @@ public class PurchaseCurrency extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        mFirebaseAnalytics.logEvent("click_purchase",null);
         sharedPref = getApplicationContext().getSharedPreferences("com.example.kangwenn.RATES", Context.MODE_PRIVATE);
         for (int i = 0; i < currencyName.length; i++) {
             String string = getResources().getString(getResources().getIdentifier(currencyName[i], "string", getApplicationContext().getPackageName()));
@@ -165,6 +175,9 @@ public class PurchaseCurrency extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, currName);
         adapter.setDropDownViewResource(R.layout.spinner_item);
         spinnerSelectCurr.setAdapter(adapter);
+        Intent intent = getIntent();
+        spinnerSelectCurr.setSelection(intent.getIntExtra("purchaseType",0));
+        editTextPurAmount.setText(String.valueOf(intent.getDoubleExtra("purchaseAmount",1.0)));
         editTextPurAmount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -190,7 +203,7 @@ public class PurchaseCurrency extends AppCompatActivity {
                     } catch (NumberFormatException e) {
 
                     }
-                    if (radioButtonCredit.isChecked() || radioButtonOnline.isChecked() && !editTextPurAmount.getText().toString().equals("") && Integer.valueOf(editTextPurAmount.getText().toString()) > 0) {
+                    if (radioButtonCredit.isChecked() || radioButtonOnline.isChecked() && !editTextPurAmount.getText().toString().equals("") && Double.valueOf(editTextPurAmount.getText().toString()) > 0) {
                         buttonProceed.setEnabled(true);
                     }
                 }
@@ -218,7 +231,7 @@ public class PurchaseCurrency extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (!editTextPurAmount.getText().toString().equals("")) {
-                    if (Integer.valueOf(editTextPurAmount.getText().toString()) > 0) {
+                    if (Double.valueOf(editTextPurAmount.getText().toString()) > 0) {
                         buttonProceed.setEnabled(true);
                         if (radioButtonCredit.isChecked()) {
 
@@ -231,6 +244,26 @@ public class PurchaseCurrency extends AppCompatActivity {
                 } else {
                     buttonProceed.setEnabled(false);
                 }
+            }
+        });
+        myCalendar = Calendar.getInstance();
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel();
+            }
+
+        };
+        editTextDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog mDatePicker = new DatePickerDialog(PurchaseCurrency.this, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
+                mDatePicker.getDatePicker().setMinDate(System.currentTimeMillis());
+                mDatePicker.show();
             }
         });
     }
@@ -285,9 +318,11 @@ public class PurchaseCurrency extends AppCompatActivity {
             //v.setVisibility(View.VISIBLE);
             //v.setText(Base64.encodeToString(encrypted, 0 /* flags */));
             if(radioButtonCredit.isChecked()){
+                mFirebaseAnalytics.logEvent("card_payment",null);
                 Intent i = new Intent(this,CardPayment.class);
                 startActivityForResult(i,150);
             }else{
+                mFirebaseAnalytics.logEvent("online_payment",null);
                 storePurchase();
             }
             //FirebaseDatabase hereee
@@ -300,7 +335,6 @@ public class PurchaseCurrency extends AppCompatActivity {
             storePurchase();
         }else{
             Toast.makeText(getApplicationContext(), "Payment Cancelled!", Toast.LENGTH_LONG).show();
-            finish();
         }
     }
 
@@ -312,6 +346,9 @@ public class PurchaseCurrency extends AppCompatActivity {
         int selectID = radioGroup.getCheckedRadioButtonId();
         RadioButton radioButton = findViewById(selectID);
         String selectRadioButtonValue = radioButton.getText().toString();
+
+        String collectionDate = editTextDate.getText().toString();
+        String collectionLoc = editTextLocation.getText().toString();
 
         //get the user UID
         String id = currentFirebaseUser.getUid();
@@ -339,6 +376,13 @@ public class PurchaseCurrency extends AppCompatActivity {
                 }
             }
         });
+        Bundle bundle = new Bundle();
+        bundle.putString("Currency_Purchased",purchase.getCurrency());
+        bundle.putString("Puchase_Amount",purchase.getAmount().toString());
+        bundle.putString("Purchase_Amount_In_MYR",purchase.getAmountInRM().toString());
+        bundle.putString("Date",date);
+        bundle.putString("Time",time);
+        mFirebaseAnalytics.logEvent("purchase_done",bundle);
         finish();
     }
 
@@ -450,6 +494,11 @@ public class PurchaseCurrency extends AppCompatActivity {
                 fragment.show(getFragmentManager(), DIALOG_FRAGMENT_TAG);
             }
         }
+    }
+    private void updateLabel() {
+        String myFormat = "dd/MM/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        editTextDate.setText(sdf.format(myCalendar.getTime()));
     }
 
 }

@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.kangwenn.currexez.Entity.Purchase;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,11 +33,14 @@ public class PurchaseHistory extends AppCompatActivity {
     private ArrayList<String> arrayList = new ArrayList<String>();
     private ArrayAdapter<String> adapter;
 
+    private FirebaseAnalytics mFirebaseAnalytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchase_history);
-
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("PurchaseHistory");
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mCurrentUser.getUid();
@@ -80,6 +84,12 @@ public class PurchaseHistory extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mFirebaseAnalytics.logEvent("click_history",null);
     }
 
     //round the double value

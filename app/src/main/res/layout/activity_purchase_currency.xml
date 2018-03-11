@@ -104,7 +104,7 @@
 
 
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/editTextCollectionDate"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:clickable="true"
@@ -122,7 +122,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/editTextCollectionLocation"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:inputType="textPersonName"

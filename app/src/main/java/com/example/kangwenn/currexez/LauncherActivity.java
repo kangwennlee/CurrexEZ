@@ -12,6 +12,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.ads.MobileAds;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,8 +32,8 @@ public class LauncherActivity extends AppCompatActivity{
     private static final int RC_SIGN_IN = 100;
     private static final String GOOGLE_TOS_URL = "https://www.google.com/policies/terms/";
     private static final String GOOGLE_PRIVACY_POLICY_URL = "https://www.google.com/policies/privacy/";
-    FirebaseUser currentFirebaseUser;
-    private DatabaseReference mReference;
+    private FirebaseAnalytics mFirebaseAnalytics;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,6 +41,9 @@ public class LauncherActivity extends AppCompatActivity{
         setTheme(R.style.AppTheme);
         setContentView(R.layout.login);
         MobileAds.initialize(this,"ca-app-pub-2148688310360459~5245440096");
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        mFirebaseAnalytics.logEvent("app_open",null);
     }
 
     @Override
@@ -48,27 +52,9 @@ public class LauncherActivity extends AppCompatActivity{
         FirebaseAuth auth = FirebaseAuth.getInstance();
         //if the user is signed in, launch homepage, else launch the sign in (AuthUI) Activity
         if (auth.getCurrentUser() != null) {
-            mReference = FirebaseDatabase.getInstance().getReference("User");
-            currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-            Query query = mReference.child(currentFirebaseUser.getUid());
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(i);
-                        finish();
-                    } else {
-                        Intent i = new Intent(getApplicationContext(), EditProfile.class);
-                        startActivity(i);
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
+            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(i);
+            finish();
         } else {
             signIn();
         }
@@ -100,6 +86,7 @@ public class LauncherActivity extends AppCompatActivity{
             IdpResponse response = IdpResponse.fromResultIntent(data);
             // Successfully signed in
             if (resultCode == RESULT_OK) {
+                mFirebaseAnalytics.logEvent("login",null);
                 //updateUserDetails();
                 return;
             } else {

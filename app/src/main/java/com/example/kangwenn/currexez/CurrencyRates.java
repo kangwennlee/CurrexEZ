@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import java.util.Date;
 
 public class CurrencyRates extends AppCompatActivity {
@@ -19,6 +21,7 @@ public class CurrencyRates extends AppCompatActivity {
     ListView listView;
     TextView textDate, textHeading;
     String[] currencyName = {"USD", "AUD", "CNY", "THB", "JPY", "GBP", "KRW", "HKD", "SGD"};
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,8 @@ public class CurrencyRates extends AppCompatActivity {
         listView = findViewById(R.id.currencyList);
         textDate = findViewById(R.id.textDate);
         textHeading = findViewById(R.id.textHeading);
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         retrieveRates();
         swipeRefreshLayout = findViewById(R.id.swiperefresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -40,14 +45,20 @@ public class CurrencyRates extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getApplicationContext(), CurrencyCalculator.class);
                 i.putExtra("currency", position);
+                Bundle bundle = new Bundle();
+                bundle.putString("currency_name",currencyName[position]);
+                mFirebaseAnalytics.logEvent("currency_rate_selected",bundle);
                 startActivity(i);
             }
         });
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        mFirebaseAnalytics.logEvent("click_rate",null);
     }
 
     protected void retrieveRates() {

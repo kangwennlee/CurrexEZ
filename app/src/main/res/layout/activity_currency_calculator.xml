@@ -44,6 +44,12 @@
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/buttonPurchaseCurrency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Purchase Currency"/>
+
     <TextView
         android:id="@+id/textViewTotal"
         android:layout_width="match_parent"

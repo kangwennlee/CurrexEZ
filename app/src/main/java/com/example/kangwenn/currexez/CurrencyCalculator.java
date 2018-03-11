@@ -10,9 +10,13 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.example.kangwenn.currexez.Entity.Purchase;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.Locale;
 
@@ -24,11 +28,21 @@ public class CurrencyCalculator extends AppCompatActivity {
     SharedPreferences sharedPref;
     String[] currencyName = {"USD", "AUD", "CNY", "THB", "JPY", "GBP", "KRW", "HKD", "SGD"};
     String[] currName = new String[currencyName.length];
+    Button button;
+    private FirebaseAnalytics mFirebaseAnalytics;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mFirebaseAnalytics.logEvent("click_calculator",null);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_currency_calculator);
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         editTextAmount = findViewById(R.id.editTextAmount);
         editTextAmount2 = findViewById(R.id.editTextAmount2);
         spinnerCurrency = findViewById(R.id.spinnerCurrency);
@@ -110,6 +124,9 @@ public class CurrencyCalculator extends AppCompatActivity {
                     float currRate = sharedPref.getFloat(currencyName[position], 0);
                     Double total = amount * currRate;
                     editTextAmount2.setText(String.format(Locale.US, "%.2f", total));
+                    Bundle bundle = new Bundle();
+                    bundle.putString("currency_name",currencyName[position]);
+                    mFirebaseAnalytics.logEvent("currency_calculator_selected",bundle);
                 } catch (NumberFormatException e) {
 
                 }
@@ -118,6 +135,17 @@ public class CurrencyCalculator extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+        button = findViewById(R.id.buttonPurchaseCurrency);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(),PurchaseCurrency.class);
+                i.putExtra("purchaseAmount",Double.parseDouble(editTextAmount2.getText().toString()));
+                i.putExtra("purchaseType",spinnerCurrency.getSelectedItemPosition());
+                startActivity(i);
+                finish();
             }
         });
     }

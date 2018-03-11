@@ -7,7 +7,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 26
         versionCode 3
-        versionName "alpha-1.1"
+        versionName "alpha-1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -41,7 +41,6 @@ dependencies {
     compile 'com.google.firebase:firebase-crash:11.8.0'
     compile 'com.google.firebase:firebase-core:11.8.0'
     compile 'com.google.firebase:firebase-ads:11.8.0'
-    compile 'com.firebase:firebase-jobdispatcher:0.6.0'
     compile 'com.firebase:firebase-jobdispatcher:0.6.0'
     compile('com.crashlytics.sdk.android:crashlytics:2.9.1@aar') {
         transitive = true
