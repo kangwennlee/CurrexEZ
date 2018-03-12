@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,6 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+
+import io.fabric.sdk.android.Fabric;
 
 public class UserProfile extends AppCompatActivity {
     Button editProfile;
@@ -33,6 +38,7 @@ public class UserProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+        Fabric.with(this, new Answers(), new Crashlytics());
         setTitle("My Profile");
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -42,6 +48,7 @@ public class UserProfile extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), EditProfile.class);
                 startActivity(i);
+                finish();
             }
         });
         userName = findViewById(R.id.textViewUserName);
@@ -61,6 +68,9 @@ public class UserProfile extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mFirebaseAnalytics.logEvent("click_user_profile", null);
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("User Profile")
+        );
         currentUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

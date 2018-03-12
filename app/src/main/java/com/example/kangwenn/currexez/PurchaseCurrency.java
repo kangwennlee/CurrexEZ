@@ -29,6 +29,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.PurchaseEvent;
 import com.example.kangwenn.currexez.Entity.Purchase;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,6 +41,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStore;
@@ -48,6 +52,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.Date;
 import java.util.Locale;
 
@@ -57,6 +62,8 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+
+import io.fabric.sdk.android.Fabric;
 
 import static com.example.kangwenn.currexez.PurchaseHistory.round;
 
@@ -89,6 +96,7 @@ public class PurchaseCurrency extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Fabric.with(this, new Answers(), new Crashlytics());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchase_currency);
         setTitle("Purchase Currency");
@@ -392,6 +400,12 @@ public class PurchaseCurrency extends AppCompatActivity {
         bundle.putString("Collection_Date", collectionDate);
         bundle.putString("Collection_Location", collectionLoc);
         mFirebaseAnalytics.logEvent("purchase_done",bundle);
+        Answers.getInstance().logPurchase(new PurchaseEvent()
+                .putItemPrice(BigDecimal.valueOf(purchaseAmountInRM))
+                .putItemName(currency)
+                .putCurrency(Currency.getInstance("MYR"))
+                .putSuccess(true)
+        );
         finish();
     }
 

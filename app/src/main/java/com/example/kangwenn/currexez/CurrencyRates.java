@@ -12,9 +12,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.Date;
+
+import io.fabric.sdk.android.Fabric;
 
 public class CurrencyRates extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
@@ -27,6 +32,7 @@ public class CurrencyRates extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_currency_rates);
+        Fabric.with(this, new Answers(), new Crashlytics());
         setTitle("Today's Rate");
         listView = findViewById(R.id.currencyList);
         textDate = findViewById(R.id.textDate);
@@ -60,6 +66,9 @@ public class CurrencyRates extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mFirebaseAnalytics.logEvent("click_rate",null);
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Currency Rates")
+        );
     }
 
     protected void retrieveRates() {

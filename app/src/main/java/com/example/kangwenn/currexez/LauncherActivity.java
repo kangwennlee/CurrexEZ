@@ -8,6 +8,10 @@ import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
+import com.crashlytics.android.answers.LoginEvent;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -19,6 +23,8 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by kangw on 22/1/2018.
@@ -34,6 +40,7 @@ public class LauncherActivity extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Answers(), new Crashlytics());
         setTheme(R.style.AppTheme);
         setContentView(R.layout.login);
         MobileAds.initialize(this,"ca-app-pub-2148688310360459~5245440096");
@@ -44,6 +51,7 @@ public class LauncherActivity extends AppCompatActivity{
         String date = sdf.format(new Date());
         bundle.putString("open_time", date);
         mFirebaseAnalytics.logEvent("app_open", bundle);
+        Answers.getInstance().logCustom(new CustomEvent("App Opened").putCustomAttribute("time", date));
     }
 
     @Override
@@ -92,6 +100,8 @@ public class LauncherActivity extends AppCompatActivity{
                 String date = sdf.format(new Date());
                 bundle.putString("login_time", date);
                 mFirebaseAnalytics.logEvent("login", bundle);
+                Answers.getInstance().logLogin(new LoginEvent()
+                        .putSuccess(true));
                 //updateUserDetails();
                 return;
             } else {

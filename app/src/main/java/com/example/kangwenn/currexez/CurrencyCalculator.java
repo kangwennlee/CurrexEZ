@@ -15,9 +15,14 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.Locale;
+
+import io.fabric.sdk.android.Fabric;
 
 public class CurrencyCalculator extends AppCompatActivity {
     EditText editTextAmount;
@@ -34,12 +39,16 @@ public class CurrencyCalculator extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mFirebaseAnalytics.logEvent("click_calculator",null);
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Currency Calculator")
+        );
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_currency_calculator);
+        Fabric.with(this, new Answers(), new Crashlytics());
         setTitle("Rate Conversion");
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);

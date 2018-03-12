@@ -24,6 +24,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.example.kangwenn.currexez.Entity.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -47,6 +50,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import io.fabric.sdk.android.Fabric;
+
 public class EditProfile extends AppCompatActivity implements View.OnClickListener {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -69,6 +74,9 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     protected void onResume() {
         super.onResume();
         mFirebaseAnalytics.logEvent("click_edit_profile",null);
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Edit Profile")
+        );
     }
 
     @Override
@@ -91,6 +99,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+        Fabric.with(this, new Answers(), new Crashlytics());
         setTitle("Edit Your Profile");
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
