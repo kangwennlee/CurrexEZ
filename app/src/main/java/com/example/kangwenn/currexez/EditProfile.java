@@ -3,12 +3,15 @@ package com.example.kangwenn.currexez;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -142,7 +145,9 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onClick(View v) {
                 DatePickerDialog mDatePicker = new DatePickerDialog(EditProfile.this, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
-                mDatePicker.getDatePicker().setMaxDate(System.currentTimeMillis());
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(2000, 1, 1);
+                mDatePicker.getDatePicker().setMaxDate(calendar.getTimeInMillis());
                 mDatePicker.show();
             }
         });
@@ -197,8 +202,55 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
             }
         });
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(EditProfile.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(EditProfile.this, android.Manifest.permission.CAMERA)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(EditProfile.this, new String[]{android.Manifest.permission.CAMERA}, 100);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        } else {
+            // Permission has already been granted
+        }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 100: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }
 
     public void uploadInformation(){
         String name = etName.getText().toString();
