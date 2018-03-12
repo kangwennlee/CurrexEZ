@@ -187,7 +187,7 @@ public class HomepageFragment extends Fragment {
                             + "\nPuchase Amount : " + round(purchase.getAmount(), 2)
                             + "\nCollection Date : " + purchase.getCollectionDate()
                             + "\nCollection Location: " + purchase.getCollectionLocation();
-                    if (todaydate.compareTo(purchase.getCollectionDate()) > 0) {
+                    if (todaydate.compareTo(purchase.getCollectionDate()) <= 0) {
                         arrayList.add(values);
                     }
                 }
