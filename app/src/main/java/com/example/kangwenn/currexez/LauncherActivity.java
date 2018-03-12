@@ -59,6 +59,7 @@ public class LauncherActivity extends AppCompatActivity{
             signIn();
         }
     }
+
     public void signIn() {
         startActivityForResult(
                 AuthUI.getInstance().createSignInIntentBuilder()

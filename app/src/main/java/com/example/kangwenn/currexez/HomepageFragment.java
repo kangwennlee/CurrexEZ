@@ -3,18 +3,36 @@ package com.example.kangwenn.currexez;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.kangwenn.currexez.Entity.Purchase;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 
 /**
@@ -32,6 +50,9 @@ public class HomepageFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     ImageButton mRate, mCalculator, mPurchase, mHotel, mHistory, mProfile;
     TextView currencyScroll;
+    ArrayAdapter<String> adapter;
+    ListView homeListView;
+    String todaydate;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -61,6 +82,15 @@ public class HomepageFragment extends Fragment {
         return fragment;
     }
 
+    //round the double value
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,13 +108,13 @@ public class HomepageFragment extends Fragment {
         mAdView = v.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("E4F7CE788C71C5DC44498B08E010C9AB").build();
         mAdView.loadAd(adRequest);
-        currencyScroll = v.findViewById(R.id.currencyscroll);
         mRate = v.findViewById(R.id.imageButtonRate);
         mCalculator = v.findViewById(R.id.imageButtonCalculator);
         mPurchase = v.findViewById(R.id.imageButtonPurchase);
         mHotel = v.findViewById(R.id.imageButtonHotel);
         mHistory= v.findViewById(R.id.imageButtonHistory);
         mProfile= v.findViewById(R.id.imageButtonProfile);
+        homeListView = v.findViewById(R.id.homeListView);
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this.getContext());
         mRate.setOnClickListener(new View.OnClickListener() {
@@ -132,20 +162,44 @@ public class HomepageFragment extends Fragment {
                 startActivity(i);
             }
         });
-        SharedPreferences sharedPref = getContext().getSharedPreferences("com.example.kangwenn.RATES", Context.MODE_PRIVATE);
-        String[] currencyName = {"USD", "AUD", "CNY", "THB", "JPY", "GBP", "KRW", "HKD", "SGD"};
-        String text = "Rate for " + sharedPref.getString("date", null) + "\n";
-        try {
-            for (int i = 0; i < currencyName.length; i++) {
-                float currRate = sharedPref.getFloat(currencyName[i], 0);
-                String string = getResources().getString(getResources().getIdentifier(currencyName[i], "string", getContext().getPackageName()));
-                text += string + " : " + currRate + "\n";
-            }
-            currencyScroll.setText(text);
-        } catch (RuntimeException e) {
-
-        }
+        populateListView();
         return v;
+    }
+
+    protected void populateListView() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("PurchaseHistory");
+        FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+        String userID = mCurrentUser.getUid();
+        DatabaseReference currentUser = databaseReference.child(userID);
+        final ArrayList<String> arrayList = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
+        todaydate = sdf.format(new Date());
+        currentUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Purchase purchase = ds.getValue(Purchase.class);
+                    String date = ds.getKey().substring(0, 4) + "/" + ds.getKey().substring(4, 6) + "/" + ds.getKey().substring(6, 8);
+                    //String month = ds.getKey().toString().substring(4,5);
+                    //String date = ds.getKey().toString().substring(6,7);
+                    String time = ds.getKey().substring(9, 11) + ":" + ds.getKey().substring(11, 13) + ":" + ds.getKey().substring(12, 14);
+                    String values = "Currency : " + purchase.getCurrency()
+                            + "\nPuchase Amount : " + round(purchase.getAmount(), 2)
+                            + "\nCollection Date : " + purchase.getCollectionDate()
+                            + "\nCollection Location: " + purchase.getCollectionLocation();
+                    if (todaydate.compareTo(purchase.getCollectionDate()) > 0) {
+                        arrayList.add(values);
+                    }
+                }
+                adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, arrayList);
+                homeListView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event

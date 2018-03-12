@@ -54,6 +54,7 @@
     <string name="BGN">Bulgarian lev</string>
     <string name="CZK">Czech koruna</string>
     <string name="DKK">Danish krone</string>
+    <string name="EUR">Euro</string>
     <string name="GBP">Pound sterling</string>
     <string name="HUF">Hungarian forint</string>
     <string name="PLN">Polish zloty</string>
@@ -80,6 +81,7 @@
     <string name="PHP">Philippine piso</string>
     <string name="SGD">Singapore dollar</string>
     <string name="THB">Thai baht</string>
+    <string name="TWD">New Taiwan Dollar</string>
     <string name="ZAR">South African rand</string>
 
 

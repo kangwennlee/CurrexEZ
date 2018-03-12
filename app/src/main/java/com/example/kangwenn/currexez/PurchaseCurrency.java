@@ -67,7 +67,7 @@ public class PurchaseCurrency extends AppCompatActivity {
     private static final String SECRET_MESSAGE = "Very secret message";
     private static final String KEY_NAME_NOT_INVALIDATED = "key_not_invalidated";
     SharedPreferences sharedPref;
-    String[] currencyName = {"USD", "AUD", "CNY", "THB", "JPY", "GBP", "KRW", "HKD", "SGD"};
+    String[] currencyName = {"USD", "EUR", "AUD", "GBP", "SGD", "CNY", "THB", "JPY", "KRW", "HKD", "TWD"};
     String[] currName = new String[currencyName.length];
     Spinner spinnerSelectCurr;
     EditText editTextPurAmount,editTextDate,editTextLocation;
@@ -91,6 +91,7 @@ public class PurchaseCurrency extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchase_currency);
+        setTitle("Purchase Currency");
         spinnerSelectCurr = findViewById(R.id.spinnerSelectCurr);
         editTextPurAmount = findViewById(R.id.editTextPurAmount);
         textViewTotal = findViewById(R.id.textViewPrice);
@@ -353,7 +354,7 @@ public class PurchaseCurrency extends AppCompatActivity {
         //get the user UID
         String id = currentFirebaseUser.getUid();
 
-        final Purchase purchase = new Purchase(currency,purchaseAmount,purchaseAmountInRM,selectRadioButtonValue);
+        final Purchase purchase = new Purchase(currency, purchaseAmount, purchaseAmountInRM, selectRadioButtonValue, collectionDate, collectionLoc);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss",Locale.US);
         String date = sdf.format(new Date());
         String time = date.substring(9,11) + ":" + date.substring(11,13) + ":" + date.substring(12,14);
@@ -361,7 +362,9 @@ public class PurchaseCurrency extends AppCompatActivity {
                 + "\nPuchase Amount : " + round(purchase.getAmount(),2)
                 + "\nPuchase Amount In MYR : " + round(purchase.getAmountInRM(),2)
                 + "\nPayment Method : " + purchase.getPayMethod()
-                + "\nDate : " + date + "\nTime : " + time;
+                + "\nPurchase Date : " + date + " " + time
+                + "\nCollection Date : " + purchase.getCollectionDate()
+                + "\nCollection Location: " + purchase.getCollectionLocation();
         databaseUser.child(id).child(date).setValue(purchase, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -380,8 +383,10 @@ public class PurchaseCurrency extends AppCompatActivity {
         bundle.putString("Currency_Purchased",purchase.getCurrency());
         bundle.putDouble("Purchase_Amount", purchase.getAmount());
         bundle.putDouble("Purchase_Amount_In_MYR", purchase.getAmountInRM());
-        bundle.putString("Date",date);
-        bundle.putString("Time",time);
+        bundle.putString("Purchase_Date", date);
+        bundle.putString("Purchase_Time", time);
+        bundle.putString("Collection_Date", collectionDate);
+        bundle.putString("Collection_Location", collectionLoc);
         mFirebaseAnalytics.logEvent("purchase_done",bundle);
         finish();
     }

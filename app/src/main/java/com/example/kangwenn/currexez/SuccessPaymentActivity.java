@@ -21,6 +21,7 @@ public class SuccessPaymentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_success_payment);
+        setTitle("Purchase Detail");
         Intent intent = getIntent();
         String purchase = intent.getStringExtra("purchase");
         ImageView imageViewQR = findViewById(R.id.imageViewQR);

@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.kangwenn.currexez.Entity.Purchase;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.Locale;
@@ -26,7 +25,7 @@ public class CurrencyCalculator extends AppCompatActivity {
     Spinner spinnerCurrency;
     TextView textViewTotal;
     SharedPreferences sharedPref;
-    String[] currencyName = {"USD", "AUD", "CNY", "THB", "JPY", "GBP", "KRW", "HKD", "SGD"};
+    String[] currencyName = {"USD", "EUR", "AUD", "GBP", "SGD", "CNY", "THB", "JPY", "KRW", "HKD", "TWD"};
     String[] currName = new String[currencyName.length];
     Button button;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -41,6 +40,7 @@ public class CurrencyCalculator extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_currency_calculator);
+        setTitle("Rate Conversion");
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         editTextAmount = findViewById(R.id.editTextAmount);

@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +52,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     static final int REQUEST_IMAGE_CAPTURE = 1;
     Calendar myCalendar;
     byte[] icData;
+    ImageView imageView;
     //component view var
     private EditText etName,etPhoneNum,etAddress,etPassport,etBirthday;
     private Spinner spNation;
@@ -80,6 +82,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             icData = baos.toByteArray();
+            imageView.setImageBitmap(imageBitmap);
             progressDialog.dismiss();
         }
     }
@@ -88,6 +91,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+        setTitle("Edit Your Profile");
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         //set the firebase var
@@ -101,6 +105,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         etAddress = findViewById(R.id.etAddress);
         etPassport = findViewById(R.id.etPassport);
         etBirthday = findViewById(R.id.Birthday);
+        imageView = findViewById(R.id.imageViewIC);
 
         //set the spinner text value
         spNation = findViewById(R.id.spinnerNation);
@@ -305,7 +310,6 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         //Validation here
         String regxforIC = "^\\d{6}-\\d{2}-\\d{4}$";
         String regxforPhoneNum = "^6?01\\d{8}$";
-
 
         if (!etName.getText().toString().isEmpty() &&
                 !etPhoneNum.getText().toString().isEmpty() &&

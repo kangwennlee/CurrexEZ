@@ -5,10 +5,39 @@
     android:layout_height="match_parent"
     tools:context="com.example.kangwenn.currexez.PurchaseHistory">
 
-    <ListView
-        android:id="@+id/puchaseHistoryListView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <TextView
+        android:id="@+id/textView24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
+        android:text="Upcoming Collection"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+    <ListView
+        android:id="@+id/purchaseHistoryListViewUpcoming"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@id/textView24"
+        android:layout_marginTop="5dp" />
+
+    <TextView
+        android:id="@+id/textView23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/purchaseHistoryListViewUpcoming"
+        android:layout_marginTop="10dp"
+        android:text="Past Purchase"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+    <ListView
+        android:id="@+id/purchaseHistoryListViewPast"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView23"
+        android:layout_marginTop="5dp" />
 </RelativeLayout>

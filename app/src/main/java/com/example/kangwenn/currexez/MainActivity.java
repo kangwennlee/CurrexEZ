@@ -50,10 +50,11 @@ import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,HomepageFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, HomepageFragment.OnFragmentInteractionListener {
     TextView userName, userEmail;
     ImageView userProfilePic;
     FirebaseUser currentFirebaseUser;
+    String apiKey;
     private DatabaseReference mReference;
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(),PurchaseCurrency.class);
+                Intent i = new Intent(getApplicationContext(), PurchaseCurrency.class);
                 startActivity(i);
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
@@ -82,19 +83,55 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        retrieveCurrencyRates();
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("com.example.kangwenn.RATES", Context.MODE_PRIVATE);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        String date = sdf.format(new Date());
+        if (!date.equals(sharedPref.getString("date", null))) {
+            retrieveCurrencyRates();
+        }
+    }
+
+    protected void retrieveCurrencyRates() {
+        String url = "http://data.fixer.io/api/latest?access_key=b248b26a99c6e0ba6ed327d7a59cbcd1";
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        final String[] currencyName = {"AUD", "MYR", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK", "DKK", "EUR", "GBP", "HKD", "HRK", "HUF", "IDR", "ILS", "INR", "ISK", "JPY", "KRW", "MXN", "NOK", "NZD", "PHP", "PLN", "RON", "RUB", "SEK", "SGD", "THB", "TRY", "TWD", "USD", "ZAR"};
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONObject rates = response.getJSONObject("rates");
+                    SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("com.example.kangwenn.RATES", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    for (int i = 0; i < currencyName.length; i++) {
+                        Double msiaRate = rates.getDouble("MYR");
+                        Double currRate = rates.getDouble(currencyName[i]);
+                        editor.putFloat(currencyName[i], currRate.floatValue() / msiaRate.floatValue());
+                    }
+                    editor.putString("date", response.getString("date"));
+                    editor.apply();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mFirebaseAnalytics.logEvent("app_destroy",null);
+        mFirebaseAnalytics.logEvent("app_destroy", null);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mFirebaseAnalytics.logEvent("click_home",null);
+        mFirebaseAnalytics.logEvent("click_home", null);
         mReference = FirebaseDatabase.getInstance().getReference("User");
         currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         Query query = mReference.child(currentFirebaseUser.getUid());
@@ -116,35 +153,6 @@ public class MainActivity extends AppCompatActivity
         this.getFragmentManager().beginTransaction().replace(R.id.frame_container, fragment, "homepage").commit();
     }
 
-    protected void retrieveCurrencyRates() {
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        final String[] currencyName = {"AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK", "DKK", "EUR", "GBP", "HKD", "HRK", "HUF", "IDR", "ILS", "INR", "ISK", "JPY", "KRW", "MXN", "NOK", "NZD", "PHP", "PLN", "RON", "RUB", "SEK", "SGD", "THB", "TRY", "USD", "ZAR"};
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, "https://api.fixer.io/latest?base=MYR", null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONObject rates = response.getJSONObject("rates");
-                    SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("com.example.kangwenn.RATES", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    for (int i = 0; i < currencyName.length; i++) {
-                        Double currRate = rates.getDouble(currencyName[i]);
-                        editor.putFloat(currencyName[i], currRate.floatValue());
-                    }
-                    editor.putString("date", response.getString("date"));
-                    editor.apply();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        requestQueue.add(jsonObjectRequest);
-    }
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -163,10 +171,10 @@ public class MainActivity extends AppCompatActivity
         userEmail = findViewById(R.id.textUserEmail);
         userProfilePic = findViewById(R.id.imageViewUserPic);
         String name = "", email = "";
-        try{
+        try {
             name = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
             email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
 
         }
         userName.setText(name);
@@ -183,7 +191,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent i = new Intent(getApplicationContext(),AboutUs.class);
+            Intent i = new Intent(getApplicationContext(), AboutUs.class);
             startActivity(i);
             return true;
         }

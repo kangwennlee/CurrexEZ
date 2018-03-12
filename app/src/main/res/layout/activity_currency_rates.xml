@@ -7,28 +7,29 @@
     tools:context="com.example.kangwenn.currexez.CurrencyRates">
 
     <TextView
+        android:id="@+id/textDate"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:paddingLeft="10dp" />
+
+    <TextView
         android:id="@+id/textHeading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:paddingLeft="10dp"
         android:textColor="@color/black"
-        android:layout_marginTop="2dp"
         android:textSize="15sp" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
-        android:layout_height="450dp">
+        android:layout_height="fill_parent">
 
         <ListView
             android:id="@+id/currencyList"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </android.support.v4.widget.SwipeRefreshLayout>
-    <TextView
-        android:id="@+id/textDate"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:paddingLeft="10dp" />
 </LinearLayout>
 

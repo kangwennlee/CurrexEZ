@@ -20,17 +20,20 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class PurchaseHistory extends AppCompatActivity {
 
     FirebaseUser mCurrentUser;
     String userID;
-    private ListView puchaseHistoryListView;
+    String todaydate;
+    private ListView purchaseHistoryListViewPast, purchaseHistoryListViewUpcoming;
     private DatabaseReference databaseReference, currentUser;
-    private ArrayList<String> arrayList = new ArrayList<String>();
-    private ArrayAdapter<String> adapter;
-
+    private ArrayList<String> arrayListPast, arrayListUpcoming;
+    private ArrayAdapter<String> adapterPast, adapterUpcoming;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     //round the double value
@@ -46,14 +49,19 @@ public class PurchaseHistory extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchase_history);
+        setTitle("Purchase History");
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("PurchaseHistory");
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mCurrentUser.getUid();
         currentUser = databaseReference.child(userID);
-        puchaseHistoryListView = findViewById(R.id.puchaseHistoryListView);
-
+        arrayListPast = new ArrayList<>();
+        arrayListUpcoming = new ArrayList<>();
+        purchaseHistoryListViewPast = findViewById(R.id.purchaseHistoryListViewPast);
+        purchaseHistoryListViewUpcoming = findViewById(R.id.purchaseHistoryListViewUpcoming);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
+        todaydate = sdf.format(new Date());
         currentUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -63,16 +71,23 @@ public class PurchaseHistory extends AppCompatActivity {
                     //String month = ds.getKey().toString().substring(4,5);
                     //String date = ds.getKey().toString().substring(6,7);
                     String time = ds.getKey().substring(9,11) + ":" + ds.getKey().substring(11,13) + ":" +ds.getKey().substring(12,14);
-
                     String values = "Currency : " + purchase.getCurrency()
-                                    + "\nPuchase Amount : " + round(purchase.getAmount(),2)
-                                    + "\nPuchase Amount In MYR : " + round(purchase.getAmountInRM(),2)
-                                    + "\nPayment Method : " + purchase.getPayMethod()
-                                    + "\nDate : " + date + "\nTime : " + time;
-                    arrayList.add(values);
+                            + "\nPuchase Amount : " + round(purchase.getAmount(), 2)
+                            + "\nPuchase Amount In MYR : " + round(purchase.getAmountInRM(), 2)
+                            + "\nPayment Method : " + purchase.getPayMethod()
+                            + "\nPurchase Date : " + date + " " + time
+                            + "\nCollection Date : " + purchase.getCollectionDate()
+                            + "\nCollection Location: " + purchase.getCollectionLocation();
+                    if (todaydate.compareTo(purchase.getCollectionDate()) < 0) {
+                        arrayListPast.add(values);
+                    } else {
+                        arrayListUpcoming.add(values);
+                    }
                 }
-                adapter = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,arrayList);
-                puchaseHistoryListView.setAdapter(adapter);
+                adapterPast = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, arrayListPast);
+                adapterUpcoming = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, arrayListUpcoming);
+                purchaseHistoryListViewPast.setAdapter(adapterPast);
+                purchaseHistoryListViewUpcoming.setAdapter(adapterUpcoming);
             }
 
             @Override
@@ -81,11 +96,11 @@ public class PurchaseHistory extends AppCompatActivity {
             }
         });
 
-        puchaseHistoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        purchaseHistoryListViewUpcoming.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getApplicationContext(), SuccessPaymentActivity.class);
-                String string = arrayList.get(i);
+                String string = arrayListUpcoming.get(i);
                 intent.putExtra("purchase", string);
                 startActivity(intent);
             }

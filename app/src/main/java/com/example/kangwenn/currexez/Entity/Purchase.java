@@ -9,15 +9,35 @@ public class Purchase {
     private Double amount;
     private Double amountInRM;
     private String payMethod;
+    private String collectionDate;
+    private String collectionLocation;
 
     public Purchase() {
     }
 
-    public Purchase(String currency, Double amount, Double amountInRM, String payMethod) {
+    public Purchase(String currency, Double amount, Double amountInRM, String payMethod, String collectionDate, String collectionLocation) {
         this.currency = currency;
         this.amount = amount;
         this.amountInRM = amountInRM;
         this.payMethod = payMethod;
+        this.collectionDate = collectionDate;
+        this.collectionLocation = collectionLocation;
+    }
+
+    public String getCollectionDate() {
+        return collectionDate;
+    }
+
+    public void setCollectionDate(String collectionDate) {
+        this.collectionDate = collectionDate;
+    }
+
+    public String getCollectionLocation() {
+        return collectionLocation;
+    }
+
+    public void setCollectionLocation(String collectionLocation) {
+        this.collectionLocation = collectionLocation;
     }
 
     public String getCurrency() {

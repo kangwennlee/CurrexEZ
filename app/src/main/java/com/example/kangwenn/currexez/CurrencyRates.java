@@ -20,13 +20,14 @@ public class CurrencyRates extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
     ListView listView;
     TextView textDate, textHeading;
-    String[] currencyName = {"USD", "AUD", "CNY", "THB", "JPY", "GBP", "KRW", "HKD", "SGD"};
+    String[] currencyName = {"USD", "EUR", "AUD", "GBP", "SGD", "CNY", "THB", "JPY", "KRW", "HKD", "TWD"};
     private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_currency_rates);
+        setTitle("Today's Rate");
         listView = findViewById(R.id.currencyList);
         textDate = findViewById(R.id.textDate);
         textHeading = findViewById(R.id.textHeading);
@@ -64,16 +65,22 @@ public class CurrencyRates extends AppCompatActivity {
     protected void retrieveRates() {
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("com.example.kangwenn.RATES", Context.MODE_PRIVATE);
         Date currentDate = new Date(System.currentTimeMillis());
-        textHeading.setText("Rate for " + sharedPref.getString("date", null) +"\n1 Malaysian Ringgit you buy:");
+        textHeading.setText("Rate for " + sharedPref.getString("date", null));
         String text = "";
         textDate.setText("Last refreshed: " + currentDate.toString());
         String[] currencyN = new String[currencyName.length];
         try {
             for (int i = 0; i < currencyName.length; i++) {
-                float currRate = sharedPref.getFloat(currencyName[i], 0);
+                Float currRate;
                 String string = getResources().getString(getResources().getIdentifier(currencyName[i], "string", getApplicationContext().getPackageName()));
-                //text += currencyName[i] + " : "+currRate + "\n";
-                text = currRate + " " + string;
+                if (sharedPref.getFloat(currencyName[i], 0) < 1) {
+                    currRate = 1 / sharedPref.getFloat(currencyName[i], 0);
+                    text = "1 " + string + "\t\t\tRM " + currRate;
+                } else {
+                    currRate = 1 / sharedPref.getFloat(currencyName[i], 0) * 100;
+                    text = "100 " + string + "\t\t\tRM " + currRate;
+                }
+
                 currencyN[i] = text;
             }
             swipeRefreshLayout.setRefreshing(false);

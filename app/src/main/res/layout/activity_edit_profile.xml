@@ -111,6 +111,13 @@
             android:drawableLeft="@drawable/bt_ic_camera"
             android:text="Photo of IC" />
 
+
+        <ImageView
+            android:id="@+id/imageViewIC"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="20dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
