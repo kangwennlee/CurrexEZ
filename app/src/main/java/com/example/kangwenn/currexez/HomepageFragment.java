@@ -172,7 +172,7 @@ public class HomepageFragment extends Fragment {
         String userID = mCurrentUser.getUid();
         DatabaseReference currentUser = databaseReference.child(userID);
         final ArrayList<String> arrayList = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy", Locale.US);
         todaydate = sdf.format(new Date());
         currentUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

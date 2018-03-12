@@ -60,7 +60,7 @@ public class PurchaseHistory extends AppCompatActivity {
         arrayListUpcoming = new ArrayList<>();
         purchaseHistoryListViewPast = findViewById(R.id.purchaseHistoryListViewPast);
         purchaseHistoryListViewUpcoming = findViewById(R.id.purchaseHistoryListViewUpcoming);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy", Locale.US);
         todaydate = sdf.format(new Date());
         currentUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -78,7 +78,7 @@ public class PurchaseHistory extends AppCompatActivity {
                             + "\nPurchase Date : " + date + " " + time
                             + "\nCollection Date : " + purchase.getCollectionDate()
                             + "\nCollection Location: " + purchase.getCollectionLocation();
-                    if (todaydate.compareTo(purchase.getCollectionDate()) < 0) {
+                    if (todaydate.compareTo(purchase.getCollectionDate()) > 0) {
                         arrayListPast.add(values);
                     } else {
                         arrayListUpcoming.add(values);

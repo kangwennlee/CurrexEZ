@@ -264,6 +264,10 @@ public class PurchaseCurrency extends AppCompatActivity {
             public void onClick(View v) {
                 DatePickerDialog mDatePicker = new DatePickerDialog(PurchaseCurrency.this, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
                 mDatePicker.getDatePicker().setMinDate(System.currentTimeMillis());
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) + 3);
+                mDatePicker.getDatePicker().setMaxDate(calendar.getTimeInMillis());
                 mDatePicker.show();
             }
         });
@@ -471,38 +475,40 @@ public class PurchaseCurrency extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
-
-            // Set up the crypto object for later. The object will be authenticated by use
-            // of the fingerprint.
-            if (initCipher(mCipher, mKeyName)) {
-
-                // Show the fingerprint dialog. The user has the option to use the fingerprint with
-                // crypto, or you can fall back to using a server-side verified password.
-                FingerprintAuthenticationDialogFragment fragment
-                        = new FingerprintAuthenticationDialogFragment();
-                fragment.setCryptoObject(new FingerprintManager.CryptoObject(mCipher));
-                boolean useFingerprintPreference = mSharedPreferences
-                        .getBoolean(getString(R.string.use_fingerprint_to_authenticate_key),
-                                true);
-                if (useFingerprintPreference) {
-                    fragment.setStage(
-                            FingerprintAuthenticationDialogFragment.Stage.FINGERPRINT);
+            if (!editTextDate.getText().toString().isEmpty() && !editTextLocation.getText().toString().isEmpty()) {
+                // Set up the crypto object for later. The object will be authenticated by use
+                // of the fingerprint.
+                if (initCipher(mCipher, mKeyName)) {
+                    // Show the fingerprint dialog. The user has the option to use the fingerprint with
+                    // crypto, or you can fall back to using a server-side verified password.
+                    FingerprintAuthenticationDialogFragment fragment
+                            = new FingerprintAuthenticationDialogFragment();
+                    fragment.setCryptoObject(new FingerprintManager.CryptoObject(mCipher));
+                    boolean useFingerprintPreference = mSharedPreferences
+                            .getBoolean(getString(R.string.use_fingerprint_to_authenticate_key),
+                                    true);
+                    if (useFingerprintPreference) {
+                        fragment.setStage(
+                                FingerprintAuthenticationDialogFragment.Stage.FINGERPRINT);
+                    } else {
+                        fragment.setStage(
+                                FingerprintAuthenticationDialogFragment.Stage.PASSWORD);
+                    }
+                    fragment.show(getFragmentManager(), DIALOG_FRAGMENT_TAG);
                 } else {
+                    // This happens if the lock screen has been disabled or or a fingerprint got
+                    // enrolled. Thus show the dialog to authenticate with their password first
+                    // and ask the user if they want to authenticate with fingerprints in the
+                    // future
+                    FingerprintAuthenticationDialogFragment fragment
+                            = new FingerprintAuthenticationDialogFragment();
+                    fragment.setCryptoObject(new FingerprintManager.CryptoObject(mCipher));
                     fragment.setStage(
-                            FingerprintAuthenticationDialogFragment.Stage.PASSWORD);
+                            FingerprintAuthenticationDialogFragment.Stage.NEW_FINGERPRINT_ENROLLED);
+                    fragment.show(getFragmentManager(), DIALOG_FRAGMENT_TAG);
                 }
-                fragment.show(getFragmentManager(), DIALOG_FRAGMENT_TAG);
             } else {
-                // This happens if the lock screen has been disabled or or a fingerprint got
-                // enrolled. Thus show the dialog to authenticate with their password first
-                // and ask the user if they want to authenticate with fingerprints in the
-                // future
-                FingerprintAuthenticationDialogFragment fragment
-                        = new FingerprintAuthenticationDialogFragment();
-                fragment.setCryptoObject(new FingerprintManager.CryptoObject(mCipher));
-                fragment.setStage(
-                        FingerprintAuthenticationDialogFragment.Stage.NEW_FINGERPRINT_ENROLLED);
-                fragment.show(getFragmentManager(), DIALOG_FRAGMENT_TAG);
+                Toast.makeText(getApplicationContext(), "Please complete the form", Toast.LENGTH_SHORT).show();
             }
         }
     }
