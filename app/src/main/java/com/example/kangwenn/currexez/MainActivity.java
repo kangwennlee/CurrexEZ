@@ -45,6 +45,10 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,HomepageFragment.OnFragmentInteractionListener {
     TextView userName, userEmail;
@@ -215,7 +219,11 @@ public class MainActivity extends AppCompatActivity
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                mFirebaseAnalytics.logEvent("logout",null);
+                                Bundle bundle = new Bundle();
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US);
+                                String date = sdf.format(new Date());
+                                bundle.putString("logout_time", date);
+                                mFirebaseAnalytics.logEvent("logout", bundle);
                                 Intent i = new Intent(getApplicationContext(), LauncherActivity.class);
                                 startActivity(i);
                                 finish();

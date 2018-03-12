@@ -378,8 +378,8 @@ public class PurchaseCurrency extends AppCompatActivity {
         });
         Bundle bundle = new Bundle();
         bundle.putString("Currency_Purchased",purchase.getCurrency());
-        bundle.putString("Puchase_Amount",purchase.getAmount().toString());
-        bundle.putString("Purchase_Amount_In_MYR",purchase.getAmountInRM().toString());
+        bundle.putDouble("Purchase_Amount", purchase.getAmount());
+        bundle.putDouble("Purchase_Amount_In_MYR", purchase.getAmountInRM());
         bundle.putString("Date",date);
         bundle.putString("Time",time);
         mFirebaseAnalytics.logEvent("purchase_done",bundle);
@@ -448,6 +448,12 @@ public class PurchaseCurrency extends AppCompatActivity {
         }
     }
 
+    private void updateLabel() {
+        String myFormat = "dd/MM/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        editTextDate.setText(sdf.format(myCalendar.getTime()));
+    }
+
     private class PurchaseButtonClickListener implements View.OnClickListener {
 
         Cipher mCipher;
@@ -494,11 +500,6 @@ public class PurchaseCurrency extends AppCompatActivity {
                 fragment.show(getFragmentManager(), DIALOG_FRAGMENT_TAG);
             }
         }
-    }
-    private void updateLabel() {
-        String myFormat = "dd/MM/yy"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        editTextDate.setText(sdf.format(myCalendar.getTime()));
     }
 
 }

@@ -14,15 +14,11 @@ import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by kangw on 22/1/2018.
@@ -43,7 +39,11 @@ public class LauncherActivity extends AppCompatActivity{
         MobileAds.initialize(this,"ca-app-pub-2148688310360459~5245440096");
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.logEvent("app_open",null);
+        Bundle bundle = new Bundle();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US);
+        String date = sdf.format(new Date());
+        bundle.putString("open_time", date);
+        mFirebaseAnalytics.logEvent("app_open", bundle);
     }
 
     @Override
@@ -86,7 +86,11 @@ public class LauncherActivity extends AppCompatActivity{
             IdpResponse response = IdpResponse.fromResultIntent(data);
             // Successfully signed in
             if (resultCode == RESULT_OK) {
-                mFirebaseAnalytics.logEvent("login",null);
+                Bundle bundle = new Bundle();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US);
+                String date = sdf.format(new Date());
+                bundle.putString("login_time", date);
+                mFirebaseAnalytics.logEvent("login", bundle);
                 //updateUserDetails();
                 return;
             } else {
