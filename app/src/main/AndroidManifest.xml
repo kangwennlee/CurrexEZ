@@ -39,11 +39,16 @@
         <activity android:name=".AboutUs" />
         <activity android:name=".PurchaseHistory" />
         <activity android:name=".SuccessPaymentActivity" />
-        <activity android:name=".CardPayment"></activity>
+        <activity android:name=".CardPayment" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="eb25c5c70eb677120f8140f0f730158908ccd8c4" />
+
+        <activity
+            android:name=".PurchaseHistory2"
+            android:label="@string/title_activity_purchase_history2"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
