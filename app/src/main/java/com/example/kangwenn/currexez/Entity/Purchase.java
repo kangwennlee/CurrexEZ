@@ -71,4 +71,5 @@ public class Purchase {
     public void setPayMethod(String payMethod) {
         this.payMethod = payMethod;
     }
+
 }

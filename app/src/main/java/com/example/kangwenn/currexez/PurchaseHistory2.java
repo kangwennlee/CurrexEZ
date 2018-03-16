@@ -65,10 +65,10 @@ public class PurchaseHistory2 extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
@@ -116,7 +116,7 @@ public class PurchaseHistory2 extends AppCompatActivity {
         String userID;
         String todaydate;
         private DatabaseReference databaseReference, currentUser;
-        private ArrayList<String> arrayListPast, arrayListUpcoming;
+        private ArrayList<String> arrayListPast, arrayListUpcoming, arrayListView1, arrayListView2;
         private ArrayAdapter<String> adapterPast, adapterUpcoming;
         private ListView listView;
 
@@ -155,6 +155,8 @@ public class PurchaseHistory2 extends AppCompatActivity {
             currentUser = databaseReference.child(userID);
             arrayListPast = new ArrayList<>();
             arrayListUpcoming = new ArrayList<>();
+            arrayListView1 = new ArrayList<>();
+            arrayListView2 = new ArrayList<>();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy", Locale.US);
             todaydate = sdf.format(new Date());
             currentUser.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -173,14 +175,19 @@ public class PurchaseHistory2 extends AppCompatActivity {
                                 + "\nPurchase Date : " + date + " " + time
                                 + "\nCollection Date : " + purchase.getCollectionDate()
                                 + "\nCollection Location: " + purchase.getCollectionLocation();
+                        String value = "Currency : " + purchase.getCurrency()
+                                + "\nPuchase Amount : " + round(purchase.getAmount(), 2)
+                                + "\nPurchase Date : " + date + " " + time;
                         if (todaydate.compareTo(purchase.getCollectionDate()) > 0) {
                             arrayListPast.add(values);
+                            arrayListView1.add(value);
                         } else {
                             arrayListUpcoming.add(values);
+                            arrayListView2.add(value);
                         }
                     }
-                    adapterPast = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, arrayListPast);
-                    adapterUpcoming = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, arrayListUpcoming);
+                    adapterPast = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, arrayListView1);
+                    adapterUpcoming = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, arrayListView2);
                     if (getArguments().getInt(ARG_SECTION_NUMBER) == 1) {
                         listView.setAdapter(adapterUpcoming);
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
