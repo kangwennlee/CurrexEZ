@@ -1,53 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="5dp"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context="com.example.kangwenn.currexez.CurrencyCalculator">
 
-    <LinearLayout
+    <EditText
+        android:id="@+id/editTextAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:ems="7"
+        android:inputType="numberDecimal"
+        android:text="1"
+        android:textAlignment="center"
+        android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="@string/MYR"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+
+    <ImageView
+        android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal">
+        android:layout_margin="20dp"
+        app:srcCompat="@drawable/ic_swap_vert_black_24dp" />
 
-        <EditText
-            android:id="@+id/editTextAmount"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:ems="7"
-            android:inputType="numberDecimal"
-            android:text="1" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/MYR" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/editTextAmount2"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:orientation="horizontal">
+        android:ems="7"
+        android:inputType="numberDecimal"
+        android:textAlignment="center"
+        android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/editTextAmount2"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:ems="7"
-            android:inputType="numberDecimal" />
-
-        <Spinner
-            android:id="@+id/spinnerCurrency"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp" />
-
-    </LinearLayout>
+    <Spinner
+        android:id="@+id/spinnerCurrency"
+        android:layout_width="300dp"
+        android:layout_height="50dp" />
 
     <Button
         android:id="@+id/buttonPurchaseCurrency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:text="Purchase Currency"/>
 
     <TextView
