@@ -25,7 +25,7 @@ public class CurrencyRates extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
     ListView listView;
     TextView textDate, textHeading;
-    String[] currencyName = {"USD", "EUR", "AUD", "GBP", "SGD", "CNY", "THB", "JPY", "KRW", "HKD", "TWD"};
+    String[] currencyName = {"USD", "EUR", "AUD", "GBP", "SGD", "SAR", "CNY", "THB", "JPY", "KRW", "HKD", "TWD"};
     private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override

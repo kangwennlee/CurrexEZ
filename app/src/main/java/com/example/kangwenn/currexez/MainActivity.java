@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity
     protected void retrieveCurrencyRates() {
         String url = "http://data.fixer.io/api/latest?access_key=b248b26a99c6e0ba6ed327d7a59cbcd1";
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        final String[] currencyName = {"AUD", "MYR", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK", "DKK", "EUR", "GBP", "HKD", "HRK", "HUF", "IDR", "ILS", "INR", "ISK", "JPY", "KRW", "MXN", "NOK", "NZD", "PHP", "PLN", "RON", "RUB", "SEK", "SGD", "THB", "TRY", "TWD", "USD", "ZAR"};
+        final String[] currencyName = {"AUD", "MYR", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK", "DKK", "EUR", "GBP", "HKD", "HRK", "HUF", "IDR", "ILS", "INR", "ISK", "JPY", "KRW", "MXN", "NOK", "NZD", "PHP", "PLN", "RON", "RUB", "SAR", "SEK", "SGD", "THB", "TRY", "TWD", "USD", "ZAR"};
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {

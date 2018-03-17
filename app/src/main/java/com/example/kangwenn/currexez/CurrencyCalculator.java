@@ -30,7 +30,7 @@ public class CurrencyCalculator extends AppCompatActivity {
     Spinner spinnerCurrency;
     TextView textViewTotal;
     SharedPreferences sharedPref;
-    String[] currencyName = {"USD", "EUR", "AUD", "GBP", "SGD", "CNY", "THB", "JPY", "KRW", "HKD", "TWD"};
+    String[] currencyName = {"USD", "EUR", "AUD", "GBP", "SGD", "SAR", "CNY", "THB", "JPY", "KRW", "HKD", "TWD"};
     String[] currName = new String[currencyName.length];
     Button button;
     private FirebaseAnalytics mFirebaseAnalytics;
