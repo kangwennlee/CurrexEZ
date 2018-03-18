@@ -2,7 +2,9 @@ package com.example.kangwenn.currexez;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -279,6 +281,11 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
         progressDialog.setMessage("Uploading...");
         progressDialog.show();
+
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("com.example.kangwenn.RATES", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("nationality", spValue);
+        editor.apply();
 
         mFirebaseAnalytics.setUserProperty("nationality", spValue);
 

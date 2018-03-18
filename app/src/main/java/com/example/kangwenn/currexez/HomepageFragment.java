@@ -3,6 +3,7 @@ package com.example.kangwenn.currexez;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -48,7 +49,7 @@ public class HomepageFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    ImageButton mRate, mCalculator, mPurchase, mHotel, mHistory, mProfile;
+    ImageButton mRate, mCalculator, mPurchase, mHotel, mHistory, mProfile, mFlight, mSell;
     TextView currencyScroll;
     ArrayAdapter<String> adapter;
     ListView homeListView;
@@ -114,9 +115,13 @@ public class HomepageFragment extends Fragment {
         mHotel = v.findViewById(R.id.imageButtonHotel);
         mHistory= v.findViewById(R.id.imageButtonHistory);
         mProfile= v.findViewById(R.id.imageButtonProfile);
+        mFlight = v.findViewById(R.id.imageButtonFlight);
+        mSell = v.findViewById(R.id.imageButtonSell);
         homeListView = v.findViewById(R.id.homeListView);
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this.getContext());
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("com.example.kangwenn.RATES", Context.MODE_PRIVATE);
+        final String nationality = sharedPref.getString("nationality", null);
         mRate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,8 +139,13 @@ public class HomepageFragment extends Fragment {
         mPurchase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getContext(),PurchaseCurrency.class);
-                startActivity(i);
+                if (nationality.equals("Malaysia")) {
+                    Intent i = new Intent(getContext(), PurchaseCurrency.class);
+                    startActivity(i);
+                } else {
+                    Intent i = new Intent(getContext(), PurchaseRinggit.class);
+                    startActivity(i);
+                }
             }
         });
         mHotel.setOnClickListener(new View.OnClickListener() {
@@ -144,7 +154,7 @@ public class HomepageFragment extends Fragment {
                 String url = "https://www.agoda.com";
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
-                mFirebaseAnalytics.logEvent("click_browser",null);
+                mFirebaseAnalytics.logEvent("click_hotel", null);
                 startActivity(i);
             }
         });
@@ -160,6 +170,28 @@ public class HomepageFragment extends Fragment {
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), UserProfile.class);
                 startActivity(i);
+            }
+        });
+        mFlight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://www.google.com/flights/";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                mFirebaseAnalytics.logEvent("click_flight", null);
+                startActivity(i);
+            }
+        });
+        mSell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (nationality.equals("Malaysia")) {
+                    Intent i = new Intent(getContext(), SellCurrency.class);
+                    startActivity(i);
+                } else {
+                    Intent i = new Intent(getContext(), SellRinggit.class);
+                    startActivity(i);
+                }
             }
         });
         populateListView();
