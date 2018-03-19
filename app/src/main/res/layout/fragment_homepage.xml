@@ -104,7 +104,7 @@
                     android:src="@drawable/ic_add_shopping_cart_black_24dp" />
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/textViewPurchaseCurrency"
                     android:layout_width="wrap_content"
                     android:layout_height="19dp"
                     android:text="Purchase Currency"
@@ -130,7 +130,7 @@
                 android:src="@drawable/ic_monetization_on_black_24dp" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/textViewSellCurrency"
                 android:layout_width="wrap_content"
                 android:layout_height="19dp"
                 android:text="Sell Currency"

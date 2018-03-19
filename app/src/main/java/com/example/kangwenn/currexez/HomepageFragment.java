@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -122,6 +123,15 @@ public class HomepageFragment extends Fragment {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this.getContext());
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("com.example.kangwenn.RATES", Context.MODE_PRIVATE);
         final String nationality = sharedPref.getString("nationality", null);
+        TextView textViewPurchase = v.findViewById(R.id.textViewPurchaseCurrency), textViewSell = v.findViewById(R.id.textViewSellCurrency);
+        try {
+            if (!nationality.equals("Malaysia")) {
+                textViewPurchase.setText(R.string.purchase_myr);
+                textViewSell.setText(R.string.sell_myr);
+            }
+        } catch (NullPointerException e) {
+            Log.d("tag", e.getMessage());
+        }
         mRate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

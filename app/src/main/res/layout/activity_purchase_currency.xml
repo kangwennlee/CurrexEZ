@@ -110,6 +110,7 @@
             android:clickable="true"
             android:focusable="false"
             android:hint="Date"
+            android:inputType="date"
             android:longClickable="false" />
 
         <TextView
@@ -125,8 +126,8 @@
             android:id="@+id/editTextCollectionLocation"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:inputType="textPersonName"
-            android:hint="Location" />
+            android:hint="Location"
+            android:inputType="textPersonName" />
 
         <Button
             android:id="@+id/buttonProceed"
