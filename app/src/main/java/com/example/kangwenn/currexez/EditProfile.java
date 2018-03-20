@@ -1,20 +1,23 @@
 package com.example.kangwenn.currexez;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -46,6 +49,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -56,7 +61,14 @@ import io.fabric.sdk.android.Fabric;
 
 public class EditProfile extends AppCompatActivity implements View.OnClickListener {
 
+    public static final int CAMERA_PERMISSIONS_REQUEST = 2;
+    public static final int CAMERA_IMAGE_REQUEST = 3;
+    public static final String FILE_NAME = "temp.jpg";
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int GALLERY_PERMISSIONS_REQUEST = 0;
+    private static final int GALLERY_IMAGE_REQUEST = 1;
+    private static final int MAX_DIMENSION = 1200;
+    private static final String TAG = EditProfile.class.getSimpleName();
     Calendar myCalendar;
     byte[] icData;
     ImageView imageView;
@@ -79,22 +91,6 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         Answers.getInstance().logContentView(new ContentViewEvent()
                 .putContentName("Edit Profile")
         );
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            progressDialog.setMessage("Please Wait...");
-            progressDialog.show();
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            icData = baos.toByteArray();
-            imageView.setImageBitmap(imageBitmap);
-            progressDialog.dismiss();
-        }
     }
 
     @Override
@@ -176,10 +172,22 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         btnPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditProfile.this);
+                builder
+                        .setMessage("Select your IC picture")
+                        .setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                startGalleryChooser();
+                            }
+                        })
+                        .setNegativeButton("Camera", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                startCamera();
+                            }
+                        });
+                builder.create().show();
             }
         });
 
@@ -218,54 +226,105 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
             }
         });
-        // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(EditProfile.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+    }
 
-            // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(EditProfile.this, android.Manifest.permission.CAMERA)) {
+    public void startGalleryChooser() {
+        if (PermissionUtils.requestPermission(this, GALLERY_PERMISSIONS_REQUEST, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select a photo"), GALLERY_IMAGE_REQUEST);
+        }
+    }
 
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
+    public void startCamera() {
+        if (PermissionUtils.requestPermission(this, CAMERA_PERMISSIONS_REQUEST, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA)) {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            Uri photoUri = FileProvider.getUriForFile(EditProfile.this, getApplicationContext().getPackageName() + ".provider", getCameraFile());
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivityForResult(intent, CAMERA_IMAGE_REQUEST);
+        }
+    }
 
-            } else {
+    public File getCameraFile() {
+        File dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        return new File(dir, FILE_NAME);
+    }
 
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(EditProfile.this, new String[]{android.Manifest.permission.CAMERA}, 100);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        } else {
-            // Permission has already been granted
+        if (requestCode == GALLERY_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+            setImage(data.getData());
+        } else if (requestCode == CAMERA_IMAGE_REQUEST && resultCode == RESULT_OK) {
+            Uri photoUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", getCameraFile());
+            setImage(photoUri);
         }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(
+            int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case 100: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
+            case CAMERA_PERMISSIONS_REQUEST:
+                if (PermissionUtils.permissionGranted(requestCode, CAMERA_PERMISSIONS_REQUEST, grantResults)) {
+                    startCamera();
                 }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request.
+                break;
+            case GALLERY_PERMISSIONS_REQUEST:
+                if (PermissionUtils.permissionGranted(requestCode, GALLERY_PERMISSIONS_REQUEST, grantResults)) {
+                    startGalleryChooser();
+                }
+                break;
         }
+    }
+
+    public void setImage(Uri uri) {
+        if (uri != null) {
+            try {
+                // scale the image to save on bandwidth
+                Bitmap bitmap =
+                        scaleBitmapDown(
+                                MediaStore.Images.Media.getBitmap(getContentResolver(), uri),
+                                MAX_DIMENSION);
+
+                //callCloudVision(bitmap);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                icData = baos.toByteArray();
+                imageView.setImageBitmap(bitmap);
+
+            } catch (IOException e) {
+                Log.d(TAG, "Image picking failed because " + e.getMessage());
+                Toast.makeText(this, "Image picker error", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Log.d(TAG, "Image picker gave us a null image.");
+            Toast.makeText(this, "Image picker error", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private Bitmap scaleBitmapDown(Bitmap bitmap, int maxDimension) {
+
+        int originalWidth = bitmap.getWidth();
+        int originalHeight = bitmap.getHeight();
+        int resizedWidth = maxDimension;
+        int resizedHeight = maxDimension;
+
+        if (originalHeight > originalWidth) {
+            resizedHeight = maxDimension;
+            resizedWidth = (int) (resizedHeight * (float) originalWidth / (float) originalHeight);
+        } else if (originalWidth > originalHeight) {
+            resizedWidth = maxDimension;
+            resizedHeight = (int) (resizedWidth * (float) originalHeight / (float) originalWidth);
+        } else if (originalHeight == originalWidth) {
+            resizedHeight = maxDimension;
+            resizedWidth = maxDimension;
+        }
+        return Bitmap.createScaledBitmap(bitmap, resizedWidth, resizedHeight, false);
     }
 
     public void uploadInformation(){
@@ -279,9 +338,6 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         //get the user UID
         String id = currentFirebaseUser.getUid();
 
-        progressDialog.setMessage("Uploading...");
-        progressDialog.show();
-
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("com.example.kangwenn.RATES", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("nationality", spValue);
@@ -294,7 +350,11 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         filepath.putBytes(icData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(EditProfile.this, "IC uploaded successfully!", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                Toast.makeText(EditProfile.this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getApplicationContext(), UserProfile.class);
+                startActivity(i);
+                finish();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -302,16 +362,14 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                 int errorCode = ((StorageException) e).getErrorCode();
                 String errorMessage = e.getMessage();
                 // test the errorCode and errorMessage, and handle accordingly
-                Toast.makeText(getApplicationContext(), "Upload unsuccessful.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Update profile failed.", Toast.LENGTH_LONG).show();
             }
         });
         databaseUser.child(id).setValue(user, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 if (databaseError == null){
-                    progressDialog.dismiss();
-                    Toast.makeText(EditProfile.this, "Profile updated successfully!", Toast.LENGTH_LONG).show();
-                    finish();
+                    //Toast.makeText(EditProfile.this, "Profile updated successfully!", Toast.LENGTH_LONG).show();
                 }else{
                     Toast.makeText(EditProfile.this, databaseError.toString(), Toast.LENGTH_SHORT).show();
                 }
@@ -339,6 +397,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
             }else if(!etPhoneNum.getText().toString().matches(regxforPhoneNum)){
                 Toast.makeText(EditProfile.this, "Please enter correct format of Malaysia Phone Number", Toast.LENGTH_SHORT).show();
             }else{
+                progressDialog.setMessage("Uploading...");
+                progressDialog.show();
                 uploadInformation();
             }
         } else {

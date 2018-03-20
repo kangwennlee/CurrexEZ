@@ -163,45 +163,50 @@ public class PurchaseHistory2 extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        Purchase purchase = ds.getValue(Purchase.class);
-                        String date = ds.getKey().substring(0, 4) + "/" + ds.getKey().substring(4, 6) + "/" + ds.getKey().substring(6, 8);
-                        //String month = ds.getKey().toString().substring(4,5);
-                        //String date = ds.getKey().toString().substring(6,7);
-                        String time = ds.getKey().substring(9, 11) + ":" + ds.getKey().substring(11, 13) + ":" + ds.getKey().substring(12, 14);
-                        String values = "Currency : " + purchase.getCurrency()
-                                + "\nPuchase Amount : " + round(purchase.getAmount(), 2)
-                                + "\nPuchase Amount In MYR : " + round(purchase.getAmountInRM(), 2)
-                                + "\nPayment Method : " + purchase.getPayMethod()
-                                + "\nPurchase Date : " + date + " " + time
-                                + "\nCollection Date : " + purchase.getCollectionDate()
-                                + "\nCollection Location: " + purchase.getCollectionLocation();
-                        String value = "Currency : " + purchase.getCurrency()
-                                + "\nPuchase Amount : " + round(purchase.getAmount(), 2)
-                                + "\nPurchase Date : " + date + " " + time;
-                        if (todaydate.compareTo(purchase.getCollectionDate()) > 0) {
-                            arrayListPast.add(values);
-                            arrayListView1.add(value);
+                        for (DataSnapshot ds1 : ds.getChildren()) {
+                            Purchase purchase = ds1.getValue(Purchase.class);
+                            String date = ds1.getKey().substring(0, 4) + "/" + ds1.getKey().substring(4, 6) + "/" + ds1.getKey().substring(6, 8);
+                            //String month = ds.getKey().toString().substring(4,5);
+                            //String date = ds.getKey().toString().substring(6,7);
+                            String time = ds1.getKey().substring(9, 11) + ":" + ds1.getKey().substring(11, 13) + ":" + ds1.getKey().substring(12, 14);
+                            String values = "Currency : " + purchase.getCurrency()
+                                    + "\n" + ds.getKey() + " Amount : " + round(purchase.getAmount(), 2)
+                                    + "\n" + ds.getKey() + " Amount In MYR : " + round(purchase.getAmountInRM(), 2)
+                                    + "\nPayment Method : " + purchase.getPayMethod()
+                                    + "\nPurchase Date : " + date + " " + time
+                                    + "\nCollection Date : " + purchase.getCollectionDate()
+                                    + "\nCollection Location: " + purchase.getCollectionLocation();
+                            String value = "Currency : " + purchase.getCurrency()
+                                    + "\n" + ds.getKey() + " Amount : " + round(purchase.getAmount(), 2)
+                                    + "\nPurchase Date : " + date + " " + time
+                                    + "\nCollection Date : " + purchase.getCollectionDate()
+                                    + "\nCollection Location: " + purchase.getCollectionLocation();
+                            if (todaydate.compareTo(purchase.getCollectionDate()) > 0) {
+                                arrayListPast.add(values);
+                                arrayListView1.add(value);
+                            } else {
+                                arrayListUpcoming.add(values);
+                                arrayListView2.add(value);
+                            }
+                        }
+                        adapterPast = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, arrayListView1);
+                        adapterUpcoming = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, arrayListView2);
+                        if (getArguments().getInt(ARG_SECTION_NUMBER) == 1) {
+                            listView.setAdapter(adapterUpcoming);
+                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                    Intent intent = new Intent(getContext(), SuccessPaymentActivity.class);
+                                    String string = arrayListUpcoming.get(i);
+                                    intent.putExtra("purchase", string);
+                                    startActivity(intent);
+                                }
+                            });
                         } else {
-                            arrayListUpcoming.add(values);
-                            arrayListView2.add(value);
+                            listView.setAdapter(adapterPast);
                         }
                     }
-                    adapterPast = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, arrayListView1);
-                    adapterUpcoming = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, arrayListView2);
-                    if (getArguments().getInt(ARG_SECTION_NUMBER) == 1) {
-                        listView.setAdapter(adapterUpcoming);
-                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                Intent intent = new Intent(getContext(), SuccessPaymentActivity.class);
-                                String string = arrayListUpcoming.get(i);
-                                intent.putExtra("purchase", string);
-                                startActivity(intent);
-                            }
-                        });
-                    } else {
-                        listView.setAdapter(adapterPast);
-                    }
+
                 }
 
                 @Override

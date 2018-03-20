@@ -42,6 +42,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStore;
@@ -65,7 +66,6 @@ import javax.crypto.SecretKey;
 
 import io.fabric.sdk.android.Fabric;
 
-import static com.example.kangwenn.currexez.PurchaseHistory.round;
 
 public class PurchaseCurrency extends AppCompatActivity {
     static final String DEFAULT_KEY_NAME = "default_key";
@@ -90,9 +90,16 @@ public class PurchaseCurrency extends AppCompatActivity {
     private KeyGenerator mKeyGenerator;
     private SharedPreferences mSharedPreferences;
 
-    private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseUser;
     private FirebaseUser currentFirebaseUser;
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,70 +119,6 @@ public class PurchaseCurrency extends AppCompatActivity {
         editTextLocation = findViewById(R.id.editTextCollectionLocation);
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        firebaseAuth = FirebaseAuth.getInstance();
-        databaseUser = FirebaseDatabase.getInstance().getReference("PurchaseHistory");
-        currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        try {
-            mKeyStore = KeyStore.getInstance("AndroidKeyStore");
-        } catch (KeyStoreException e) {
-            throw new RuntimeException("Failed to get an instance of KeyStore", e);
-        }
-        try {
-            mKeyGenerator = KeyGenerator
-                    .getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
-        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
-            throw new RuntimeException("Failed to get an instance of KeyGenerator", e);
-        }
-        Cipher defaultCipher;
-        Cipher cipherNotInvalidated;
-        try {
-            defaultCipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
-                    + KeyProperties.BLOCK_MODE_CBC + "/"
-                    + KeyProperties.ENCRYPTION_PADDING_PKCS7);
-            cipherNotInvalidated = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
-                    + KeyProperties.BLOCK_MODE_CBC + "/"
-                    + KeyProperties.ENCRYPTION_PADDING_PKCS7);
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-            throw new RuntimeException("Failed to get an instance of Cipher", e);
-        }
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        KeyguardManager keyguardManager = getSystemService(KeyguardManager.class);
-        FingerprintManager fingerprintManager = getSystemService(FingerprintManager.class);
-
-        if (!keyguardManager.isKeyguardSecure()) {
-            // Show a message that the user hasn't set up a fingerprint or lock screen.
-            Toast.makeText(this,
-                    "Secure lock screen hasn't set up.\n"
-                            + "Go to 'Settings -> Security -> Fingerprint' to set up a fingerprint",
-                    Toast.LENGTH_LONG).show();
-            buttonProceed.setEnabled(false);
-            return;
-        }
-
-        // Now the protection level of USE_FINGERPRINT permission is normal instead of dangerous.
-        // See http://developer.android.com/reference/android/Manifest.permission.html#USE_FINGERPRINT
-        // The line below prevents the false positive inspection from Android Studio
-        // noinspection ResourceType
-        if (!fingerprintManager.hasEnrolledFingerprints()) {
-            buttonProceed.setEnabled(false);
-            // This happens when no fingerprints are registered.
-            Toast.makeText(this,
-                    "Go to 'Settings -> Security -> Fingerprint' and register at least one" +
-                            " fingerprint",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-        createKey(DEFAULT_KEY_NAME, true);
-        createKey(KEY_NAME_NOT_INVALIDATED, false);
-        buttonProceed.setEnabled(false);
-        buttonProceed.setOnClickListener(new PurchaseButtonClickListener(defaultCipher, DEFAULT_KEY_NAME));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mFirebaseAnalytics.logEvent("click_purchase",null);
         sharedPref = getApplicationContext().getSharedPreferences("com.example.kangwenn.RATES", Context.MODE_PRIVATE);
         for (int i = 0; i < currencyName.length; i++) {
             String string = getResources().getString(getResources().getIdentifier(currencyName[i], "string", getApplicationContext().getPackageName()));
@@ -231,6 +174,7 @@ public class PurchaseCurrency extends AppCompatActivity {
 
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -256,6 +200,7 @@ public class PurchaseCurrency extends AppCompatActivity {
             }
         });
         myCalendar = Calendar.getInstance();
+        updateLabel();
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
             @Override
@@ -279,6 +224,64 @@ public class PurchaseCurrency extends AppCompatActivity {
                 mDatePicker.show();
             }
         });
+        initializeFingerprint();
+        buttonProceed.setEnabled(false);
+    }
+
+    public void initializeFingerprint() {
+        try {
+            mKeyStore = KeyStore.getInstance("AndroidKeyStore");
+        } catch (KeyStoreException e) {
+            throw new RuntimeException("Failed to get an instance of KeyStore", e);
+        }
+        try {
+            mKeyGenerator = KeyGenerator
+                    .getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
+        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
+            throw new RuntimeException("Failed to get an instance of KeyGenerator", e);
+        }
+        Cipher defaultCipher;
+        try {
+            defaultCipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
+                    + KeyProperties.BLOCK_MODE_CBC + "/"
+                    + KeyProperties.ENCRYPTION_PADDING_PKCS7);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+            throw new RuntimeException("Failed to get an instance of Cipher", e);
+        }
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        KeyguardManager keyguardManager = getSystemService(KeyguardManager.class);
+        FingerprintManager fingerprintManager = getSystemService(FingerprintManager.class);
+
+        if (!keyguardManager.isKeyguardSecure()) {
+            // Show a message that the user hasn't set up a fingerprint or lock screen.
+            Toast.makeText(this,
+                    "Secure lock screen hasn't set up.\n"
+                            + "Go to 'Settings -> Security -> Fingerprint' to set up a fingerprint",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Now the protection level of USE_FINGERPRINT permission is normal instead of dangerous.
+        // See http://developer.android.com/reference/android/Manifest.permission.html#USE_FINGERPRINT
+        // The line below prevents the false positive inspection from Android Studio
+        // noinspection ResourceType
+        if (!fingerprintManager.hasEnrolledFingerprints()) {
+            // This happens when no fingerprints are registered.
+            Toast.makeText(this,
+                    "Go to 'Settings -> Security -> Fingerprint' and register at least one" +
+                            " fingerprint",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+        createKey(DEFAULT_KEY_NAME, true);
+        createKey(KEY_NAME_NOT_INVALIDATED, false);
+        buttonProceed.setOnClickListener(new PurchaseButtonClickListener(defaultCipher, DEFAULT_KEY_NAME));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mFirebaseAnalytics.logEvent("local_click_purchase", null);
     }
 
     /**
@@ -331,11 +334,9 @@ public class PurchaseCurrency extends AppCompatActivity {
             //v.setVisibility(View.VISIBLE);
             //v.setText(Base64.encodeToString(encrypted, 0 /* flags */));
             if(radioButtonCredit.isChecked()){
-                mFirebaseAnalytics.logEvent("card_payment",null);
                 Intent i = new Intent(this,CardPayment.class);
                 startActivityForResult(i,150);
             }else{
-                mFirebaseAnalytics.logEvent("online_payment",null);
                 storePurchase();
             }
             //FirebaseDatabase hereee
@@ -352,6 +353,11 @@ public class PurchaseCurrency extends AppCompatActivity {
     }
 
     public void storePurchase(){
+        if (radioButtonCredit.isChecked()) {
+            mFirebaseAnalytics.logEvent("card_payment", null);
+        } else {
+            mFirebaseAnalytics.logEvent("online_payment", null);
+        }
         String currency = spinnerSelectCurr.getSelectedItem().toString();
         Double purchaseAmount = Double.parseDouble(editTextPurAmount.getText().toString());
         Double purchaseAmountInRM = total;
@@ -363,6 +369,8 @@ public class PurchaseCurrency extends AppCompatActivity {
         String collectionDate = editTextDate.getText().toString();
         String collectionLoc = editTextLocation.getText().toString();
 
+        databaseUser = FirebaseDatabase.getInstance().getReference("PurchaseHistory");
+        currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         //get the user UID
         String id = currentFirebaseUser.getUid();
 
@@ -371,26 +379,12 @@ public class PurchaseCurrency extends AppCompatActivity {
         String date = sdf.format(new Date());
         String time = date.substring(9,11) + ":" + date.substring(11,13) + ":" + date.substring(12,14);
         final String values = "Currency : " + purchase.getCurrency()
-                + "\nPuchase Amount : " + round(purchase.getAmount(),2)
-                + "\nPuchase Amount In MYR : " + round(purchase.getAmountInRM(),2)
+                + "\nPurchase Amount : " + round(purchase.getAmount(), 2)
+                + "\nPurchase Amount In MYR : " + round(purchase.getAmountInRM(), 2)
                 + "\nPayment Method : " + purchase.getPayMethod()
-                + "\nPurchase Date : " + date + " " + time
+                + "\nTransaction Date : " + date + " " + time
                 + "\nCollection Date : " + purchase.getCollectionDate()
                 + "\nCollection Location: " + purchase.getCollectionLocation();
-        databaseUser.child(id).child(date).setValue(purchase, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                if (databaseError == null){
-                    Intent intent = new Intent(getApplicationContext(),SuccessPaymentActivity.class);
-                    intent.putExtra("purchase",values);
-                    Toast.makeText(getApplicationContext(), "Payment Successful!", Toast.LENGTH_LONG).show();
-                    startActivity(intent);
-                }else{
-                    Toast.makeText(getApplicationContext(), "Database failed. Please contact our customer service", Toast.LENGTH_LONG).show();
-
-                }
-            }
-        });
         Bundle bundle = new Bundle();
         bundle.putString("Currency_Purchased",purchase.getCurrency());
         bundle.putDouble("Purchase_Amount", purchase.getAmount());
@@ -406,7 +400,21 @@ public class PurchaseCurrency extends AppCompatActivity {
                 .putCurrency(Currency.getInstance("MYR"))
                 .putSuccess(true)
         );
-        finish();
+        databaseUser.child(id).child("Buy").child(date).setValue(purchase, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError == null) {
+                    Intent intent = new Intent(getApplicationContext(), SuccessPaymentActivity.class);
+                    intent.putExtra("purchase", values);
+                    Toast.makeText(getApplicationContext(), "Payment Successful!", Toast.LENGTH_LONG).show();
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Database failed. Please contact our customer service", Toast.LENGTH_LONG).show();
+
+                }
+            }
+        });
     }
 
     /**

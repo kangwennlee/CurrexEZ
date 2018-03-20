@@ -16,20 +16,6 @@
         tools:context="com.example.kangwenn.currexez.SellRinggit">
 
         <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:drawableLeft="@drawable/ic_attach_money_black_24dp"
-            android:text="Select a currency to convert to"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-
-        <Spinner
-            android:id="@+id/spinnerSelectSellCurr"
-            android:layout_width="match_parent"
-            android:layout_height="50dp" />
-
-        <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,6 +44,20 @@
                 android:text="@string/MYR"
                 android:textSize="18sp" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:drawableLeft="@drawable/ic_attach_money_black_24dp"
+            android:text="Select a currency to convert to"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+        <Spinner
+            android:id="@+id/spinnerSelectSellCurr"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
 
 
         <TextView

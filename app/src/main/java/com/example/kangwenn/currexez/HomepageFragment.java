@@ -220,21 +220,23 @@ public class HomepageFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Purchase purchase = ds.getValue(Purchase.class);
-                    String date = ds.getKey().substring(0, 4) + "/" + ds.getKey().substring(4, 6) + "/" + ds.getKey().substring(6, 8);
-                    //String month = ds.getKey().toString().substring(4,5);
-                    //String date = ds.getKey().toString().substring(6,7);
-                    String time = ds.getKey().substring(9, 11) + ":" + ds.getKey().substring(11, 13) + ":" + ds.getKey().substring(12, 14);
-                    String values = "Currency : " + purchase.getCurrency()
-                            + "\nPuchase Amount : " + round(purchase.getAmount(), 2)
-                            + "\nCollection Date : " + purchase.getCollectionDate()
-                            + "\nCollection Location: " + purchase.getCollectionLocation();
-                    if (todaydate.compareTo(purchase.getCollectionDate()) <= 0) {
-                        arrayList.add(values);
+                    for (DataSnapshot ds1 : ds.getChildren()) {
+                        Purchase purchase = ds1.getValue(Purchase.class);
+                        String date = ds1.getKey().substring(0, 4) + "/" + ds1.getKey().substring(4, 6) + "/" + ds1.getKey().substring(6, 8);
+                        //String month = ds.getKey().toString().substring(4,5);
+                        //String date = ds.getKey().toString().substring(6,7);
+                        String time = ds1.getKey().substring(9, 11) + ":" + ds1.getKey().substring(11, 13) + ":" + ds1.getKey().substring(12, 14);
+                        String values = "Currency : " + purchase.getCurrency()
+                                + "\n" + ds.getKey() + " Amount : " + round(purchase.getAmount(), 2)
+                                + "\nCollection Date : " + purchase.getCollectionDate()
+                                + "\nCollection Location: " + purchase.getCollectionLocation();
+                        if (todaydate.compareTo(purchase.getCollectionDate()) <= 0) {
+                            arrayList.add(values);
+                        }
                     }
+                    adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, arrayList);
+                    homeListView.setAdapter(adapter);
                 }
-                adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, arrayList);
-                homeListView.setAdapter(adapter);
             }
 
             @Override
