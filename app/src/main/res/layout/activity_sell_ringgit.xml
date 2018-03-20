@@ -67,34 +67,6 @@
             android:layout_marginTop="15dp" />
 
         <TextView
-            android:id="@+id/textView10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:drawableLeft="@drawable/ic_credit_card_black_24dp"
-            android:text="Select Payment Method"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-
-        <RadioGroup
-            android:id="@+id/radioGroupMethod"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <RadioButton
-                android:id="@+id/radioButtonCredit"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:duplicateParentState="false"
-                android:text="Debit Card" />
-
-            <RadioButton
-                android:id="@+id/radioButtonOnline"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:text="Online Payment" />
-        </RadioGroup>
-
-        <TextView
             android:id="@+id/textView11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -129,6 +101,13 @@
             android:layout_height="50dp"
             android:hint="Location"
             android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/charge_fee" />
 
         <Button
             android:id="@+id/buttonProceed"

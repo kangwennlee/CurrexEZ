@@ -1,6 +1,8 @@
 package com.example.kangwenn.currexez;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -47,6 +49,7 @@ public class PurchaseHistory2 extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private FirebaseAnalytics mFirebaseAnalytics;
 
+
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -72,6 +75,7 @@ public class PurchaseHistory2 extends AppCompatActivity {
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+
 
     }
 
@@ -115,6 +119,7 @@ public class PurchaseHistory2 extends AppCompatActivity {
         FirebaseUser mCurrentUser;
         String userID;
         String todaydate;
+        SharedPreferences sharedPref;
         private DatabaseReference databaseReference, currentUser;
         private ArrayList<String> arrayListPast, arrayListUpcoming, arrayListView1, arrayListView2;
         private ArrayAdapter<String> adapterPast, adapterUpcoming;
@@ -159,6 +164,8 @@ public class PurchaseHistory2 extends AppCompatActivity {
             arrayListView2 = new ArrayList<>();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy", Locale.US);
             todaydate = sdf.format(new Date());
+            sharedPref = getContext().getSharedPreferences("com.example.kangwenn.RATES", Context.MODE_PRIVATE);
+            final String nationality = sharedPref.getString("nationality", null);
             currentUser.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -169,18 +176,66 @@ public class PurchaseHistory2 extends AppCompatActivity {
                             //String month = ds.getKey().toString().substring(4,5);
                             //String date = ds.getKey().toString().substring(6,7);
                             String time = ds1.getKey().substring(9, 11) + ":" + ds1.getKey().substring(11, 13) + ":" + ds1.getKey().substring(12, 14);
-                            String values = "Currency : " + purchase.getCurrency()
-                                    + "\n" + ds.getKey() + " Amount : " + round(purchase.getAmount(), 2)
-                                    + "\n" + ds.getKey() + " Amount In MYR : " + round(purchase.getAmountInRM(), 2)
-                                    + "\nPayment Method : " + purchase.getPayMethod()
-                                    + "\nPurchase Date : " + date + " " + time
-                                    + "\nCollection Date : " + purchase.getCollectionDate()
-                                    + "\nCollection Location: " + purchase.getCollectionLocation();
-                            String value = "Currency : " + purchase.getCurrency()
-                                    + "\n" + ds.getKey() + " Amount : " + round(purchase.getAmount(), 2)
-                                    + "\nPurchase Date : " + date + " " + time
-                                    + "\nCollection Date : " + purchase.getCollectionDate()
-                                    + "\nCollection Location: " + purchase.getCollectionLocation();
+                            String values;
+                            String value;
+                            if (nationality.equals("Malaysia")) {
+                                if (ds.getKey().equals("Buy")) {
+                                    values = "Currency purchased: " + purchase.getCurrency()
+                                            + "\nPurchase Amount : " + round(purchase.getAmount(), 2)
+                                            + "\nPurchase Amount In MYR : " + round(purchase.getAmountInRM(), 2)
+                                            + "\nPayment Method : " + purchase.getPayMethod()
+                                            + "\nTransaction Date : " + date + " " + time
+                                            + "\nCollection Date : " + purchase.getCollectionDate()
+                                            + "\nCollection Location: " + purchase.getCollectionLocation();
+                                    value = "Currency purchased: " + purchase.getCurrency()
+                                            + "\nPurchase Amount : " + round(purchase.getAmount(), 2)
+                                            + "\nTransaction Date : " + date + " " + time
+                                            + "\nCollection Date : " + purchase.getCollectionDate()
+                                            + "\nCollection Location: " + purchase.getCollectionLocation();
+                                } else {
+                                    values = "Currency sold: " + purchase.getCurrency()
+                                            + "\nSell Amount : " + round(purchase.getAmount(), 2)
+                                            + "\nSell Amount In MYR : " + round(purchase.getAmountInRM(), 2)
+                                            + "\nPayment Method : " + purchase.getPayMethod()
+                                            + "\nTransaction Date : " + date + " " + time
+                                            + "\nCollection Date : " + purchase.getCollectionDate()
+                                            + "\nCollection Location: " + purchase.getCollectionLocation();
+                                    value = "Currency sold: " + purchase.getCurrency()
+                                            + "\nSold Amount : " + round(purchase.getAmount(), 2)
+                                            + "\nTransaction Date : " + date + " " + time
+                                            + "\nCollection Date : " + purchase.getCollectionDate()
+                                            + "\nCollection Location: " + purchase.getCollectionLocation();
+                                }
+                            } else {
+                                if (ds.getKey().equals("Buy")) {
+                                    values = "Currency paid using: " + purchase.getCurrency()
+                                            + "\nPaid Amount : " + round(purchase.getAmount(), 2)
+                                            + "\nAmount In MYR : " + round(purchase.getAmountInRM(), 2)
+                                            + "\nPayment Method : " + purchase.getPayMethod()
+                                            + "\nTransaction Date : " + date + " " + time
+                                            + "\nCollection Date : " + purchase.getCollectionDate()
+                                            + "\nCollection Location: " + purchase.getCollectionLocation();
+                                    value = "Currency paid using: " + purchase.getCurrency()
+                                            + "\nPaid Amount : " + round(purchase.getAmount(), 2)
+                                            + "\nTransaction Date : " + date + " " + time
+                                            + "\nCollection Date : " + purchase.getCollectionDate()
+                                            + "\nCollection Location: " + purchase.getCollectionLocation();
+                                } else {
+                                    values = "Currency Converted to: " + purchase.getCurrency()
+                                            + "\nConverted Amount : " + round(purchase.getAmount(), 2)
+                                            + "\nReceived Amount of MYR : " + round(purchase.getAmountInRM(), 2)
+                                            + "\nPayment Method : " + purchase.getPayMethod()
+                                            + "\nTransaction Date : " + date + " " + time
+                                            + "\nCollection Date : " + purchase.getCollectionDate()
+                                            + "\nCollection Location: " + purchase.getCollectionLocation();
+                                    value = "Currency Converted to: " + purchase.getCurrency()
+                                            + "\nConverted Amount : " + round(purchase.getAmount(), 2)
+                                            + "\nTransaction Date : " + date + " " + time
+                                            + "\nCollection Date : " + purchase.getCollectionDate()
+                                            + "\nCollection Location: " + purchase.getCollectionLocation();
+                                }
+                            }
+
                             if (todaydate.compareTo(purchase.getCollectionDate()) > 0) {
                                 arrayListPast.add(values);
                                 arrayListView1.add(value);

@@ -1,7 +1,6 @@
 package com.example.kangwenn.currexez;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,11 +9,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
@@ -90,29 +84,8 @@ public class UserProfile extends AppCompatActivity {
                 FirebaseStorage.getInstance().getReference().child("IC").child(uid).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                        ImageRequest imageRequest = new ImageRequest(
-                                uri.toString(),
-                                new Response.Listener<Bitmap>() {
-                                    @Override
-                                    public void onResponse(Bitmap response) {
-                                        imageView.setImageBitmap(response);
-                                    }
-                                },
-                                0,
-                                0,
-                                ImageView.ScaleType.CENTER_CROP,
-                                Bitmap.Config.RGB_565,
-                                new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        error.printStackTrace();
-                                    }
-                                }
-                        );
-                        requestQueue.add(imageRequest);
-                        //BitmapDownloaderTask task = new BitmapDownloaderTask(imageView);
-                        //task.execute(uri.toString());
+                        BitmapDownloaderTask task = new BitmapDownloaderTask(imageView);
+                        task.execute(uri.toString());
                     }
                 });
 

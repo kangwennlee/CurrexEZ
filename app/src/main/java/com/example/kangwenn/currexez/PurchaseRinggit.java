@@ -15,8 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,8 +46,6 @@ public class PurchaseRinggit extends AppCompatActivity {
     EditText editTextPurAmount, editTextDate, editTextLocation;
     TextView textViewTotal, textViewName;
     Button buttonProceed;
-    RadioButton radioButtonCredit, radioButtonOnline;
-    RadioGroup radioGroup;
     Double total;
     Calendar myCalendar;
     private ProgressDialog progressDialog;
@@ -74,9 +70,6 @@ public class PurchaseRinggit extends AppCompatActivity {
         textViewTotal = findViewById(R.id.textViewPrice);
         textViewName = findViewById(R.id.textViewCurrency);
         buttonProceed = findViewById(R.id.buttonProceed);
-        radioButtonCredit = findViewById(R.id.radioButtonCredit);
-        radioButtonOnline = findViewById(R.id.radioButtonOnline);
-        radioGroup = findViewById(R.id.radioGroupMethod);
         editTextDate = findViewById(R.id.editTextCollectionDate);
         editTextLocation = findViewById(R.id.editTextCollectionLocation);
         // Obtain the FirebaseAnalytics instance.
@@ -115,7 +108,7 @@ public class PurchaseRinggit extends AppCompatActivity {
                     } catch (NumberFormatException e) {
 
                     }
-                    if (radioButtonCredit.isChecked() || radioButtonOnline.isChecked() && !editTextPurAmount.getText().toString().equals("") && Double.valueOf(editTextPurAmount.getText().toString()) > 0) {
+                    if (!editTextPurAmount.getText().toString().equals("") && Double.valueOf(editTextPurAmount.getText().toString()) > 0) {
                         buttonProceed.setEnabled(true);
                     }
                 }
@@ -135,25 +128,6 @@ public class PurchaseRinggit extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (!editTextPurAmount.getText().toString().equals("")) {
-                    if (Double.valueOf(editTextPurAmount.getText().toString()) > 0) {
-                        buttonProceed.setEnabled(true);
-                        if (radioButtonCredit.isChecked()) {
-
-                        } else if (radioButtonOnline.isChecked()) {
-
-                        }
-                    } else {
-                        buttonProceed.setEnabled(false);
-                    }
-                } else {
-                    buttonProceed.setEnabled(false);
-                }
             }
         });
         myCalendar = Calendar.getInstance();
@@ -207,24 +181,15 @@ public class PurchaseRinggit extends AppCompatActivity {
     public void updatePrice(int position) {
         Double amount = Double.parseDouble(editTextPurAmount.getText().toString());
         float currRate = sharedPref.getFloat(currencyName[position], 0);
-        total = amount / currRate;
-        textViewTotal.setText("You will get: RM" + " " + String.format(Locale.US, "%.2f", total));
+        total = amount * currRate;
+        textViewTotal.setText("This would cost you: " + currencyName[position] + " " + String.format(Locale.US, "%.2f", total));
     }
 
     public void storePurchase() {
-        if (radioButtonCredit.isChecked()) {
-            mFirebaseAnalytics.logEvent("card_payment", null);
-        } else {
-            mFirebaseAnalytics.logEvent("online_payment", null);
-        }
+        mFirebaseAnalytics.logEvent("card_payment", null);
         String currency = spinnerSelectCurr.getSelectedItem().toString();
         Double purchaseAmount = Double.parseDouble(editTextPurAmount.getText().toString());
         Double purchaseAmountInRM = total;
-
-        int selectID = radioGroup.getCheckedRadioButtonId();
-        RadioButton radioButton = findViewById(selectID);
-        String selectRadioButtonValue = radioButton.getText().toString();
-
         String collectionDate = editTextDate.getText().toString();
         String collectionLoc = editTextLocation.getText().toString();
 
@@ -233,13 +198,13 @@ public class PurchaseRinggit extends AppCompatActivity {
         //get the user UID
         String id = currentFirebaseUser.getUid();
 
-        final Purchase purchase = new Purchase(currency, purchaseAmount, purchaseAmountInRM, selectRadioButtonValue, collectionDate, collectionLoc);
+        final Purchase purchase = new Purchase(currency, purchaseAmount, purchaseAmountInRM, "Credit Card", collectionDate, collectionLoc);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US);
         String date = sdf.format(new Date());
         String time = date.substring(9, 11) + ":" + date.substring(11, 13) + ":" + date.substring(12, 14);
-        final String values = "Currency : " + purchase.getCurrency()
-                + "\nBuy Amount : " + round(purchase.getAmount(), 2)
-                + "\nBuy Amount In MYR : " + round(purchase.getAmountInRM(), 2)
+        final String values = "Currency paid using: " + purchase.getCurrency()
+                + "\nPay Amount : " + round(purchase.getAmount(), 2)
+                + "\nAmount In MYR : " + round(purchase.getAmountInRM(), 2)
                 + "\nPayment Method : " + purchase.getPayMethod()
                 + "\nTransaction Date : " + date + " " + time
                 + "\nCollection Date : " + purchase.getCollectionDate()

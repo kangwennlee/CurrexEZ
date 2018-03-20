@@ -378,7 +378,7 @@ public class PurchaseCurrency extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss",Locale.US);
         String date = sdf.format(new Date());
         String time = date.substring(9,11) + ":" + date.substring(11,13) + ":" + date.substring(12,14);
-        final String values = "Currency : " + purchase.getCurrency()
+        final String values = "Currency purchased: " + purchase.getCurrency()
                 + "\nPurchase Amount : " + round(purchase.getAmount(), 2)
                 + "\nPurchase Amount In MYR : " + round(purchase.getAmountInRM(), 2)
                 + "\nPayment Method : " + purchase.getPayMethod()
