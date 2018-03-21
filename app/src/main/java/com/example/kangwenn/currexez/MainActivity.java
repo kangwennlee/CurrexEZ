@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("com.example.kangwenn.RATES", Context.MODE_PRIVATE);
+        final SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("com.example.kangwenn.RATES", Context.MODE_PRIVATE);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         sdf.setTimeZone(TimeZone.getTimeZone("CET"));
         String date = sdf.format(new Date());
@@ -143,6 +143,15 @@ public class MainActivity extends AppCompatActivity
                 if (!dataSnapshot.exists()) {
                     Intent i = new Intent(getApplicationContext(), EditProfile.class);
                     startActivity(i);
+                } else {
+                    SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("com.example.kangwenn.RATES", Context.MODE_PRIVATE);
+                    if (sharedPref.getString("nationality", null) == null) {
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString("nationality", dataSnapshot.child("nation").getValue().toString());
+                        editor.apply();
+                        Fragment fragment = new HomepageFragment();
+                        getFragmentManager().beginTransaction().replace(R.id.frame_container, fragment, "homepage").commit();
+                    }
                 }
             }
 
@@ -152,7 +161,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
         Fragment fragment = new HomepageFragment();
-        this.getFragmentManager().beginTransaction().replace(R.id.frame_container, fragment, "homepage").commit();
+        getFragmentManager().beginTransaction().replace(R.id.frame_container, fragment, "homepage").commit();
     }
 
     @Override
