@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CurrexEZ</string>
+
+
+    <!--For Language change-->
+    <string name="dialogTitle">选择你的语言</string>
+    <string-array name="languageChoose">
+        <item>英文</item>
+        <item>中文</item>
+    </string-array>
+
+</resources>

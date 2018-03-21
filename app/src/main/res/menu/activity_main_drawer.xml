@@ -20,6 +20,12 @@
             android:id="@+id/nav_history"
             android:icon="@drawable/ic_history_black_24dp"
             android:title="My Purchase" />
+
+        <item
+            android:id="@+id/nav_changeLanguage"
+            android:icon="@drawable/ic_translate_black_24dp"
+            android:title="Language"
+            />
     </group>
 
     <item android:title="Others">

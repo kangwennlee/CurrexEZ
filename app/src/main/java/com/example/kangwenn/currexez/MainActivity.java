@@ -1,9 +1,12 @@
 package com.example.kangwenn.currexez;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
@@ -231,7 +234,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_profile) {
             Intent i = new Intent(getApplicationContext(), UserProfile.class);
             startActivity(i);
-        } else if (id == R.id.nav_logout) {
+        } else if (id == R.id.nav_changeLanguage) {
+            showDialogForLanguage();
+        }else if (id == R.id.nav_logout) {
             AuthUI.getInstance()
                     .signOut(this)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -266,4 +271,34 @@ public class MainActivity extends AppCompatActivity
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+    public void showDialogForLanguage(){
+        String title = getString(R.string.dialogTitle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle(title);
+        builder.setSingleChoiceItems(R.array.languageChoose, 2, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if(i == 1){
+                    changeLanguage("zh");
+                    recreate();
+                }else{
+                    changeLanguage("en");
+                    recreate();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    public void changeLanguage(String code){
+        Context context = LocaleHelper.setLocale(this, code);
+        Resources resources = context.getResources();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
+    }
+
 }

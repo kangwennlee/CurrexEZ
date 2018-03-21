@@ -147,4 +147,13 @@
     <string name="sell_currency">Sell Currency</string>
     <string name="sell_myr">Sell Ringgit</string>
     <string name="charge_fee">You will be charged for a small amount of fees for deposit.</string>
+
+
+
+    <!--For Language change-->
+    <string name="dialogTitle">Change Your Language</string>
+    <string-array name="languageChoose">
+        <item>English</item>
+        <item>Chinese</item>
+    </string-array>
 </resources>
