@@ -408,13 +408,13 @@ public class PurchaseCurrency extends AppCompatActivity {
                     intent.putExtra("purchase", values);
                     Toast.makeText(getApplicationContext(), "Payment Successful!", Toast.LENGTH_LONG).show();
                     startActivity(intent);
-                    finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Database failed. Please contact our customer service", Toast.LENGTH_LONG).show();
 
                 }
             }
         });
+        finish();
     }
 
     /**
