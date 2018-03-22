@@ -418,4 +418,9 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         etBirthday.setText(sdf.format(myCalendar.getTime()));
     }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
+    }
 }

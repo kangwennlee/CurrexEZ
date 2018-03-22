@@ -296,4 +296,9 @@ public class PurchaseHistory2 extends AppCompatActivity {
             return 2;
         }
     }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
+    }
 }

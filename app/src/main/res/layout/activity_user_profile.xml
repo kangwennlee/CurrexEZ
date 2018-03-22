@@ -15,7 +15,7 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Name :" />
+            android:text="@string/lblname" />
 
         <TextView
             android:id="@+id/textViewUserName"
@@ -31,7 +31,7 @@
             android:id="@+id/textView16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="IC / Passport :" />
+            android:text="@string/lblPassport" />
 
         <TextView
             android:id="@+id/textViewUserIC"
@@ -47,7 +47,7 @@
             android:id="@+id/textView11"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Birth date :" />
+            android:text="@string/lblBirthdate" />
 
         <TextView
             android:id="@+id/textViewUserBirthdate"
@@ -63,7 +63,7 @@
             android:id="@+id/textView21"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nationality: " />
+            android:text="@string/lblNationality" />
 
         <TextView
             android:id="@+id/textViewUserNationality"
@@ -79,7 +79,7 @@
             android:id="@+id/textView14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Address :" />
+            android:text="@string/lblAddress" />
 
         <TextView
             android:id="@+id/textViewUserAddress"
@@ -95,7 +95,7 @@
             android:id="@+id/textView15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mobile Number: " />
+            android:text="@string/lblMobileNumber" />
 
         <TextView
             android:id="@+id/textViewUserPhone"
@@ -108,7 +108,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Photo of IC:" />
+            android:text="@string/PhotoofIC" />
 
         <ImageView
             android:id="@+id/imageViewIC"
@@ -124,6 +124,6 @@
             android:id="@+id/buttonEditProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit Profile" />
+            android:text="@string/btnEditProfile" />
     </TableRow>
 </TableLayout>

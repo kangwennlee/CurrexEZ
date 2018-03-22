@@ -15,7 +15,7 @@
             android:id="@+id/textView12"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Enter your name as stated in your IC/Passport" />
+            android:text="@string/lblName" />
 
         <EditText
             android:id="@+id/etName"
@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Select your nationality" />
+            android:text="@string/lblNational" />
 
         <Spinner
             android:id="@+id/spinnerNation"
@@ -44,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Select your birth date" />
+            android:text="@string/lblBrith" />
 
         <EditText
             android:id="@+id/Birthday"
@@ -52,7 +52,7 @@
             android:layout_height="50dp"
             android:clickable="true"
             android:focusable="false"
-            android:hint="Birthday"
+            android:hint="@string/hihtBrith"
             android:longClickable="false" />
 
         <TextView
@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Enter your mobile phone number (numbers only)" />
+            android:text="@string/lblphone" />
 
         <EditText
             android:id="@+id/etPhoneNum"
@@ -76,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Enter your Identity Card Number (xxxxxx-xx-xxxx)" />
+            android:text="@string/lblIC" />
 
         <EditText
             android:id="@+id/etPassport"
@@ -92,7 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Enter your address as stated in IC" />
+            android:text="@string/lbladdress" />
 
         <EditText
             android:id="@+id/etAddress"
@@ -109,7 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:drawableLeft="@drawable/bt_ic_camera"
-            android:text="Photo of IC" />
+            android:text="@string/lblphoto" />
 
 
         <ImageView
@@ -126,7 +126,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="I agree to the terms and conditions of CurrexEZ."/>
+                android:text="@string/lblCondition"/>
         </LinearLayout>
 
 

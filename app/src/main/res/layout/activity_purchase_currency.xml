@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:drawableLeft="@drawable/ic_euro_symbol_black_24dp"
-            android:text="Select a currency to purchase"
+            android:text="@string/lblSelectacurrencytopurchase"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <Spinner
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:drawableLeft="@drawable/ic_attach_money_black_24dp"
-            android:text="Enter amount you wish to purchase"
+            android:text="@string/enteramountyouwishtopurchase"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             />
 
@@ -49,7 +49,7 @@
                 android:layout_width="150dp"
                 android:layout_height="50dp"
                 android:ems="8"
-                android:hint="Enter Amount"
+                android:hint="@string/enterAmount"
                 android:inputType="numberDecimal" />
 
             <TextView
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:drawableLeft="@drawable/ic_date_range_black_24dp"
-            android:text="Select Collection Date"
+            android:text="@string/selectCollectionDate"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
 
@@ -91,7 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:drawableLeft="@drawable/ic_add_location_black_24dp"
-            android:text="Select Collection Location"
+            android:text="@string/selectCollectionLocation"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <EditText
@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:drawableLeft="@drawable/ic_credit_card_black_24dp"
-            android:text="Select Payment Method"
+            android:text="@string/selectPaymentMethod"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <RadioGroup
@@ -120,13 +120,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:duplicateParentState="false"
-                android:text="Debit Card" />
+                android:text="@string/debitCard" />
 
             <RadioButton
                 android:id="@+id/radioButtonOnline"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:text="Online Payment" />
+                android:text="@string/onlinePayment" />
         </RadioGroup>
 
         <Button
@@ -134,7 +134,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Proceed to payment" />
+            android:text="@string/proceedToPayment" />
 
     </LinearLayout>
 

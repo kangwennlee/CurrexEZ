@@ -1,5 +1,6 @@
 package com.example.kangwenn.currexez;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
@@ -130,5 +131,10 @@ public class LauncherActivity extends AppCompatActivity{
     @MainThread
     private void showToast(@StringRes int errorMessageRes) {
         Toast.makeText(getApplicationContext(), errorMessageRes, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
     }
 }

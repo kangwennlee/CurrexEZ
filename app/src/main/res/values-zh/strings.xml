@@ -1,7 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CurrexEZ</string>
+    <string name ="navigation_drawer_open">打开抽屉式导航</string>
+    <string name ="navigation_drawer_close">关闭抽屉式导航</string>
 
+    <string name="action_about">关于我们</string>
+
+    <string name="unknown_response">Unexpected onActivityResult response code</string>
+    <string name="unknown_sign_in_response">Unknown response from AuthUI sign-in</string>
+    <string name="sign_in_cancelled">登录取消</string>
+    <string name="no_internet_connection">没有网络连接</string>
+    <string name="unknown_error">出现未知错误</string>
+
+    <!-- Auth UI - Signed in -->
+    <string name="signed_in_header">您已登录！</string>
+    <string name="sign_out">登出</string>
+    <string name="delete_account_label">删除帐户</string>
+    <string name="sign_out_failed">退出失败</string>
+    <string name="delete_account_failed">删除帐户失败</string>
+
+
+    <string name="cancel">取消</string>
+    <string name="use_password">使用密码</string>
+    <string name="finger_title">指纹认证</string>
+    <string name="ok">OK</string>
+    <string name="password">密码</string>
+    <string name="fingerprint_description">确认指纹以继续</string>
+    <string name="fingerprint_hint">触摸传感器</string>
+    <string name="password_description">输入您的商店密码以继续</string>
+    <string name="purchase">采购</string>
+    <string name="purchase_not_invalidated">购买不失效</string>
+    <string name="purchase_button_not_invalidated_description">
+        即使注册了新的指纹，您也可以继续使用此按钮进行购买
+    </string>
+    <string name="fingerprint_not_recognized">指纹未被识别, 再试一次</string>
+    <string name="fingerprint_success">指纹识别</string>
+    <string name="item_title">白色网布冥王星背包</string>
+    <string name="item_price">$62.68</string>
+    <string name="item_description">Mesh backpack in white. Black textile trim throughout.</string>
+    <string name="purchase_done">购买成功</string>
+    <string name="new_fingerprint_enrolled_description">一个新的指纹被添加到这个设备，所以你的密码是必需的。</string>
+    <string name="use_fingerprint_in_future">使用指纹</string>
+    <string name="use_fingerprint_to_authenticate_title">使用指纹进行身份验证</string>
+    <string name="use_fingerprint_to_authenticate_key">use_fingerprint_to_authenticate_key</string>
+    <string name="description_bugdroid_icon">Android bugdroid image</string>
+    <string name="description_fingerprint_icon">指纹图标</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="USD">美元</string>
+    <string name="JPY">日元</string>
+    <string name="BGN">保加利亚列弗</string>
+    <string name="CZK">捷克克朗</string>
+    <string name="DKK">丹麦克朗</string>
+    <string name="EUR">欧元</string>
+    <string name="GBP">英镑</string>
+    <string name="HUF">匈牙利福林</string>
+    <string name="PLN">波兰兹罗提</string>
+    <string name="RON">罗马尼亚列伊</string>
+    <string name="SEK">瑞典克朗</string>
+    <string name="CHF">瑞士法郎</string>
+    <string name="ISK">冰岛克朗</string>
+    <string name="NOK">挪威克朗</string>
+    <string name="HRK">克罗地亚库纳</string>
+    <string name="RUB">俄罗斯卢布</string>
+    <string name="TRY">土耳其里拉</string>
+    <string name="AUD">澳元</string>
+    <string name="BRL">巴西雷亚尔</string>
+    <string name="CAD">加拿大元</string>
+    <string name="CNY">中国元人民币</string>
+    <string name="HKD">港元</string>
+    <string name="IDR">印尼卢比</string>
+    <string name="ILS">以色列谢克尔</string>
+    <string name="INR">印度卢比</string>
+    <string name="KRW">韩元</string>
+    <string name="MXN">墨西哥比索</string>
+    <string name="MYR">马来西亚林吉特</string>
+    <string name="NZD">新西兰元</string>
+    <string name="PHP">菲律宾piso</string>
+    <string name="SAR">沙特里亚尔</string>
+    <string name="SGD">新加坡元</string>
+    <string name="THB">泰铢</string>
+    <string name="TWD">新台币</string>
+    <string name="ZAR">南非兰特</string>
+
+    <!-- For User Profile -->
+    <string name="nameHint">姓名</string>
+    <string name="PhoneNumberHint">电话号码</string>
+    <string name="addressHint">地址</string>
+    <string name="passportHint">身份证号码</string>
+    <string name="btnConfirmUser">确认</string>
+
+    <string name="lblName">按照您的IC /护照中的说明输入您的姓名</string>
+    <string name="lblNational">选择你的国籍</string>
+    <string name="lblBrith">选择你的出生日期</string>
+    <string name="hihtBrith">生日</string>
+    <string name="lblphone">输入您的手机号码（仅限数字）</string>
+    <string name="lblIC">输入您的身份证号码（xxxxxx-xx-xxxx）</string>
+    <string name="lbladdress">按照IC中所述输入您的地址</string>
+    <string name="lblphoto">IC的照片</string>
+    <string name="lblCondition">我同意CurrexEZ的条款和条件。</string>
+
+    <string name="lblname">姓名 :</string>
+    <string name="lblPassport">身份证 /护照 :</string>
+    <string name="lblBirthdate">生日日期 :</string>
+    <string name="lblNationality">国籍: </string>
+    <string name="lblAddress">地址 :</string>
+    <string name="lblMobileNumber">手机号码 : </string>
+    <string name="PhotoofIC">身份证/护照的照片:</string>
+    <string name="btnEditProfile">编辑个人资料</string>
+
+    <string name="lblSelectacurrencytopurchase">选择要购买的货币</string>
+    <string name="enteramountyouwishtopurchase">输入您购买的金额</string>
+    <string name="enterAmount">输入金额</string>
+    <string name="selectCollectionDate">选择收集日期</string>
+    <string name="selectCollectionLocation">选择收集位置</string>
+    <string name="selectPaymentMethod">选择付款方式</string>
+    <string name="debitCard">转账卡/信用卡</string>
+    <string name="onlinePayment">在线支付</string>
+    <string name="proceedToPayment">付款</string>
+
+    <!--String Array -->
+    <string-array name="national">
+        <item> -- 选择您的国家 -- </item>
+        <item>马来西亚</item>
+        <item>奥地利</item>
+        <item>阿根廷</item>
+        <item>孟加拉</item>
+        <item>巴西</item>
+        <item>文莱</item>
+        <item>加拿大</item>
+        <item>中国</item>
+        <item>哥伦比亚</item>
+        <item>丹麦</item>
+        <item>法国</item>
+        <item>德国</item>
+        <item>香港</item>
+        <item>匈牙利</item>
+        <item>印度</item>
+        <item>印度尼西亚</item>
+        <item>意大利</item>
+        <item>日本</item>
+        <item>韩国</item>
+        <item>墨西哥</item>
+        <item>新西兰</item>
+        <item>朝鲜</item>
+        <item>菲律宾</item>
+        <item>波兰</item>
+        <item>葡萄牙</item>
+        <item>俄罗斯</item>
+        <item>新加坡</item>
+        <item>南非</item>
+        <item>斯威士兰</item>
+        <item>台湾</item>
+        <item>土耳其</item>
+        <item>泰国</item>
+        <item>英国</item>
+        <item>美国</item>
+        <item>越南</item>
+    </string-array>
+
+    <string name="invalid">卡无效</string>
+    <string name="scan_with_card_io">Scan with card.io</string>
+    <string name="error">请选择一张卡片</string>
+    <string name="title_activity_purchase_history2">PurchaseHistory2</string>
+    <string name="tab_text_1">即将到来的交易</string>
+    <string name="tab_text_2">采购历史</string>
+    <string name="tab_text_3">Tab 3</string>
+    <string name="action_settings">设置</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="purchase_currency">购买货币</string>
+    <string name="purchase_myr">购买林吉特</string>
+    <string name="sell_currency">销售货币</string>
+    <string name="sell_myr">出售林吉特</string>
+    <string name="charge_fee">您将需要支付少量押金费用</string>
+
+    <!-- for drawable-->
+    <string name="CurrencyRates">货币汇率</string>
+    <string name="ConversionCalculator">汇率转换计算器</string>
+    <string name="PurchaseCurrency">购买货币</string>
+    <string name="MyPurchase">我的采购</string>
+    <string name="Language">语言</string>
+    <string name="MyProfile">我的资料</string>
+    <string name="Logout">登出</string>
+    <string name="SellCurrency">卖货币</string>
+    <string name="BrowseFlight">浏览航班</string>
+    <string name="Browsehotel">浏览酒店</string>
 
     <!--For Language change-->
     <string name="dialogTitle">选择你的语言</string>

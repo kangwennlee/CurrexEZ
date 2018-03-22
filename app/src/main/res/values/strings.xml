@@ -93,6 +93,34 @@
     <string name="passportHint">IC Number</string>
     <string name="btnConfirmUser">Confirm</string>
 
+    <string name="lblName">Enter your name as stated in your IC/Passport</string>
+    <string name="lblNational">Select your nationality</string>
+    <string name="lblBrith">Select your birth date</string>
+    <string name="hihtBrith">Birthday</string>
+    <string name="lblphone">Enter your mobile phone number (numbers only)</string>
+    <string name="lblIC">Enter your Identity Card Number (xxxxxx-xx-xxxx)</string>
+    <string name="lbladdress">Enter your address as stated in IC</string>
+    <string name="lblphoto">Photo of IC</string>
+    <string name="lblCondition">I agree to the terms and conditions of CurrexEZ.</string>
+
+    <string name="lblname">Name :</string>
+    <string name="lblPassport">IC / Passport :</string>
+    <string name="lblBirthdate">Birth date :</string>
+    <string name="lblNationality">Nationality: </string>
+    <string name="lblAddress">Address :</string>
+    <string name="lblMobileNumber">Mobile Number: </string>
+    <string name="PhotoofIC">Photo of IC:</string>
+    <string name="btnEditProfile">Edit Profile</string>
+
+    <string name="lblSelectacurrencytopurchase">Select a currency to purchase</string>
+    <string name="enteramountyouwishtopurchase">Enter amount you wish to purchase</string>
+    <string name="enterAmount">Enter Amount</string>
+    <string name="selectCollectionDate">Select Collection Date</string>
+    <string name="selectCollectionLocation">Select Collection Location</string>
+    <string name="selectPaymentMethod">Select Payment Method</string>
+    <string name="debitCard">Debit Card</string>
+    <string name="onlinePayment">Online Payment</string>
+    <string name="proceedToPayment">Proceed to payment</string>
     <!--String Array -->
     <string-array name="national">
         <item>--Choose Your Country--</item>
@@ -148,10 +176,21 @@
     <string name="sell_myr">Sell Ringgit</string>
     <string name="charge_fee">You will be charged for a small amount of fees for deposit.</string>
 
-
+    <!-- for drawable-->
+    <string name="CurrencyRates">Currency Rates</string>
+    <string name="ConversionCalculator">Conversion Calculator</string>
+    <string name="PurchaseCurrency">Purchase Currency</string>
+    <string name="MyPurchase">My Purchase</string>
+    <string name="Language">Language</string>
+    <string name="MyProfile">My Profile</string>
+    <string name="Logout">Logout</string>
+    <string name="SellCurrency">Sell Currency</string>
+    <string name="BrowseFlight">Browse Flight</string>
+    <string name="Browsehotel">Browse Hotel</string>
 
     <!--For Language change-->
     <string name="dialogTitle">Change Your Language</string>
+
     <string-array name="languageChoose">
         <item>English</item>
         <item>Chinese</item>

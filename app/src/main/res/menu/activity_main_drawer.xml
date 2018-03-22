@@ -7,24 +7,24 @@
         <item
             android:id="@+id/nav_rate"
             android:icon="@drawable/ic_trending_up_black_24dp"
-            android:title="Currency Rates" />
+            android:title="@string/CurrencyRates" />
         <item
             android:id="@+id/nav_calculator"
             android:icon="@drawable/ic_assessment_black_24dp"
-            android:title="Conversion Calculator" />
+            android:title="@string/ConversionCalculator" />
         <item
             android:id="@+id/nav_purchase"
             android:icon="@drawable/ic_monetization_on_black_24dp"
-            android:title="Purchase Currency" />
+            android:title="@string/PurchaseCurrency" />
         <item
             android:id="@+id/nav_history"
             android:icon="@drawable/ic_history_black_24dp"
-            android:title="My Purchase" />
+            android:title="@string/MyPurchase" />
 
         <item
             android:id="@+id/nav_changeLanguage"
             android:icon="@drawable/ic_translate_black_24dp"
-            android:title="Language"
+            android:title="@string/Language"
             />
     </group>
 
@@ -33,11 +33,11 @@
             <item
                 android:id="@+id/nav_profile"
                 android:icon="@drawable/ic_person_black_24dp"
-                android:title="My Profile" />
+                android:title="@string/MyProfile" />
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_menu_logout"
-                android:title="Logout" />
+                android:title="@string/Logout" />
         </menu>
     </item>
 

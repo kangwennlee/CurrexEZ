@@ -273,10 +273,16 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void showDialogForLanguage(){
+        String defaule = LocaleHelper.getLanguage(MainActivity.this);
+        int position;
+        if(defaule.equals("en"))
+            position = 0;
+        else
+            position = 1;
         String title = getString(R.string.dialogTitle);
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle(title);
-        builder.setSingleChoiceItems(R.array.languageChoose, 2, new DialogInterface.OnClickListener() {
+        builder.setSingleChoiceItems(R.array.languageChoose, position, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if(i == 1){

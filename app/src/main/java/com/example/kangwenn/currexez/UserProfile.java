@@ -1,5 +1,6 @@
 package com.example.kangwenn.currexez;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -96,5 +97,10 @@ public class UserProfile extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
     }
 }
