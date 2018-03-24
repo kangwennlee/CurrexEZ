@@ -176,6 +176,14 @@
     <string name="sell_myr">Sell Ringgit</string>
     <string name="charge_fee">You will be charged for a small amount of fees for deposit.</string>
 
+    <!--sell currency-->
+    <string name="Selectacurrencytosell">Select a currency to sell</string>
+    <string name="Enteramountyouwishtosell">Enter amount you wish to sell</string>
+    <string name="date">Date</string>
+    <string name="location">Location</string>
+    <string name="selectdepositpaymentmethod">Select deposit payment method</string>
+    <string name="creditCard">Credit Card</string>
+
     <!-- for drawable-->
     <string name="CurrencyRates">Currency Rates</string>
     <string name="ConversionCalculator">Conversion Calculator</string>

@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:drawableLeft="@drawable/ic_euro_symbol_black_24dp"
-            android:text="Select a currency to sell"
+            android:text="@string/Selectacurrencytosell"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <Spinner
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:drawableLeft="@drawable/ic_attach_money_black_24dp"
-            android:text="Enter amount you wish to sell"
+            android:text="@string/Enteramountyouwishtosell"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <LinearLayout
@@ -48,7 +48,7 @@
                 android:layout_width="150dp"
                 android:layout_height="50dp"
                 android:ems="8"
-                android:hint="Enter Amount"
+                android:hint="@string/enterAmount"
                 android:inputType="numberDecimal" />
 
             <TextView
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:drawableLeft="@drawable/ic_date_range_black_24dp"
-            android:text="Select Collection Date"
+            android:text="@string/selectCollectionDate"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
 
@@ -80,7 +80,7 @@
             android:layout_height="50dp"
             android:clickable="true"
             android:focusable="false"
-            android:hint="Date"
+            android:hint="@string/date"
             android:inputType="date"
             android:longClickable="false" />
 
@@ -90,14 +90,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:drawableLeft="@drawable/ic_add_location_black_24dp"
-            android:text="Select Collection Location"
+            android:text="@string/selectCollectionLocation"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <EditText
             android:id="@+id/editTextCollectionLocation"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="Location"
+            android:hint="@string/location"
             android:inputType="textPersonName" />
 
         <TextView
@@ -106,7 +106,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:drawableLeft="@drawable/ic_credit_card_black_24dp"
-            android:text="Select deposit payment method"
+            android:text="@string/selectdepositpaymentmethod"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <RadioGroup
@@ -119,13 +119,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:duplicateParentState="false"
-                android:text="Credit Card" />
+                android:text="@string/creditCard" />
 
             <RadioButton
                 android:id="@+id/radioButtonOnline"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:text="Online Payment" />
+                android:text="@string/onlinePayment" />
         </RadioGroup>
 
         <Button
@@ -133,7 +133,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Proceed to payment" />
+            android:text="@string/proceedToPayment" />
 
     </LinearLayout>
 
