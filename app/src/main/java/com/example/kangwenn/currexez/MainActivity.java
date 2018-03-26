@@ -19,6 +19,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,7 +56,7 @@ import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, HomepageFragment.OnFragmentInteractionListener {
-    TextView userName, userEmail;
+    TextView textUserName, textUserEmail;
     ImageView userProfilePic;
     FirebaseUser currentFirebaseUser;
     String apiKey;
@@ -181,18 +182,15 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        userName = findViewById(R.id.textUserName);
-        userEmail = findViewById(R.id.textUserEmail);
+        textUserName = findViewById(R.id.textUserName);
+        textUserEmail = findViewById(R.id.textUserEmail);
         userProfilePic = findViewById(R.id.imageViewUserPic);
-        String name = "", email = "";
         try {
-            name = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-            email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            textUserName.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+            textUserEmail.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
         } catch (NullPointerException e) {
-
+            Log.d("d", e.getMessage());
         }
-        userName.setText(name);
-        userEmail.setText(email);
         return true;
     }
 
@@ -226,8 +224,8 @@ public class MainActivity extends AppCompatActivity
             Intent i = new Intent(getApplicationContext(), CurrencyCalculator.class);
             startActivity(i);
         } else if (id == R.id.nav_purchase) {
-            Intent i = new Intent(getApplicationContext(), PurchaseCurrency.class);
-            startActivity(i);
+            //Intent i = new Intent(getApplicationContext(), PurchaseCurrency.class);
+            //startActivity(i);
         } else if (id == R.id.nav_history) {
             Intent i = new Intent(getApplicationContext(), PurchaseHistory2.class);
             startActivity(i);

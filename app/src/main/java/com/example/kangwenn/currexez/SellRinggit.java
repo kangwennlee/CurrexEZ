@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -72,6 +73,9 @@ public class SellRinggit extends AppCompatActivity {
         buttonProceed = findViewById(R.id.buttonProceed);
         editTextDate = findViewById(R.id.editTextCollectionDate);
         editTextLocation = findViewById(R.id.editTextCollectionLocation);
+        getSupportActionBar().setTitle("Sell Ringgit");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         progressDialog = new ProgressDialog(this);
@@ -164,6 +168,14 @@ public class SellRinggit extends AppCompatActivity {
             }
         });
         buttonProceed.setEnabled(false);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

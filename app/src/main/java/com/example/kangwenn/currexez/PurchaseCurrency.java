@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -106,7 +107,9 @@ public class PurchaseCurrency extends AppCompatActivity {
         Fabric.with(this, new Answers(), new Crashlytics());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchase_currency);
-        setTitle("Purchase Currency");
+        getSupportActionBar().setTitle("Purchase Currency");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         spinnerSelectCurr = findViewById(R.id.spinnerSelectCurr);
         editTextPurAmount = findViewById(R.id.editTextPurAmount);
         textViewTotal = findViewById(R.id.textViewPrice);
@@ -224,8 +227,16 @@ public class PurchaseCurrency extends AppCompatActivity {
                 mDatePicker.show();
             }
         });
-        initializeFingerprint();
         buttonProceed.setEnabled(false);
+        initializeFingerprint();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void initializeFingerprint() {
@@ -235,8 +246,7 @@ public class PurchaseCurrency extends AppCompatActivity {
             throw new RuntimeException("Failed to get an instance of KeyStore", e);
         }
         try {
-            mKeyGenerator = KeyGenerator
-                    .getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
+            mKeyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
         } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
             throw new RuntimeException("Failed to get an instance of KeyGenerator", e);
         }
@@ -254,10 +264,7 @@ public class PurchaseCurrency extends AppCompatActivity {
 
         if (!keyguardManager.isKeyguardSecure()) {
             // Show a message that the user hasn't set up a fingerprint or lock screen.
-            Toast.makeText(this,
-                    "Secure lock screen hasn't set up.\n"
-                            + "Go to 'Settings -> Security -> Fingerprint' to set up a fingerprint",
-                    Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Secure lock screen hasn't set up.\n" + "Go to 'Settings -> Security -> Fingerprint' to set up a fingerprint", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -267,10 +274,7 @@ public class PurchaseCurrency extends AppCompatActivity {
         // noinspection ResourceType
         if (!fingerprintManager.hasEnrolledFingerprints()) {
             // This happens when no fingerprints are registered.
-            Toast.makeText(this,
-                    "Go to 'Settings -> Security -> Fingerprint' and register at least one" +
-                            " fingerprint",
-                    Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Go to 'Settings -> Security -> Fingerprint' and register at least one" + " fingerprint", Toast.LENGTH_LONG).show();
             return;
         }
         createKey(DEFAULT_KEY_NAME, true);
@@ -485,6 +489,11 @@ public class PurchaseCurrency extends AppCompatActivity {
         editTextDate.setText(sdf.format(myCalendar.getTime()));
     }
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
+    }
+
     private class PurchaseButtonClickListener implements View.OnClickListener {
 
         Cipher mCipher;
@@ -533,11 +542,6 @@ public class PurchaseCurrency extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Please complete the form", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
     }
 
 }

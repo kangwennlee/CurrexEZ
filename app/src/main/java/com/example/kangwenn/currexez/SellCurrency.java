@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -80,6 +81,9 @@ public class SellCurrency extends AppCompatActivity {
         editTextDate = findViewById(R.id.editTextCollectionDate);
         editTextLocation = findViewById(R.id.editTextCollectionLocation);
         progressDialog = new ProgressDialog(this);
+        getSupportActionBar().setTitle("Sell Currency");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
@@ -191,6 +195,14 @@ public class SellCurrency extends AppCompatActivity {
             }
         });
         buttonProceed.setEnabled(false);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

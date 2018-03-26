@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -234,9 +235,18 @@ public class HomepageFragment extends Fragment {
                             arrayList.add(values);
                         }
                     }
-                    adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, arrayList);
-                    homeListView.setAdapter(adapter);
                 }
+                adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, arrayList);
+                homeListView.setAdapter(adapter);
+                homeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Intent intent = new Intent(getContext(), SuccessPaymentActivity.class);
+                        String string = arrayList.get(i);
+                        intent.putExtra("purchase", string);
+                        startActivity(intent);
+                    }
+                });
             }
 
             @Override

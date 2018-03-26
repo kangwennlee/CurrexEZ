@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -33,7 +34,10 @@ public class CurrencyRates extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_currency_rates);
         Fabric.with(this, new Answers(), new Crashlytics());
-        setTitle("Today's Rate");
+        //setTitle("Today's Rate");
+        getSupportActionBar().setTitle("Today's Rate");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         listView = findViewById(R.id.currencyList);
         textDate = findViewById(R.id.textDate);
         textHeading = findViewById(R.id.textHeading);
@@ -60,6 +64,14 @@ public class CurrencyRates extends AppCompatActivity {
         });
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

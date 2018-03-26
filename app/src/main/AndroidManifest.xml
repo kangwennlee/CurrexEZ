@@ -29,18 +29,33 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PurchaseCurrency" />
-        <activity android:name=".EditProfile" />
-        <activity android:name=".CurrencyRates" />
-        <activity android:name=".CurrencyCalculator" />
-        <activity android:name=".UserProfile" />
-        <activity android:name=".AboutUs" />
-        <activity android:name=".SuccessPaymentActivity" />
-        <activity android:name=".CardPayment" />
+        <activity
+            android:name=".PurchaseCurrency"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
+        <activity
+            android:name=".EditProfile"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
+        <activity
+            android:name=".CurrencyRates"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
+        <activity
+            android:name=".CurrencyCalculator"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
+        <activity
+            android:name=".UserProfile"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
+        <activity
+            android:name=".AboutUs"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
+        <activity
+            android:name=".SuccessPaymentActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
+        <activity
+            android:name=".CardPayment"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -50,9 +65,15 @@
             android:name=".PurchaseHistory2"
             android:label="@string/title_activity_purchase_history2"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".SellCurrency" />
-        <activity android:name=".SellRinggit" />
-        <activity android:name=".PurchaseRinggit"></activity>
+        <activity
+            android:name=".SellCurrency"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
+        <activity
+            android:name=".SellRinggit"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
+        <activity
+            android:name=".PurchaseRinggit"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
