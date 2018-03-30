@@ -162,12 +162,27 @@ public class PurchaseRinggit extends AppCompatActivity {
         buttonProceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressDialog.setMessage("Processing...");
-                progressDialog.show();
-                storePurchase();
+                if (editTextLocation.getText().toString().isEmpty() || editTextDate.getText().toString().isEmpty() || editTextPurAmount.getText().toString().isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Please Complete the form!", Toast.LENGTH_LONG).show();
+                } else {
+                    Intent i = new Intent(getApplicationContext(), CardPayment.class);
+                    startActivityForResult(i, 150);
+                }
             }
         });
         buttonProceed.setEnabled(false);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == 151) {
+            progressDialog.setMessage("Processing...");
+            progressDialog.show();
+            storePurchase();
+        } else {
+            Toast.makeText(getApplicationContext(), "Payment Cancelled!", Toast.LENGTH_LONG).show();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

@@ -189,9 +189,13 @@ public class SellCurrency extends AppCompatActivity {
         buttonProceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressDialog.setMessage("Processing...");
-                progressDialog.show();
-                storePurchase();
+                if (editTextLocation.getText().toString().isEmpty() || editTextDate.getText().toString().isEmpty() || editTextSellAmount.getText().toString().isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Please Complete the form!", Toast.LENGTH_LONG).show();
+                } else {
+                    progressDialog.setMessage("Processing...");
+                    progressDialog.show();
+                    storePurchase();
+                }
             }
         });
         buttonProceed.setEnabled(false);
