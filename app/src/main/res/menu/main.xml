@@ -10,5 +10,6 @@
         android:id="@+id/action_feedback"
         android:orderInCategory="110"
         android:title="Feedback"
+        android:visible="false"
         app:showAsAction="never"/>
 </menu>

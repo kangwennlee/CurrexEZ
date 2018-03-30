@@ -224,8 +224,8 @@ public class MainActivity extends AppCompatActivity
             Intent i = new Intent(getApplicationContext(), CurrencyCalculator.class);
             startActivity(i);
         } else if (id == R.id.nav_purchase) {
-            //Intent i = new Intent(getApplicationContext(), PurchaseCurrency.class);
-            //startActivity(i);
+            Intent i = new Intent(getApplicationContext(), ScanQR.class);
+            startActivity(i);
         } else if (id == R.id.nav_history) {
             Intent i = new Intent(getApplicationContext(), PurchaseHistory2.class);
             startActivity(i);
