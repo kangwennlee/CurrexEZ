@@ -221,9 +221,12 @@ public class PurchaseCurrency extends AppCompatActivity {
                 DatePickerDialog mDatePicker = new DatePickerDialog(PurchaseCurrency.this, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
                 mDatePicker.getDatePicker().setMinDate(System.currentTimeMillis());
                 Calendar calendar = Calendar.getInstance();
+                //calendar.add(Calendar.DAY_OF_YEAR,1);
                 calendar.setTimeInMillis(System.currentTimeMillis());
-                calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) + 3);
-                mDatePicker.getDatePicker().setMaxDate(calendar.getTimeInMillis());
+                calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
+                calendar.set(Calendar.DAY_OF_YEAR,calendar.get(Calendar.DAY_OF_YEAR) + 1);
+                //mDatePicker.getDatePicker().setMaxDate(calendar.getTimeInMillis());
+                mDatePicker.getDatePicker().setMinDate(calendar.getTimeInMillis());
                 mDatePicker.show();
             }
         });
@@ -486,6 +489,7 @@ public class PurchaseCurrency extends AppCompatActivity {
     private void updateLabel() {
         String myFormat = "dd/MM/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        myCalendar.add(Calendar.DATE, 1);
         editTextDate.setText(sdf.format(myCalendar.getTime()));
     }
 
