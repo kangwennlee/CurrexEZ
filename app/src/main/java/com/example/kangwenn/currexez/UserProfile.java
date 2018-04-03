@@ -52,7 +52,7 @@ public class UserProfile extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), EditProfile.class);
                 startActivity(i);
-                finish();
+                //finish();
             }
         });
         userName = findViewById(R.id.textViewUserName);

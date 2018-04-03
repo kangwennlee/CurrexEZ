@@ -175,6 +175,7 @@
     <string name="sell_currency">Sell Currency</string>
     <string name="sell_myr">Sell Ringgit</string>
     <string name="charge_fee">You will be charged for a small amount of fees for deposit.</string>
+    <string name="valid">Form is valid. Card is added successfully.</string>
 
     <!--sell currency-->
     <string name="Selectacurrencytosell">Select a currency to sell</string>

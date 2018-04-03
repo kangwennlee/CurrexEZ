@@ -15,9 +15,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class CardPayment extends AppCompatActivity implements OnCardFormSubmitListener, CardEditText.OnCardTypeChangedListener{
-    protected CardForm cardForm;
+public class AddCard extends AppCompatActivity implements OnCardFormSubmitListener, CardEditText.OnCardTypeChangedListener {
     private static final CardType[] SUPPORTED_CARD_TYPES = {CardType.AMEX, CardType.MASTERCARD, CardType.VISA, CardType.DINERS_CLUB};
+    protected CardForm cardForm;
     private SupportedCardTypesView mSupportedCardTypesView;
 
     @Override
@@ -33,6 +33,7 @@ public class CardPayment extends AppCompatActivity implements OnCardFormSubmitLi
                 .expirationRequired(true)
                 .cvvRequired(true)
                 .mobileNumberRequired(true)
+                .mobileNumberExplanation("SMS is required on this number")
                 .actionLabel("Card Payment")
                 .setup(this);
         cardForm.setOnCardFormSubmitListener(this);
@@ -43,6 +44,13 @@ public class CardPayment extends AppCompatActivity implements OnCardFormSubmitLi
     @Override
     public void onCardFormSubmit() {
         if(cardForm.isValid()){
+            Toast.makeText(this, R.string.valid, Toast.LENGTH_SHORT).show();
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Card").child(FirebaseAuth.getInstance().getUid());
+            mDatabase.child(cardForm.getCardNumber()).child("ExpirationMonth").setValue(cardForm.getExpirationMonth());
+            mDatabase.child(cardForm.getCardNumber()).child("ExpirationYear").setValue(cardForm.getExpirationYear());
+            mDatabase.child(cardForm.getCardNumber()).child("CountryCode").setValue(cardForm.getCountryCode());
+            mDatabase.child(cardForm.getCardNumber()).child("MobileNumber").setValue(cardForm.getMobileNumber());
+            mDatabase.child(cardForm.getCardNumber()).child("Cvv").setValue(cardForm.getCvv());
             setResult(151);
             finish();
         }else{

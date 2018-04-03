@@ -110,24 +110,32 @@
             android:text="@string/selectPaymentMethod"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
+
         <RadioGroup
             android:id="@+id/radioGroupMethod"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/radioButtonCredit"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:duplicateParentState="false"
                 android:text="@string/debitCard" />
 
             <RadioButton
                 android:id="@+id/radioButtonOnline"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
+                android:layout_marginStart="50dp"
                 android:text="@string/onlinePayment" />
         </RadioGroup>
+
+        <TextView
+            android:id="@+id/textViewCreditSelected"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="20dp" />
 
         <Button
             android:id="@+id/buttonProceed"

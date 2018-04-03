@@ -168,7 +168,7 @@ public class PurchaseRinggit extends AppCompatActivity {
                 if (editTextLocation.getText().toString().isEmpty() || editTextDate.getText().toString().isEmpty() || editTextPurAmount.getText().toString().isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please Complete the form!", Toast.LENGTH_LONG).show();
                 } else {
-                    Intent i = new Intent(getApplicationContext(), CardPayment.class);
+                    Intent i = new Intent(getApplicationContext(), AddCard.class);
                     startActivityForResult(i, 150);
                 }
             }

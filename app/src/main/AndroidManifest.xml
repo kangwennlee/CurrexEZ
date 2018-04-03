@@ -55,7 +55,7 @@
             android:name=".SuccessPaymentActivity"
             android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
         <activity
-            android:name=".CardPayment"
+            android:name=".AddCard"
             android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
 
         <meta-data

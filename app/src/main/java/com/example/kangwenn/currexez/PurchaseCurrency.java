@@ -1,8 +1,10 @@
 package com.example.kangwenn.currexez;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.KeyguardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.fingerprint.FingerprintManager;
@@ -37,9 +39,12 @@ import com.example.kangwenn.currexez.Entity.Purchase;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -53,6 +58,7 @@ import java.security.NoSuchProviderException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
@@ -79,7 +85,7 @@ public class PurchaseCurrency extends AppCompatActivity {
     String[] currName = new String[currencyName.length];
     Spinner spinnerSelectCurr;
     EditText editTextPurAmount,editTextDate,editTextLocation;
-    TextView textViewTotal, textViewName;
+    TextView textViewTotal, textViewName, textViewCard;
     Button buttonProceed;
     RadioButton radioButtonCredit, radioButtonOnline;
     RadioGroup radioGroup;
@@ -114,6 +120,7 @@ public class PurchaseCurrency extends AppCompatActivity {
         editTextPurAmount = findViewById(R.id.editTextPurAmount);
         textViewTotal = findViewById(R.id.textViewPrice);
         textViewName = findViewById(R.id.textViewCurrency);
+        textViewCard = findViewById(R.id.textViewCreditSelected);
         buttonProceed = findViewById(R.id.buttonProceed);
         radioButtonCredit = findViewById(R.id.radioButtonCredit);
         radioButtonOnline = findViewById(R.id.radioButtonOnline);
@@ -132,7 +139,7 @@ public class PurchaseCurrency extends AppCompatActivity {
         spinnerSelectCurr.setAdapter(adapter);
         Intent intent = getIntent();
         spinnerSelectCurr.setSelection(intent.getIntExtra("purchaseType",0));
-        editTextPurAmount.setText(String.valueOf(intent.getDoubleExtra("purchaseAmount",1.0)));
+        editTextPurAmount.setText(String.valueOf(intent.getDoubleExtra("purchaseAmount", 100)));
         editTextPurAmount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -187,12 +194,49 @@ public class PurchaseCurrency extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (!editTextPurAmount.getText().toString().equals("")) {
-                    if (Double.valueOf(editTextPurAmount.getText().toString()) > 0) {
+                    if (Double.valueOf(editTextPurAmount.getText().toString()) > 0 && !editTextLocation.getText().toString().isEmpty()) {
                         buttonProceed.setEnabled(true);
                         if (radioButtonCredit.isChecked()) {
+                            //Toast.makeText(getApplicationContext(),"Credit card",Toast.LENGTH_SHORT).show();
+                            Query query = FirebaseDatabase.getInstance().getReference().child("Card").child(FirebaseAuth.getInstance().getUid());
+                            query.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(PurchaseCurrency.this);
+                                    builder.setTitle("Select your card");
+                                    ArrayList<String> cardArrayList = new ArrayList<>();
+                                    cardArrayList.add("Add New Card");
+                                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                        String cardNumber = userSnapshot.getKey().toString();
+                                        if (!cardArrayList.contains(cardNumber)) {
+                                            cardArrayList.add(cardNumber);
+                                        }
+                                    }
+                                    final CharSequence[] cs = cardArrayList.toArray(new CharSequence[cardArrayList.size()]);
+                                    builder.setItems(cs, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.dismiss();
+                                            switch (i) {
+                                                case 0:
+                                                    Intent intent = new Intent(getApplicationContext(), AddCard.class);
+                                                    startActivityForResult(intent, 150);
+                                                default:
+                                                    textViewCard.setText("Card Selected: " + cs[i].toString());
+                                            }
+                                        }
+                                    });
+                                    builder.show();
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
 
                         } else if (radioButtonOnline.isChecked()) {
-
+                            //Toast.makeText(getApplicationContext(),"Online",Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         buttonProceed.setEnabled(false);
@@ -341,8 +385,7 @@ public class PurchaseCurrency extends AppCompatActivity {
             //v.setVisibility(View.VISIBLE);
             //v.setText(Base64.encodeToString(encrypted, 0 /* flags */));
             if(radioButtonCredit.isChecked()){
-                Intent i = new Intent(this,CardPayment.class);
-                startActivityForResult(i,150);
+                storePurchase();
             }else{
                 storePurchase();
             }
@@ -353,8 +396,9 @@ public class PurchaseCurrency extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode==151){
-            storePurchase();
+            //storePurchase();
         }else{
+
             Toast.makeText(getApplicationContext(), "Payment Cancelled!", Toast.LENGTH_LONG).show();
         }
     }

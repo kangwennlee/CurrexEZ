@@ -234,8 +234,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            Intent i = new Intent(this, UserProfile.class);
-            startActivity(i);
+            //Intent i = new Intent(this, UserProfile.class);
+            //startActivity(i);
             finish();
         }
         return super.onOptionsItemSelected(item);
@@ -365,8 +365,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 progressDialog.dismiss();
                 Toast.makeText(EditProfile.this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(getApplicationContext(), UserProfile.class);
-                startActivity(i);
+                //Intent i = new Intent(getApplicationContext(), UserProfile.class);
+                //startActivity(i);
                 finish();
             }
         }).addOnFailureListener(new OnFailureListener() {
