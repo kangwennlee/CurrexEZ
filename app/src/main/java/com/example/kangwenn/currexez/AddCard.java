@@ -1,9 +1,13 @@
 package com.example.kangwenn.currexez;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.braintreepayments.cardform.OnCardFormSubmitListener;
@@ -41,6 +45,17 @@ public class AddCard extends AppCompatActivity implements OnCardFormSubmitListen
 
     }
 
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
     @Override
     public void onCardFormSubmit() {
         if(cardForm.isValid()){
@@ -51,7 +66,10 @@ public class AddCard extends AppCompatActivity implements OnCardFormSubmitListen
             mDatabase.child(cardForm.getCardNumber()).child("CountryCode").setValue(cardForm.getCountryCode());
             mDatabase.child(cardForm.getCardNumber()).child("MobileNumber").setValue(cardForm.getMobileNumber());
             mDatabase.child(cardForm.getCardNumber()).child("Cvv").setValue(cardForm.getCvv());
-            setResult(151);
+            Intent i = new Intent();
+            i.putExtra("Card", cardForm.getCardNumber());
+            setResult(151, i);
+            hideKeyboard(AddCard.this);
             finish();
         }else{
             cardForm.validate();

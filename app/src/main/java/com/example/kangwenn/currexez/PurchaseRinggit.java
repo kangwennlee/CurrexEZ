@@ -1,11 +1,14 @@
 package com.example.kangwenn.currexez;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,13 +29,20 @@ import com.example.kangwenn.currexez.Entity.Purchase;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.jesusm.kfingerprintmanager.KFingerprintManager;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
@@ -41,6 +51,7 @@ import java.util.Locale;
 public class PurchaseRinggit extends AppCompatActivity {
 
     SharedPreferences sharedPref;
+    private static final String KEY = "KEY";
     String[] currencyName = {"USD", "EUR", "AUD", "GBP", "SGD", "CNY", "THB", "JPY", "KRW", "HKD", "TWD"};
     String[] currName = new String[currencyName.length];
     Spinner spinnerSelectCurr;
@@ -66,6 +77,7 @@ public class PurchaseRinggit extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchase_ringgit);
+        //find view
         spinnerSelectCurr = findViewById(R.id.spinnerSelectCurr);
         editTextPurAmount = findViewById(R.id.editTextPurAmount);
         textViewTotal = findViewById(R.id.textViewPrice);
@@ -73,12 +85,17 @@ public class PurchaseRinggit extends AppCompatActivity {
         buttonProceed = findViewById(R.id.buttonProceed);
         editTextDate = findViewById(R.id.editTextCollectionDate);
         editTextLocation = findViewById(R.id.editTextCollectionLocation);
+        //set return button
         getSupportActionBar().setTitle("Purchase Ringgit");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         progressDialog = new ProgressDialog(this);
+        initialize();
+    }
+
+    private void initialize() {
         sharedPref = getApplicationContext().getSharedPreferences("com.example.kangwenn.RATES", Context.MODE_PRIVATE);
         for (int i = 0; i < currencyName.length; i++) {
             String string = getResources().getString(getResources().getIdentifier(currencyName[i], "string", getApplicationContext().getPackageName()));
@@ -168,24 +185,96 @@ public class PurchaseRinggit extends AppCompatActivity {
                 if (editTextLocation.getText().toString().isEmpty() || editTextDate.getText().toString().isEmpty() || editTextPurAmount.getText().toString().isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please Complete the form!", Toast.LENGTH_LONG).show();
                 } else {
-                    Intent i = new Intent(getApplicationContext(), AddCard.class);
-                    startActivityForResult(i, 150);
+                    fingerAuth();
                 }
             }
         });
         buttonProceed.setEnabled(false);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == 151) {
-            progressDialog.setMessage("Processing...");
-            progressDialog.show();
-            storePurchase();
-        } else {
-            Toast.makeText(getApplicationContext(), "Payment Cancelled!", Toast.LENGTH_LONG).show();
-        }
-        super.onActivityResult(requestCode, resultCode, data);
+    private void fingerAuth() {
+        createFingerprintManagerInstance().authenticate(new KFingerprintManager.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationSuccess() {
+                //messageText.setText("Successfully authenticated");
+                pickCard();
+            }
+
+            @Override
+            public void onSuccessWithManualPassword(@NotNull String password) {
+                //messageText.setText("Manual password: " + password);
+            }
+
+            @Override
+            public void onFingerprintNotRecognized() {
+                Toast.makeText(getApplicationContext(), "Fingerprint not recognized", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAuthenticationFailedWithHelp(@Nullable String help) {
+                //messageText.setText(help);
+            }
+
+            @Override
+            public void onFingerprintNotAvailable() {
+                //messageText.setText("Fingerprint not available");
+            }
+
+            @Override
+            public void onCancelled() {
+                //messageText.setText("Operation cancelled by user");
+            }
+        }, getSupportFragmentManager());
+
+    }
+
+    private KFingerprintManager createFingerprintManagerInstance() {
+        KFingerprintManager fingerprintManager = new KFingerprintManager(this, KEY);
+        //fingerprintManager.setAuthenticationDialogStyle(dialogTheme);
+        return fingerprintManager;
+    }
+
+    private void pickCard() {
+        Query query = FirebaseDatabase.getInstance().getReference().child("Card").child(FirebaseAuth.getInstance().getUid());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(PurchaseRinggit.this);
+                builder.setTitle("Select your card");
+                ArrayList<String> cardArrayList = new ArrayList<>();
+                cardArrayList.add("Add New Card");
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    String cardNumber = userSnapshot.getKey().toString();
+                    if (!cardArrayList.contains(cardNumber)) {
+                        cardArrayList.add(cardNumber);
+                    }
+                }
+                final CharSequence[] cs = cardArrayList.toArray(new CharSequence[cardArrayList.size()]);
+                builder.setItems(cs, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        switch (i) {
+                            case 0:
+                                Intent intent = new Intent(getApplicationContext(), AddCard.class);
+                                startActivityForResult(intent, 150);
+                                break;
+                            default:
+                                //textViewCard.setText("Card Selected: " + cs[i].toString());
+                                progressDialog.setMessage("Processing...");
+                                progressDialog.show();
+                                storePurchase();
+                        }
+                    }
+                });
+                builder.show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -200,6 +289,16 @@ public class PurchaseRinggit extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mFirebaseAnalytics.logEvent("foreign_click_buy", null);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == 151) {
+
+        } else {
+            Toast.makeText(getApplicationContext(), "Payment Cancelled!", Toast.LENGTH_LONG).show();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void updateDate() {
