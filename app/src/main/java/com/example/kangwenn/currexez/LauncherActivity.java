@@ -71,21 +71,22 @@ public class LauncherActivity extends AppCompatActivity{
 
     public void signIn() {
         startActivityForResult(
-                AuthUI.getInstance().createSignInIntentBuilder()
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
                         .setTheme(R.style.BlackBackground)
                         .setLogo(R.drawable.logo)
                         .setAvailableProviders(
                                 Arrays.asList(
-                                        new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                                        new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build(),
-                                        new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build(),
-                                        new AuthUI.IdpConfig.Builder(AuthUI.TWITTER_PROVIDER).build()
+                                        new AuthUI.IdpConfig.EmailBuilder().build(),
+                                        //new AuthUI.IdpConfig.PhoneBuilder().build(),
+                                        new AuthUI.IdpConfig.GoogleBuilder().build()
+                                        //new AuthUI.IdpConfig.FacebookBuilder().build()
+                                        //new AuthUI.IdpConfig.TwitterBuilder().build()
                                 )
                         )
                         .setTosUrl(GOOGLE_TOS_URL)
                         .setPrivacyPolicyUrl(GOOGLE_PRIVACY_POLICY_URL)
-                        .setIsSmartLockEnabled(false, true)
-                        .setAllowNewEmailAccounts(true)
+                        .setIsSmartLockEnabled(true)
                         .build(),
                 RC_SIGN_IN);
     }
