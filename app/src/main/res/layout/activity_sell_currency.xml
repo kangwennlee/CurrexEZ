@@ -115,11 +115,11 @@
             android:layout_height="wrap_content">
 
             <RadioButton
-                android:id="@+id/radioButtonCredit"
+                android:id="@+id/radioButtonNo"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:duplicateParentState="false"
-                android:text="@string/creditCard" />
+                android:text="@string/noTransfer" />
 
             <RadioButton
                 android:id="@+id/radioButtonOnline"
@@ -133,6 +133,13 @@
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/textViewNotice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/chargeNotice" />
 
         <Button
             android:id="@+id/buttonProceed"

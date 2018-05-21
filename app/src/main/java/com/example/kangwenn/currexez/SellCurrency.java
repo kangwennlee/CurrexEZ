@@ -19,7 +19,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -61,7 +60,7 @@ public class SellCurrency extends AppCompatActivity implements accNumEnterDialog
     EditText editTextSellAmount, editTextDate, editTextLocation;
     TextView textViewTotal, textViewName, textViewCard;
     Button buttonProceed;
-    RadioButton radioButtonCredit, radioButtonOnline;
+    RadioButton radioButtonOnline;
     RadioGroup radioGroup;
     Double total;
     Calendar myCalendar;
@@ -90,7 +89,6 @@ public class SellCurrency extends AppCompatActivity implements accNumEnterDialog
         textViewTotal = findViewById(R.id.textViewPrice);
         textViewName = findViewById(R.id.textViewCurrency);
         buttonProceed = findViewById(R.id.buttonProceed);
-        radioButtonCredit = findViewById(R.id.radioButtonCredit);
         radioButtonOnline = findViewById(R.id.radioButtonOnline);
         radioGroup = findViewById(R.id.radioGroupMethod);
         editTextDate = findViewById(R.id.editTextCollectionDate);
@@ -140,7 +138,7 @@ public class SellCurrency extends AppCompatActivity implements accNumEnterDialog
                     } catch (NumberFormatException e) {
 
                     }
-                    if (radioButtonCredit.isChecked() || radioButtonOnline.isChecked() && !editTextSellAmount.getText().toString().equals("") && Double.valueOf(editTextSellAmount.getText().toString()) > 0) {
+                    if (radioButtonOnline.isChecked() && !editTextSellAmount.getText().toString().equals("") && Double.valueOf(editTextSellAmount.getText().toString()) > 0) {
                         buttonProceed.setEnabled(true);
                     }
                 }
@@ -165,12 +163,11 @@ public class SellCurrency extends AppCompatActivity implements accNumEnterDialog
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                buttonProceed.setEnabled(true);
-                if (radioButtonCredit.isChecked()) {
-                    pickCard();
-                } else if (radioButtonOnline.isChecked()) {
+                if (radioButtonOnline.isChecked()) {
                     //textViewCard.setText("");
                     addBankAccount();
+                } else {
+                    buttonProceed.setEnabled(true);
                 }
             }
         });
@@ -222,7 +219,7 @@ public class SellCurrency extends AppCompatActivity implements accNumEnterDialog
                 //messageText.setText("Successfully authenticated");
                 progressDialog.setMessage("Processing...");
                 progressDialog.show();
-                storePurchase();
+                pickCard();
             }
 
             @Override
@@ -286,6 +283,7 @@ public class SellCurrency extends AppCompatActivity implements accNumEnterDialog
                                 break;
                             default:
                                 textViewCard.setText("Card Selected: " + cs[i].toString());
+                                storePurchase();
                         }
                     }
                 });
@@ -300,6 +298,7 @@ public class SellCurrency extends AppCompatActivity implements accNumEnterDialog
     }
 
     private void addBankAccount(){
+        buttonProceed.setEnabled(false);
         Query query = FirebaseDatabase.getInstance().getReference().child("AccountNumber").child(FirebaseAuth.getInstance().getUid());
         query.addListenerForSingleValueEvent(new ValueEventListener(){
 
@@ -328,6 +327,7 @@ public class SellCurrency extends AppCompatActivity implements accNumEnterDialog
                                 break;
                             default:
                                 textViewCard.setText("Bank Selected: " + cs[i].toString());
+                                buttonProceed.setEnabled(true);
                         }
                     }
                 });
@@ -378,6 +378,7 @@ public class SellCurrency extends AppCompatActivity implements accNumEnterDialog
             Toast.makeText(getApplicationContext(), "Payment Cancelled!", Toast.LENGTH_LONG).show();
         } else {
             textViewCard.setText("Card Selected: " + data.getStringExtra("Card"));
+            storePurchase();
         }
     }
 
@@ -402,10 +403,10 @@ public class SellCurrency extends AppCompatActivity implements accNumEnterDialog
     }
 
     public void storePurchase() {
-        if (radioButtonCredit.isChecked()) {
-            mFirebaseAnalytics.logEvent("card_payment", null);
+        if (radioButtonOnline.isChecked()) {
+            mFirebaseAnalytics.logEvent("deposit_bank", null);
         } else {
-            mFirebaseAnalytics.logEvent("online_payment", null);
+            mFirebaseAnalytics.logEvent("no_deposit", null);
         }
         String currency = spinnerSelectCurr.getSelectedItem().toString();
         Double purchaseAmount = Double.parseDouble(editTextSellAmount.getText().toString());

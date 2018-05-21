@@ -183,9 +183,11 @@
     <string name="Enteramountyouwishtosell">输入您想要出售的金额</string>
     <string name="date">日期</string>
     <string name="location">地点</string>
-    <string name="selectdepositpaymentmethod">选择存款付款方式</string>
+    <string name="selectdepositpaymentmethod">将余额存入您的银行？</string>
     <string name="creditCard">信用卡</string>
-    <string name="transferIntoBankAcc">转入您的银行账户</string>
+    <string name="transferIntoBankAcc">是</string>
+    <string name="noTransfer">否</string>
+    <string name="chargeNotice">如果您在收款日没有存入货币，将收取总金额的8％的取消费用</string>
 
     <!-- for drawable-->
     <string name="CurrencyRates">货币汇率</string>

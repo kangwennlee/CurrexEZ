@@ -19,6 +19,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,7 +50,7 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.Locale;
 
-public class SellRinggit extends AppCompatActivity {
+public class SellRinggit extends AppCompatActivity implements accNumEnterDialog.dialogListener {
 
     SharedPreferences sharedPref;
     private static final String KEY = "KEY";
@@ -56,14 +58,19 @@ public class SellRinggit extends AppCompatActivity {
     String[] currName = new String[currencyName.length];
     Spinner spinnerSelectCurr;
     EditText editTextSellAmount, editTextDate, editTextLocation;
-    TextView textViewTotal, textViewName;
+    TextView textViewCard, textViewTotal, textViewName;
     Button buttonProceed;
     Double total;
     Calendar myCalendar;
+    RadioGroup radioGroup;
+    RadioButton radioButtonOnline;
+
     private ProgressDialog progressDialog;
     private FirebaseAnalytics mFirebaseAnalytics;
     private DatabaseReference databaseUser;
     private FirebaseUser currentFirebaseUser;
+
+    String[] bankName = {"MayBank", "Public Bank", "AmBank", "HSBC", "CIMB"};
 
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
@@ -85,6 +92,9 @@ public class SellRinggit extends AppCompatActivity {
         buttonProceed = findViewById(R.id.buttonProceed);
         editTextDate = findViewById(R.id.editTextCollectionDate);
         editTextLocation = findViewById(R.id.editTextCollectionLocation);
+        textViewCard = findViewById(R.id.textViewCreditSelected);
+        radioButtonOnline = findViewById(R.id.radioButtonOnline);
+        radioGroup = findViewById(R.id.radioGroupMethod);
         //
         getSupportActionBar().setTitle("Sell Ringgit");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -101,7 +111,7 @@ public class SellRinggit extends AppCompatActivity {
             String string = getResources().getString(getResources().getIdentifier(currencyName[i], "string", getApplicationContext().getPackageName()));
             currName[i] = string;
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, currName);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, currName);
         adapter.setDropDownViewResource(R.layout.spinner_item);
         spinnerSelectCurr.setAdapter(adapter);
         Intent intent = getIntent();
@@ -149,6 +159,17 @@ public class SellRinggit extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (radioButtonOnline.isChecked()) {
+                    //textViewCard.setText("");
+                    addBankAccount();
+                } else {
+                    buttonProceed.setEnabled(true);
+                }
             }
         });
         myCalendar = Calendar.getInstance();
@@ -372,5 +393,72 @@ public class SellRinggit extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void storeToDatabase(String bank, String accountNum) {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("AccountNumber").child(FirebaseAuth.getInstance().getUid());
+        mDatabase.child(bank).child("AccountNumber").setValue(accountNum);
+        Toast.makeText(this, "Account Number added successfully.", Toast.LENGTH_SHORT).show();
+        addBankAccount();
+    }
+
+    private void addBankAccount() {
+        buttonProceed.setEnabled(false);
+        Query query = FirebaseDatabase.getInstance().getReference().child("AccountNumber").child(FirebaseAuth.getInstance().getUid());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(SellRinggit.this);
+                builder.setTitle(R.string.banktitle);
+                ArrayList<String> bankAccArrayList = new ArrayList<>();
+                bankAccArrayList.add("Add New Bank Account");
+
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    String accountNumber = userSnapshot.getKey().toString();
+                    if (!bankAccArrayList.contains(accountNumber)) {
+                        bankAccArrayList.add(accountNumber);
+                    }
+                }
+
+                final CharSequence[] cs = bankAccArrayList.toArray(new CharSequence[bankAccArrayList.size()]);
+                builder.setItems(cs, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        switch (i) {
+                            case 0:
+                                bankListDialog();
+                                break;
+                            default:
+                                textViewCard.setText("Bank Selected: " + cs[i].toString());
+                                buttonProceed.setEnabled(true);
+                        }
+                    }
+                });
+                builder.show();
+            }
+
+            private void bankListDialog() {
+                AlertDialog.Builder bankDialog = new AlertDialog.Builder(SellRinggit.this);
+                bankDialog.setTitle(R.string.banktitle);
+                bankDialog.setItems(bankName, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        accNumEnterDialog accNumEnterDialog = new accNumEnterDialog(bankName[i]);
+                        // accNumEnterDialog.setBankName(bankName[i]);
+                        accNumEnterDialog.show(getSupportFragmentManager(), "Account Number Dialog");
+                    }
+                });
+                bankDialog.show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

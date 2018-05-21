@@ -107,7 +107,41 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="@string/charge_fee" />
+            android:drawableLeft="@drawable/ic_credit_card_black_24dp"
+            android:text="@string/selectdepositpaymentmethod"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupMethod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/radioButtonNo"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:duplicateParentState="false"
+                android:text="@string/noTransfer" />
+
+            <RadioButton
+                android:id="@+id/radioButtonOnline"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="@string/transferIntoBankAcc" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/textViewCreditSelected"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/textViewNotice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/chargeNotice" />
 
         <Button
             android:id="@+id/buttonProceed"
