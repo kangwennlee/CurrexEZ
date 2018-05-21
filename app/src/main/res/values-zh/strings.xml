@@ -185,6 +185,7 @@
     <string name="location">地点</string>
     <string name="selectdepositpaymentmethod">选择存款付款方式</string>
     <string name="creditCard">信用卡</string>
+    <string name="transferIntoBankAcc">转入您的银行账户</string>
 
     <!-- for drawable-->
     <string name="CurrencyRates">货币汇率</string>

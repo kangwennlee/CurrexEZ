@@ -125,7 +125,7 @@
                 android:id="@+id/radioButtonOnline"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:text="@string/onlinePayment" />
+                android:text="@string/transferIntoBankAcc" />
         </RadioGroup>
 
         <TextView

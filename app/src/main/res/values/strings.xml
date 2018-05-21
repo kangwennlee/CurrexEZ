@@ -120,6 +120,7 @@
     <string name="selectPaymentMethod">Select Payment Method</string>
     <string name="debitCard">Debit Card</string>
     <string name="onlinePayment">Online Payment</string>
+    <string name="transferIntoBankAcc">Transfer into your bank account</string>
     <string name="proceedToPayment">Proceed to payment</string>
     <!--String Array -->
     <string-array name="national">
@@ -184,6 +185,10 @@
     <string name="location">Location</string>
     <string name="selectdepositpaymentmethod">Select deposit payment method</string>
     <string name="creditCard">Credit Card</string>
+    <string name="banktitle">Select Your Bank Provider</string>
+    <string name="enterBankAccNum">Enter your bank account number</string>
+
+    <string name="hintforAccNumEnter">Account Number</string>
 
     <!-- for drawable-->
     <string name="CurrencyRates">Currency Rates</string>

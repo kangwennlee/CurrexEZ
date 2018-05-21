@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -50,7 +51,7 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.Locale;
 
-public class SellCurrency extends AppCompatActivity {
+public class SellCurrency extends AppCompatActivity implements accNumEnterDialog.dialogListener{
 
     SharedPreferences sharedPref;
     private static final String KEY = "KEY";
@@ -68,6 +69,8 @@ public class SellCurrency extends AppCompatActivity {
     private FirebaseAnalytics mFirebaseAnalytics;
     private DatabaseReference databaseUser;
     private FirebaseUser currentFirebaseUser;
+
+    String[] bankName = {"MayBank","Public Bank", "AmBank","HSBC", "CIMB"};
 
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
@@ -166,7 +169,8 @@ public class SellCurrency extends AppCompatActivity {
                 if (radioButtonCredit.isChecked()) {
                     pickCard();
                 } else if (radioButtonOnline.isChecked()) {
-                    textViewCard.setText("");
+                    //textViewCard.setText("");
+                    addBankAccount();
                 }
             }
         });
@@ -293,6 +297,71 @@ public class SellCurrency extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void addBankAccount(){
+        Query query = FirebaseDatabase.getInstance().getReference().child("AccountNumber").child(FirebaseAuth.getInstance().getUid());
+        query.addListenerForSingleValueEvent(new ValueEventListener(){
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(SellCurrency.this);
+                builder.setTitle(R.string.banktitle);
+                ArrayList<String> bankAccArrayList = new ArrayList<>();
+                bankAccArrayList.add("Add New Bank Account");
+
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    String accountNumber = userSnapshot.getKey().toString();
+                    if (!bankAccArrayList.contains(accountNumber)) {
+                        bankAccArrayList.add(accountNumber);
+                    }
+                }
+
+                final CharSequence[] cs = bankAccArrayList.toArray(new CharSequence[bankAccArrayList.size()]);
+                builder.setItems(cs, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        switch (i) {
+                            case 0:
+                                bankListDialog();
+                                break;
+                            default:
+                                textViewCard.setText("Bank Selected: " + cs[i].toString());
+                        }
+                    }
+                });
+                builder.show();
+            }
+
+            private void bankListDialog(){
+                AlertDialog.Builder bankDialog = new AlertDialog.Builder(SellCurrency.this);
+                bankDialog.setTitle(R.string.banktitle);
+                bankDialog.setItems(bankName, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        accNumEnterDialog accNumEnterDialog = new accNumEnterDialog(bankName[i]);
+                       // accNumEnterDialog.setBankName(bankName[i]);
+                        accNumEnterDialog.show(getSupportFragmentManager(),"Account Number Dialog");
+                    }
+                });
+                bankDialog.show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    public void storeToDatabase(String bank, String accountNum) {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("AccountNumber").child(FirebaseAuth.getInstance().getUid());
+        mDatabase.child(bank).child("AccountNumber").setValue(accountNum);
+        Toast.makeText(this, "Account Number added successfully.", Toast.LENGTH_SHORT).show();
+        addBankAccount();
     }
 
     @Override
