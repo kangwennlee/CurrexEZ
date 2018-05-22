@@ -1,7 +1,9 @@
 package com.example.kangwenn.currexez;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,6 +25,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +37,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.kangwenn.currexez.Entity.Purchase;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -49,7 +54,10 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -62,6 +70,10 @@ public class MainActivity extends AppCompatActivity
     String apiKey;
     private DatabaseReference mReference;
     private FirebaseAnalytics mFirebaseAnalytics;
+
+    String todaydate;
+    Date dateToday;
+    Date collectionDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +107,8 @@ public class MainActivity extends AppCompatActivity
         if (!date.equals(sharedPref.getString("date", null))) {
             retrieveCurrencyRates();
         }
+
+        setNotificationAlarm();
     }
 
     protected void retrieveCurrencyRates() {
@@ -126,6 +140,8 @@ public class MainActivity extends AppCompatActivity
             }
         });
         requestQueue.add(jsonObjectRequest);
+
+
     }
 
     @Override
@@ -305,4 +321,57 @@ public class MainActivity extends AppCompatActivity
         super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
     }
 
+    public void setNotificationAlarm(){
+        final AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("PurchaseHistory");
+        FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+        String userID = mCurrentUser.getUid();
+        DatabaseReference currentUser = databaseReference.child(userID);
+        final ArrayList<Purchase> arrayList = new ArrayList<>();
+        final ArrayList<Date> dateList = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy", Locale.US);
+        todaydate = sdf.format(new Date());
+
+        try {
+            dateToday = new SimpleDateFormat("dd/MM/yy").parse(todaydate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        currentUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    for (DataSnapshot ds1 : ds.getChildren()) {
+                        int i = 0;
+                        Purchase purchase = ds1.getValue(Purchase.class);
+                        try {
+                            collectionDate = new SimpleDateFormat("dd/MM/yy").parse(purchase.getCollectionDate());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        long t = System.currentTimeMillis();
+
+                        if (dateToday.before(collectionDate) || dateToday.equals(collectionDate)) {
+                            arrayList.add(purchase);
+                            dateList.add(collectionDate);
+                            long test = dateList.get(i).getTime();
+                            if (t <= dateList.get(i).getTime()){ // to check whether the notification have display before.
+                                Intent intent = new Intent(getApplicationContext(),notificationReceiver.class);
+                                PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),100,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+                                alarmManager.set(AlarmManager.RTC_WAKEUP,dateList.get(i).getTime(),pendingIntent);
+                                i++;
+                            }
+
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

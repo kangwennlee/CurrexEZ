@@ -250,6 +250,7 @@ public class HomepageFragment extends Fragment {
                         if (dateToday.before(collectionDate) || dateToday.equals(collectionDate)) {
                             arrayList.add(values);
                         }
+
                     }
                 }
                 adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, arrayList);
