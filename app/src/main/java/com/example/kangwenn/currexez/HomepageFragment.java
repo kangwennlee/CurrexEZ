@@ -30,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,6 +57,7 @@ public class HomepageFragment extends Fragment {
     ArrayAdapter<String> adapter;
     ListView homeListView;
     String todaydate;
+    Date dateToday;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -209,6 +211,7 @@ public class HomepageFragment extends Fragment {
         return v;
     }
 
+    //Need check for the date update
     protected void populateListView() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("PurchaseHistory");
         FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -217,6 +220,12 @@ public class HomepageFragment extends Fragment {
         final ArrayList<String> arrayList = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy", Locale.US);
         todaydate = sdf.format(new Date());
+
+        try {
+            dateToday = new SimpleDateFormat("dd/MM/yy").parse(todaydate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         currentUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -231,7 +240,14 @@ public class HomepageFragment extends Fragment {
                                 + "\n" + ds.getKey() + " Amount : " + round(purchase.getAmount(), 2)
                                 + "\nCollection Date : " + purchase.getCollectionDate()
                                 + "\nCollection Location: " + purchase.getCollectionLocation();
-                        if (todaydate.compareTo(purchase.getCollectionDate()) <= 0) {
+
+                        Date collectionDate = dateToday; // to prevent using null to initialize the date variable
+                        try {
+                            collectionDate = new SimpleDateFormat("dd/MM/yy").parse(purchase.getCollectionDate());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        if (dateToday.before(collectionDate) || dateToday.equals(collectionDate)) {
                             arrayList.add(values);
                         }
                     }
