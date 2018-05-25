@@ -32,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,7 +50,6 @@ public class PurchaseHistory2 extends AppCompatActivity {
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private FirebaseAnalytics mFirebaseAnalytics;
-
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -134,6 +134,7 @@ public class PurchaseHistory2 extends AppCompatActivity {
         private ArrayList<String> arrayListPast, arrayListUpcoming, arrayListView1, arrayListView2;
         private ArrayAdapter<String> adapterPast, adapterUpcoming;
         private ListView listView;
+        private Date dateToday;
 
         public PlaceholderFragment() {
         }
@@ -174,6 +175,11 @@ public class PurchaseHistory2 extends AppCompatActivity {
             arrayListView2 = new ArrayList<>();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy", Locale.US);
             todaydate = sdf.format(new Date());
+            try{
+                dateToday = new SimpleDateFormat("dd/MM/yy").parse(todaydate);
+            }catch (ParseException e){
+                e.printStackTrace();
+            }
             sharedPref = getContext().getSharedPreferences("com.example.kangwenn.RATES", Context.MODE_PRIVATE);
             final String nationality = sharedPref.getString("nationality", null);
             currentUser.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -245,13 +251,18 @@ public class PurchaseHistory2 extends AppCompatActivity {
                                             + "\nCollection Location: " + purchase.getCollectionLocation();
                                 }
                             }
-
-                            if (todaydate.compareTo(purchase.getCollectionDate()) > 0) {
-                                arrayListPast.add(values);
-                                arrayListView1.add(value);
-                            } else {
+                            Date collectionDate = dateToday; // to prevent using null to initialize the date variable
+                            try{
+                                collectionDate = new SimpleDateFormat("dd/MM/yy").parse(purchase.getCollectionDate());
+                            }catch (ParseException e){
+                                e.printStackTrace();
+                            }
+                            if (dateToday.before(collectionDate) || dateToday.equals(collectionDate)) {
                                 arrayListUpcoming.add(values);
                                 arrayListView2.add(value);
+                            } else {
+                                arrayListPast.add(values);
+                                arrayListView1.add(value);
                             }
                         }
                         adapterPast = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, arrayListView1);

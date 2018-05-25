@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.kangwenn.currexez">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -63,7 +64,13 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="eb25c5c70eb677120f8140f0f730158908ccd8c4" />
-
+        <meta-data
+            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+            android:value="text,barcode" />
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="portrait"
+            tools:replace="screenOrientation" />
         <activity
             android:name=".PurchaseHistory2"
             android:label="@string/title_activity_purchase_history2"
@@ -88,13 +95,17 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".ScanQR"></activity>
-        
-        <receiver android:name=".notificationReceiver" android:enabled="true">
+        <activity android:name=".ScanQR" />
+
+        <receiver
+            android:name=".notificationReceiver"
+            android:enabled="true">
             <intent-filter>
                 <action android:name="NOTIFICATION_SERVICE" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".QRPage"></activity>
     </application>
 
 </manifest>

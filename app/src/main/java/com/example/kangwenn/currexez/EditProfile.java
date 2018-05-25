@@ -1,5 +1,6 @@
 package com.example.kangwenn.currexez;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -9,16 +10,25 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.SparseIntArray;
 import android.view.MenuItem;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -36,6 +46,7 @@ import com.crashlytics.android.answers.ContentViewEvent;
 import com.example.kangwenn.currexez.Entity.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,6 +55,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata;
+import com.google.firebase.ml.vision.text.FirebaseVisionText;
+import com.google.firebase.ml.vision.text.FirebaseVisionTextDetector;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
@@ -56,6 +72,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 
 import io.fabric.sdk.android.Fabric;
@@ -77,6 +95,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     private EditText etName,etPhoneNum,etAddress,etPassport,etBirthday;
     private Spinner spNation;
     private String spValue;
+    List<String> textBlocks;
     private Button btnConfirm, btnPhoto;
     private ProgressDialog progressDialog;
     // Firebase var
@@ -108,6 +127,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         firebaseAuth = FirebaseAuth.getInstance();
         databaseUser = FirebaseDatabase.getInstance().getReference("User");
         currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        textBlocks = new LinkedList<>();
 
         //find the EditText view component
         etName = findViewById(R.id.etName);
@@ -170,7 +190,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         //find the Button view component
         btnConfirm =  findViewById(R.id.btnConfirm);
         btnConfirm.setOnClickListener(this);
-
+        //btnConfirm.setEnabled(false);
         btnPhoto = findViewById(R.id.buttonICPhoto);
         btnPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -268,7 +288,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        FirebaseVisionImage image = null;
         if (requestCode == GALLERY_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
             setImage(data.getData());
         } else if (requestCode == CAMERA_IMAGE_REQUEST && resultCode == RESULT_OK) {
@@ -303,8 +323,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                         scaleBitmapDown(
                                 MediaStore.Images.Media.getBitmap(getContentResolver(), uri),
                                 MAX_DIMENSION);
-
                 //callCloudVision(bitmap);
+                runTextRecognition(bitmap);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 icData = baos.toByteArray();
@@ -318,6 +338,104 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
             Log.d(TAG, "Image picker gave us a null image.");
             Toast.makeText(this, "Image picker error", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
+    static {
+        ORIENTATIONS.append(Surface.ROTATION_0, 90);
+        ORIENTATIONS.append(Surface.ROTATION_90, 0);
+        ORIENTATIONS.append(Surface.ROTATION_180, 270);
+        ORIENTATIONS.append(Surface.ROTATION_270, 180);
+    }
+
+    /**
+     * Get the angle by which an image must be rotated given the device's current
+     * orientation.
+     */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private int getRotationCompensation(String cameraId, Activity activity, Context context)
+            throws CameraAccessException {
+        // Get the device's current rotation relative to its "native" orientation.
+        // Then, from the ORIENTATIONS table, look up the angle the image must be
+        // rotated to compensate for the device's rotation.
+        int deviceRotation = activity.getWindowManager().getDefaultDisplay().getRotation();
+        int rotationCompensation = ORIENTATIONS.get(deviceRotation);
+
+        // On most devices, the sensor orientation is 90 degrees, but for some
+        // devices it is 270 degrees. For devices with a sensor orientation of
+        // 270, rotate the image an additional 180 ((270 + 270) % 360) degrees.
+        CameraManager cameraManager = (CameraManager) context.getSystemService(CAMERA_SERVICE);
+        int sensorOrientation = 0;
+        try {
+            sensorOrientation = cameraManager
+                    .getCameraCharacteristics(cameraId)
+                    .get(CameraCharacteristics.SENSOR_ORIENTATION);
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+        rotationCompensation = (rotationCompensation + sensorOrientation + 270) % 360;
+
+        // Return the corresponding FirebaseVisionImageMetadata rotation value.
+        int result;
+        switch (rotationCompensation) {
+            case 0:
+                result = FirebaseVisionImageMetadata.ROTATION_0;
+                break;
+            case 90:
+                result = FirebaseVisionImageMetadata.ROTATION_90;
+                break;
+            case 180:
+                result = FirebaseVisionImageMetadata.ROTATION_180;
+                break;
+            case 270:
+                result = FirebaseVisionImageMetadata.ROTATION_270;
+                break;
+            default:
+                result = FirebaseVisionImageMetadata.ROTATION_0;
+                Log.e(TAG, "Bad rotation value: " + rotationCompensation);
+        }
+        return result;
+    }
+
+    private void runTextRecognition(Bitmap bitmap){
+        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
+        FirebaseVisionTextDetector detector = FirebaseVision.getInstance()
+                .getVisionTextDetector();
+        Task<FirebaseVisionText> result =
+                detector.detectInImage(image)
+                        .addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
+                            @Override
+                            public void onSuccess(FirebaseVisionText firebaseVisionText) {
+                                // Task completed successfully
+                                // ...
+                                processTextRecognitionResult(firebaseVisionText);
+                            }
+                        })
+                        .addOnFailureListener(
+                                new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        // Task failed with an exception
+                                        // ...
+                                    }
+                                });
+
+    }
+
+    private void processTextRecognitionResult(FirebaseVisionText texts) {
+        List<FirebaseVisionText.Block> blocks = texts.getBlocks();
+        if ( blocks.size()==0 ){
+            Toast.makeText(getApplicationContext(),"No Text", Toast.LENGTH_SHORT).show();
+        }
+
+        for (FirebaseVisionText.Block block: blocks) {
+            String text = block.getText();
+            textBlocks.add(block.getText());
+            if(text.matches("\\d{6,6}-\\d{2,2}-\\d{4,4}")){
+                Toast.makeText(getApplicationContext(),text, Toast.LENGTH_SHORT).show();
+            }
+        }
+        FirebaseDatabase.getInstance().getReference("Text").child(currentFirebaseUser.getUid()).setValue(textBlocks);
     }
 
     private Bitmap scaleBitmapDown(Bitmap bitmap, int maxDimension) {

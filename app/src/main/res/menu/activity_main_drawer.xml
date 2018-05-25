@@ -38,6 +38,10 @@
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_menu_logout"
                 android:title="@string/Logout" />
+            <item
+                android:id="@+id/nav_QR"
+                android:icon="@drawable/bt_ic_camera"
+                android:title="Scan QR"/>
         </menu>
     </item>
 

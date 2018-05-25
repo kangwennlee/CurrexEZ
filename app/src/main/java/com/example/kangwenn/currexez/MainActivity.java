@@ -1,5 +1,6 @@
 package com.example.kangwenn.currexez;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -50,6 +51,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity
     String todaydate;
     Date dateToday;
     Date collectionDate;
+    Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +85,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        activity = this;
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -250,6 +254,10 @@ public class MainActivity extends AppCompatActivity
             startActivity(i);
         } else if (id == R.id.nav_changeLanguage) {
             showDialogForLanguage();
+        }else if(id == R.id.nav_QR) {
+            IntentIntegrator integrator = new IntentIntegrator(activity);
+            integrator.setOrientationLocked(true);
+            integrator.initiateScan();
         }else if (id == R.id.nav_logout) {
             AuthUI.getInstance()
                     .signOut(this)
@@ -284,6 +292,26 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                //Scan cancelled
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                //Scan successful
+                //Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), QRPage.class);
+                intent.putExtra("product", result.getContents());
+                startActivity(intent);
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     public void showDialogForLanguage(){
