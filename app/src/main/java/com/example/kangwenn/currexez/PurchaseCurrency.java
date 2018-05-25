@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -201,7 +202,7 @@ public class PurchaseCurrency extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth -1 ); // minus 1 because the updateLabel function will add one
                 updateLabel();
             }
 
@@ -409,8 +410,10 @@ public class PurchaseCurrency extends AppCompatActivity {
     private void updateLabel() {
         String myFormat = "dd/MM/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        myCalendar.add(Calendar.DATE, 1);
+        myCalendar.add(Calendar.DATE, 1); // add one day because today date can't make deal
         editTextDate.setText(sdf.format(myCalendar.getTime()));
+
+        //Log.d(TAG, editTextDate.getText().toString());
     }
 
     @Override
