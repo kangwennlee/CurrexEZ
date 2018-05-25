@@ -16,8 +16,8 @@ android {
         applicationId "com.example.kangwenn.currexez"
         minSdkVersion 23
         targetSdkVersion 27
-        versionCode 8
-        versionName "beta-1.6.8"
+        versionCode 9
+        versionName "1.0.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
