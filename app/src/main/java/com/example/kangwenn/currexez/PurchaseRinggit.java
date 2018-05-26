@@ -55,7 +55,7 @@ public class PurchaseRinggit extends AppCompatActivity {
     String[] currencyName = {"USD", "EUR", "AUD", "GBP", "SGD", "CNY", "THB", "JPY", "KRW", "HKD", "TWD"};
     String[] currName = new String[currencyName.length];
     Spinner spinnerSelectCurr;
-    EditText editTextPurAmount, editTextDate, editTextLocation;
+    EditText editTextPurAmount, editTextDate;
     TextView textViewTotal, textViewName;
     Button buttonProceed;
     Double total;
@@ -64,6 +64,7 @@ public class PurchaseRinggit extends AppCompatActivity {
     private FirebaseAnalytics mFirebaseAnalytics;
     private DatabaseReference databaseUser;
     private FirebaseUser currentFirebaseUser;
+    private Spinner spinnerCollectLocation;
 
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
@@ -84,7 +85,8 @@ public class PurchaseRinggit extends AppCompatActivity {
         textViewName = findViewById(R.id.textViewCurrency);
         buttonProceed = findViewById(R.id.buttonProceed);
         editTextDate = findViewById(R.id.editTextCollectionDate);
-        editTextLocation = findViewById(R.id.editTextCollectionLocation);
+        //editTextLocation = findViewById(R.id.editTextCollectionLocation);
+        spinnerCollectLocation = findViewById(R.id.spinnerCollectLocation);
         //set return button
         getSupportActionBar().setTitle("Purchase Ringgit");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -182,7 +184,7 @@ public class PurchaseRinggit extends AppCompatActivity {
         buttonProceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (editTextLocation.getText().toString().isEmpty() || editTextDate.getText().toString().isEmpty() || editTextPurAmount.getText().toString().isEmpty()) {
+                if (editTextDate.getText().toString().isEmpty() || editTextPurAmount.getText().toString().isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please Complete the form!", Toast.LENGTH_LONG).show();
                 } else {
                     fingerAuth();
@@ -190,6 +192,14 @@ public class PurchaseRinggit extends AppCompatActivity {
             }
         });
         buttonProceed.setEnabled(false);
+
+        final String[] location = getResources().getStringArray(R.array.location);
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, location);
+        adapter1.setDropDownViewResource(R.layout.spinner_item);
+
+        spinnerCollectLocation.setAdapter(adapter1);
+        Intent arrayrIntent = getIntent();
+        spinnerSelectCurr.setSelection(arrayrIntent.getIntExtra("location",0));
     }
 
     private void fingerAuth() {
@@ -321,7 +331,7 @@ public class PurchaseRinggit extends AppCompatActivity {
         Double purchaseAmount = Double.parseDouble(editTextPurAmount.getText().toString());
         Double purchaseAmountInRM = total;
         String collectionDate = editTextDate.getText().toString();
-        String collectionLoc = editTextLocation.getText().toString();
+        String collectionLoc = spinnerCollectLocation.getSelectedItem().toString();
 
         databaseUser = FirebaseDatabase.getInstance().getReference("PurchaseHistory");
         currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();

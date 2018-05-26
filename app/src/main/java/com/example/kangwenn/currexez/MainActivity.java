@@ -64,6 +64,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, HomepageFragment.OnFragmentInteractionListener {
@@ -86,7 +88,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         activity = this;
-        FloatingActionButton fab = findViewById(R.id.fab);
+        /*FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,7 +96,31 @@ public class MainActivity extends AppCompatActivity
                 startActivity(i);
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
+        });*/
+
+        FloatingActionsMenu menu = (FloatingActionsMenu) findViewById(R.id.floatingBtnMenu);
+
+        final com.getbase.floatingactionbutton.FloatingActionButton purchase =
+                (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.action_purchase);
+        purchase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), PurchaseCurrency.class);
+                startActivity(i);
+            }
         });
+
+        final com.getbase.floatingactionbutton.FloatingActionButton sell =
+                (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.action_sell);
+        sell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), SellCurrency.class);
+                startActivity(i);
+            }
+        });
+
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -14,6 +16,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -68,7 +71,7 @@ public class PurchaseCurrency extends AppCompatActivity {
     String[] currencyName = {"USD", "EUR", "AUD", "GBP", "SGD", "CNY", "THB", "JPY", "KRW", "HKD", "TWD"};
     String[] currName = new String[currencyName.length];
     Spinner spinnerSelectCurr;
-    EditText editTextPurAmount,editTextDate,editTextLocation;
+    EditText editTextPurAmount,editTextDate;
     TextView textViewTotal, textViewName, textViewCard;
     Button buttonProceed;
     RadioButton radioButtonCredit, radioButtonOnline;
@@ -83,6 +86,8 @@ public class PurchaseCurrency extends AppCompatActivity {
 
     private DatabaseReference databaseUser;
     private FirebaseUser currentFirebaseUser;
+
+    private Spinner spinnerCollectLocation;
 
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
@@ -112,7 +117,8 @@ public class PurchaseCurrency extends AppCompatActivity {
         radioButtonOnline = findViewById(R.id.radioButtonOnline);
         radioGroup = findViewById(R.id.radioGroupMethod);
         editTextDate = findViewById(R.id.editTextCollectionDate);
-        editTextLocation = findViewById(R.id.editTextCollectionLocation);
+        //editTextLocation = findViewById(R.id.editTextCollectionLocation);
+        spinnerCollectLocation = findViewById(R.id.spinnerCollectLocation);
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         initialize();
@@ -226,15 +232,20 @@ public class PurchaseCurrency extends AppCompatActivity {
         buttonProceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!editTextDate.getText().toString().isEmpty() && !editTextLocation.getText().toString().isEmpty()) {
+                if (!editTextDate.getText().toString().isEmpty() && spinnerCollectLocation.getSelectedItemPosition() != 0) {
                     fingerAuth();
-                } else {
-                    if (editTextLocation.getText().toString().isEmpty()) {
-                        Toast.makeText(getApplicationContext(), "Please fill in location.", Toast.LENGTH_SHORT).show();
-                    }
                 }
             }
         });
+
+        final String[] location = getResources().getStringArray(R.array.location);
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, location);
+        adapter1.setDropDownViewResource(R.layout.spinner_item);
+
+        spinnerCollectLocation.setAdapter(adapter1);
+        Intent arrayrIntent = getIntent();
+        spinnerSelectCurr.setSelection(arrayrIntent.getIntExtra("location",0));
+
     }
 
     private void pickCard() {
@@ -275,6 +286,9 @@ public class PurchaseCurrency extends AppCompatActivity {
 
             }
         });
+
+
+
     }
 
     private void fingerAuth() {
@@ -357,7 +371,7 @@ public class PurchaseCurrency extends AppCompatActivity {
         String selectRadioButtonValue = radioButton.getText().toString();
 
         String collectionDate = editTextDate.getText().toString();
-        String collectionLoc = editTextLocation.getText().toString();
+        String collectionLoc = spinnerCollectLocation.getSelectedItem().toString();
 
         databaseUser = FirebaseDatabase.getInstance().getReference("PurchaseHistory");
         currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();

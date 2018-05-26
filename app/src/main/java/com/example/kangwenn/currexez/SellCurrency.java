@@ -57,7 +57,7 @@ public class SellCurrency extends AppCompatActivity implements accNumEnterDialog
     String[] currencyName = {"USD", "EUR", "AUD", "GBP", "SGD", "CNY", "THB", "JPY", "KRW", "HKD", "TWD"};
     String[] currName = new String[currencyName.length];
     Spinner spinnerSelectCurr;
-    EditText editTextSellAmount, editTextDate, editTextLocation;
+    EditText editTextSellAmount, editTextDate;
     TextView textViewTotal, textViewName, textViewCard;
     Button buttonProceed;
     RadioButton radioButtonOnline;
@@ -68,6 +68,8 @@ public class SellCurrency extends AppCompatActivity implements accNumEnterDialog
     private FirebaseAnalytics mFirebaseAnalytics;
     private DatabaseReference databaseUser;
     private FirebaseUser currentFirebaseUser;
+
+    private Spinner spinnerCollectLocation;
 
     String[] bankName = {"MayBank","Public Bank", "AmBank","HSBC", "CIMB"};
 
@@ -92,9 +94,10 @@ public class SellCurrency extends AppCompatActivity implements accNumEnterDialog
         radioButtonOnline = findViewById(R.id.radioButtonOnline);
         radioGroup = findViewById(R.id.radioGroupMethod);
         editTextDate = findViewById(R.id.editTextCollectionDate);
-        editTextLocation = findViewById(R.id.editTextCollectionLocation);
+        //editTextLocation = findViewById(R.id.editTextCollectionLocation);
         textViewCard = findViewById(R.id.textViewCreditSelected);
         progressDialog = new ProgressDialog(this);
+        spinnerCollectLocation = findViewById(R.id.spinnerCollectLocation);
         //
         getSupportActionBar().setTitle("Sell Currency");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -202,7 +205,7 @@ public class SellCurrency extends AppCompatActivity implements accNumEnterDialog
         buttonProceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (editTextLocation.getText().toString().isEmpty() || editTextDate.getText().toString().isEmpty() || editTextSellAmount.getText().toString().isEmpty()) {
+                if (editTextDate.getText().toString().isEmpty() || editTextSellAmount.getText().toString().isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please Complete the form!", Toast.LENGTH_LONG).show();
                 } else {
                     fingerAuth();
@@ -210,6 +213,15 @@ public class SellCurrency extends AppCompatActivity implements accNumEnterDialog
             }
         });
         buttonProceed.setEnabled(false);
+
+        final String[] location = getResources().getStringArray(R.array.location);
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, location);
+        adapter1.setDropDownViewResource(R.layout.spinner_item);
+
+        spinnerCollectLocation.setAdapter(adapter1);
+        Intent arrayrIntent = getIntent();
+        spinnerSelectCurr.setSelection(arrayrIntent.getIntExtra("location",0));
+
     }
 
     private void fingerAuth() {
@@ -417,7 +429,7 @@ public class SellCurrency extends AppCompatActivity implements accNumEnterDialog
         String selectRadioButtonValue = radioButton.getText().toString();
 
         String collectionDate = editTextDate.getText().toString();
-        String collectionLoc = editTextLocation.getText().toString();
+        String collectionLoc = spinnerCollectLocation.getSelectedItem().toString();
 
         databaseUser = FirebaseDatabase.getInstance().getReference("PurchaseHistory");
         currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();

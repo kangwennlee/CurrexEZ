@@ -79,5 +79,8 @@ dependencies {
     }
     //Fingerprint API
     implementation 'com.github.JesusM:FingerprintManager:v2.0.2'
+
+    //Floating action button
+    implementation 'com.getbase:floatingactionbutton:1.10.1'
 }
 apply plugin: 'com.google.gms.google-services'
