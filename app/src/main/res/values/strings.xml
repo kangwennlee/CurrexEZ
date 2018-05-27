@@ -221,5 +221,6 @@
         <item>KLIA2</item>
         <item>KLCC</item>
     </string-array>
+    <string name="title_activity_maps">Map</string>
 
 </resources>

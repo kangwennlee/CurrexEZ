@@ -181,7 +181,7 @@ public class HomepageFragment extends Fragment {
         mProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getContext(), UserProfile.class);
+                Intent i = new Intent(getContext(), MapsActivity.class);
                 startActivity(i);
             }
         });
