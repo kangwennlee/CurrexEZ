@@ -52,7 +52,7 @@ public class HomepageFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    ImageButton mRate, mCalculator, mPurchase, mHotel, mHistory, mProfile, mFlight, mSell;
+    ImageButton mRate, mCalculator, mPurchase, mHotel, mHistory, mFindLocation, mFlight, mSell;
     TextView currencyScroll;
     ArrayAdapter<String> adapter;
     ListView homeListView;
@@ -118,7 +118,7 @@ public class HomepageFragment extends Fragment {
         mPurchase = v.findViewById(R.id.imageButtonPurchase);
         mHotel = v.findViewById(R.id.imageButtonHotel);
         mHistory= v.findViewById(R.id.imageButtonHistory);
-        mProfile= v.findViewById(R.id.imageButtonProfile);
+        mFindLocation= v.findViewById(R.id.imageButtonLocation);
         mFlight = v.findViewById(R.id.imageButtonFlight);
         mSell = v.findViewById(R.id.imageButtonSell);
         homeListView = v.findViewById(R.id.homeListView);
@@ -178,7 +178,7 @@ public class HomepageFragment extends Fragment {
                 startActivity(i);
             }
         });
-        mProfile.setOnClickListener(new View.OnClickListener() {
+        mFindLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), MapsActivity.class);

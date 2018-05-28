@@ -226,10 +226,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                //When user click the marker, get the result of place and assign to static var
-                Common.currentResult = currentPlace.getResults()[Integer.parseInt(marker.getSnippet())];
-                //Start new activity
-                startActivity(new Intent(MapsActivity.this,ViewPlace.class));
+                try{
+                    //When user click the marker, get the result of place and assign to static var
+                    Common.currentResult = currentPlace.getResults()[Integer.parseInt(marker.getSnippet())];
+                    //Start new activity
+                    startActivity(new Intent(MapsActivity.this,ViewPlace.class));
+
+                }catch (Exception e){
+                    //e.printStackTrace();
+                    LatLng latLng = new LatLng(latitude,longitude);
+                    MarkerOptions markerOptions = new MarkerOptions()
+                            .position(latLng)
+                            .title("your position")
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                    mMap.addMarker(markerOptions);
+
+                }
+
                 return true;
             }
         });

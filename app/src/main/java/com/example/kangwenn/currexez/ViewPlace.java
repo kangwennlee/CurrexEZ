@@ -69,7 +69,8 @@ public class ViewPlace extends AppCompatActivity {
 
         //opening hours
         if (Common.currentResult.getOpening_hours() != null){
-            opening_hours.setText("Open now : " + Common.currentResult.getOpening_hours().getOpen_now());
+            if (Common.currentResult.getOpening_hours().getOpen_now().equals("true"))
+            opening_hours.setText("Now Opening");
         }else {
             opening_hours.setVisibility(View.GONE);
         }

@@ -35,7 +35,7 @@ public class CurrencyRates extends AppCompatActivity {
         setContentView(R.layout.activity_currency_rates);
         Fabric.with(this, new Answers(), new Crashlytics());
         //setTitle("Today's Rate");
-        getSupportActionBar().setTitle("Today's Rate");
+        getSupportActionBar().setTitle(R.string.todayRate);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         listView = findViewById(R.id.currencyList);

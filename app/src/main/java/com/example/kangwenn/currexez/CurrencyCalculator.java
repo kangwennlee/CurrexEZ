@@ -51,7 +51,7 @@ public class CurrencyCalculator extends AppCompatActivity {
         setContentView(R.layout.activity_currency_calculator);
         Fabric.with(this, new Answers(), new Crashlytics());
         //setTitle("Rate Conversion");
-        getSupportActionBar().setTitle("Rate Conversion");
+        getSupportActionBar().setTitle(R.string.RateConversion);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         // Obtain the FirebaseAnalytics instance.

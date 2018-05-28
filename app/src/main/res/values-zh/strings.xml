@@ -200,6 +200,7 @@
     <string name="SellCurrency">卖货币</string>
     <string name="BrowseFlight">浏览航班</string>
     <string name="Browsehotel">浏览酒店</string>
+    <string name="Location">发现旅游胜地</string>
 
     <!--For Language change-->
     <string name="dialogTitle">选择你的语言</string>
@@ -207,5 +208,9 @@
         <item>英文</item>
         <item>中文</item>
     </string-array>
+
+    <!--title-->
+    <string name="todayRate">今日利率</string>
+    <string name="RateConversion">汇率转换</string>
 
 </resources>

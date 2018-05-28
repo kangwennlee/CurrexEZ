@@ -191,6 +191,9 @@
     <string name="noTransfer">No</string>
     <string name="hintforAccNumEnter">Account Number</string>
     <string name="chargeNotice">A cancellation fee of 8% of the total amount will be charged if you do not deposit the currency on the collection date.</string>
+    <string name="selectacurrencytoconvertto">Select a currency to convert to</string>
+
+    <string name="Selectcurrencytopaywith">Select currency to pay with</string>
 
     <!-- for drawable-->
     <string name="CurrencyRates">Currency Rates</string>
@@ -203,6 +206,7 @@
     <string name="SellCurrency">Sell Currency</string>
     <string name="BrowseFlight">Browse Flight</string>
     <string name="Browsehotel">Browse Hotel</string>
+    <string name="Location">Find Near Place</string>
 
     <!--For Language change-->
     <string name="dialogTitle">Change Your Language</string>
@@ -215,7 +219,7 @@
     <string name="FloatingBtnpurchaseCurrency">Purchase Currency</string>
     <string name="FloatingBtnsellCurrency">Sell Currency</string>
 
-    //Location select
+    <!--Location select-->
     <string-array name="location">
         <item>KLIA</item>
         <item>KLIA2</item>
@@ -223,4 +227,7 @@
     </string-array>
     <string name="title_activity_maps">Map</string>
 
+    <!--title-->
+    <string name="todayRate">Today's Rate</string>
+    <string name="RateConversion">Rate Conversion</string>
 </resources>

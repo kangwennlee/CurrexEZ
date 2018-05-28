@@ -189,17 +189,17 @@
             android:orientation="vertical">
 
             <ImageButton
-                android:id="@+id/imageButtonProfile"
+                android:id="@+id/imageButtonLocation"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@color/zxing_transparent"
-                android:src="@drawable/ic_person_black_24dp" />
+                android:src="@drawable/ic_location_on_black_24dp" />
 
             <TextView
                 android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="19dp"
-                android:text="@string/MyProfile"
+                android:text="@string/Location"
                 android:textStyle="bold"
                 tools:layout_editor_absoluteX="55dp" />
         </LinearLayout>
