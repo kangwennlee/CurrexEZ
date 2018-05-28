@@ -1,8 +1,11 @@
 package com.example.kangwenn.currexez;
 
+import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
+import android.provider.Telephony;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -11,6 +14,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.kangwenn.currexez.MapModel.Common;
 import com.example.kangwenn.currexez.MapModel.IGoogleAPIService;
@@ -41,12 +45,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
 
+    BottomNavigationView bottomNavigationView;
+
     private double longitude, latitude;
     private Location mLastLocation;
     private Marker mMarker;
     private LocationRequest mLocationRequest;
 
     IGoogleAPIService mService;
+
+    MyPlace currentPlace;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +73,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             checkLocationPremission();
         }
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
+          @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId())
                 {
@@ -99,6 +107,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .enqueue(new Callback<MyPlace>() {
                     @Override
                     public void onResponse(Call<MyPlace> call, Response<MyPlace> response) {
+
+                        currentPlace = response.body(); // assign value for currentPlace else will clash
+
                         if (response.isSuccessful()){
                             for (int i=0; i< response.body().getResults().length;i++){
                                 MarkerOptions markerOptions = new MarkerOptions();
@@ -111,17 +122,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 markerOptions.position(latLng);
                                 markerOptions.title(placeName);
                                 if (placeType.equals("hospital"))
-                                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_local_hospital_black_24dp));
+                                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                                 else if (placeType.equals("restaurant"))
-                                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_restaurant_menu_black_24dp));
+                                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
                                 else if (placeType.equals("makert"))
-                                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_shopping_basket_black_24dp));
+                                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                                 else if (placeType.equals("scenic"))
-                                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_beach_access_black_24dp));
+                                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
                                 else
                                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
-
+                                markerOptions.snippet(String.valueOf(i));
+                                mMap.addMarker(markerOptions);
 
                                 //move camera
                                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -169,6 +181,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case MY_PERMISSION_CODE:
+
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED){
+
+                        if (mGoogleApiClient == null)
+                            buildGoogleApiClient();
+
+                        mMap.setMyLocationEnabled(true);
+                    }
+                }else {
+                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                }
+
+                break;
+        }
+    }
+
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
@@ -185,6 +219,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
+
+        mMap.setPadding(0,0,0,bottomNavigationView.getHeight());
+
+        //Event of marker click
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                //When user click the marker, get the result of place and assign to static var
+                Common.currentResult = currentPlace.getResults()[Integer.parseInt(marker.getSnippet())];
+                //Start new activity
+                startActivity(new Intent(MapsActivity.this,ViewPlace.class));
+                return true;
+            }
+        });
+
     }
 
     private synchronized void buildGoogleApiClient() {
