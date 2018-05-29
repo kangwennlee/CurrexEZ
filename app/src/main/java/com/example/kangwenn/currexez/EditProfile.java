@@ -432,7 +432,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                 text = text.replace(" ", "-");
                 etPassport.setText(text);
                 Toast.makeText(getApplicationContext(), "IC detected: IC Number: " + text, Toast.LENGTH_SHORT).show();
-            } else if (text.matches("([A-Z][a-z]*)[\\s-]([A-Z][a-z]*)[\\s-]([A-Z][a-z]*)")) {
+            } else if (text.matches("([A-Z][A-Z]*)[\\s-]([A-Z][A-Z]*)[\\s-]([A-Z][A-Z]*)")) {
                 etName.setText(text);
                 Toast.makeText(getApplicationContext(), "Name detected: Name: " + text, Toast.LENGTH_SHORT).show();
             }
