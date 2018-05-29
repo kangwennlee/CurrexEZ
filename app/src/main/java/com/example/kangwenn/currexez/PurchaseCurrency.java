@@ -232,7 +232,7 @@ public class PurchaseCurrency extends AppCompatActivity {
         buttonProceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!editTextDate.getText().toString().isEmpty() && spinnerCollectLocation.getSelectedItemPosition() != 0) {
+                if (!editTextDate.getText().toString().isEmpty()) {
                     fingerAuth();
                 }
             }
