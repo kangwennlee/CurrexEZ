@@ -432,9 +432,15 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                 text = text.replace(" ", "-");
                 etPassport.setText(text);
                 Toast.makeText(getApplicationContext(), "IC detected: IC Number: " + text, Toast.LENGTH_SHORT).show();
+                spNation.setSelection(1);
+                String dob = text.substring(0, 6);
+                myCalendar.set(Integer.parseInt(dob.substring(0, 2)), Integer.parseInt(dob.substring(2, 4)), Integer.parseInt(dob.substring(4, 6)));
+                updateLabel();
             } else if (text.matches("([A-Z][A-Z]*)[\\s-]([A-Z][A-Z]*)[\\s-]([A-Z][A-Z]*)")) {
                 etName.setText(text);
                 Toast.makeText(getApplicationContext(), "Name detected: Name: " + text, Toast.LENGTH_SHORT).show();
+            } else if (text.length() > 15) {
+                etAddress.setText(text);
             }
         }
         FirebaseDatabase.getInstance().getReference("Text").child(currentFirebaseUser.getUid()).setValue(textBlocks);
