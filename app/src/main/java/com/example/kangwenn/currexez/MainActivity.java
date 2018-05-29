@@ -81,6 +81,8 @@ public class MainActivity extends AppCompatActivity
     Date collectionDate;
     Activity activity;
 
+    String nationality;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,6 +139,8 @@ public class MainActivity extends AppCompatActivity
         if (!date.equals(sharedPref.getString("date", null))) {
             retrieveCurrencyRates();
         }
+
+        nationality = sharedPref.getString("nationality", null);
 
         setNotificationAlarm();
     }
@@ -270,8 +274,13 @@ public class MainActivity extends AppCompatActivity
             Intent i = new Intent(getApplicationContext(), CurrencyCalculator.class);
             startActivity(i);
         } else if (id == R.id.nav_purchase) {
-            Intent i = new Intent(getApplicationContext(), ScanQR.class);
-            startActivity(i);
+            if (nationality.equals("Malaysia")) {
+                Intent i = new Intent(getApplicationContext(), PurchaseCurrency.class);
+                startActivity(i);
+            } else {
+                Intent i = new Intent(getApplicationContext(), PurchaseRinggit.class);
+                startActivity(i);
+            }
         } else if (id == R.id.nav_history) {
             Intent i = new Intent(getApplicationContext(), PurchaseHistory2.class);
             startActivity(i);
