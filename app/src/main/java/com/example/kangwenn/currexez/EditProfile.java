@@ -10,8 +10,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
@@ -353,8 +351,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
      * orientation.
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private int getRotationCompensation(String cameraId, Activity activity, Context context)
-            throws CameraAccessException {
+    private int getRotationCompensation(String cameraId, Activity activity, Context context) {
         // Get the device's current rotation relative to its "native" orientation.
         // Then, from the ORIENTATIONS table, look up the angle the image must be
         // rotated to compensate for the device's rotation.
@@ -431,8 +428,13 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         for (FirebaseVisionText.Block block: blocks) {
             String text = block.getText();
             textBlocks.add(block.getText());
-            if(text.matches("\\d{6,6}-\\d{2,2}-\\d{4,4}")){
-                Toast.makeText(getApplicationContext(),text, Toast.LENGTH_SHORT).show();
+            if (text.matches("\\d{6,6}.\\d{2,2}.\\d{4,4}")) {
+                text = text.replace(" ", "-");
+                etPassport.setText(text);
+                Toast.makeText(getApplicationContext(), "IC detected: IC Number: " + text, Toast.LENGTH_SHORT).show();
+            } else if (text.matches("([A-Z][a-z]*)[\\s-]([A-Z][a-z]*)[\\s-]([A-Z][a-z]*)")) {
+                etName.setText(text);
+                Toast.makeText(getApplicationContext(), "Name detected: Name: " + text, Toast.LENGTH_SHORT).show();
             }
         }
         FirebaseDatabase.getInstance().getReference("Text").child(currentFirebaseUser.getUid()).setValue(textBlocks);

@@ -74,77 +74,77 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/functionLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_below="@+id/functionLayout1"
-        android:baselineAligned="false"
-        android:orientation="horizontal">
+    <!--<LinearLayout-->
+    <!--android:id="@+id/functionLayout2"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="80dp"-->
+    <!--android:layout_below="@+id/functionLayout1"-->
+    <!--android:baselineAligned="false"-->
+    <!--android:orientation="horizontal">-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_weight="1"-->
+    <!--android:gravity="center"-->
+    <!--android:orientation="vertical">-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/blackborder"
-                android:gravity="center"
-                android:orientation="vertical">
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:background="@drawable/blackborder"-->
+    <!--android:gravity="center"-->
+    <!--android:orientation="vertical">-->
 
-                <ImageButton
-                    android:id="@+id/imageButtonPurchase"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@color/zxing_transparent"
-                    android:src="@drawable/ic_add_shopping_cart_black_24dp" />
+    <!--<ImageButton-->
+    <!--android:id="@+id/imageButtonPurchase"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:background="@color/zxing_transparent"-->
+    <!--android:src="@drawable/ic_add_shopping_cart_black_24dp" />-->
 
-                <TextView
-                    android:id="@+id/textViewPurchaseCurrency"
-                    android:layout_width="wrap_content"
-                    android:layout_height="19dp"
-                    android:text="@string/PurchaseCurrency"
-                    android:textStyle="bold"
-                    tools:layout_editor_absoluteX="55dp" />
-            </LinearLayout>
+    <!--<TextView-->
+    <!--android:id="@+id/textViewPurchaseCurrency"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="19dp"-->
+    <!--android:text="@string/PurchaseCurrency"-->
+    <!--android:textStyle="bold"-->
+    <!--tools:layout_editor_absoluteX="55dp" />-->
+    <!--</LinearLayout>-->
 
-        </LinearLayout>
+    <!--</LinearLayout>-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/blackborder"
-            android:gravity="center"
-            android:orientation="vertical">
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@drawable/blackborder"-->
+    <!--android:gravity="center"-->
+    <!--android:orientation="vertical">-->
 
-            <ImageButton
-                android:id="@+id/imageButtonSell"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@color/zxing_transparent"
-                android:src="@drawable/ic_monetization_on_black_24dp" />
+    <!--<ImageButton-->
+    <!--android:id="@+id/imageButtonSell"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:background="@color/zxing_transparent"-->
+    <!--android:src="@drawable/ic_monetization_on_black_24dp" />-->
 
-            <TextView
-                android:id="@+id/textViewSellCurrency"
-                android:layout_width="wrap_content"
-                android:layout_height="19dp"
-                android:text="@string/SellCurrency"
-                android:textStyle="bold"
-                tools:layout_editor_absoluteX="55dp" />
-        </LinearLayout>
+    <!--<TextView-->
+    <!--android:id="@+id/textViewSellCurrency"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="19dp"-->
+    <!--android:text="@string/SellCurrency"-->
+    <!--android:textStyle="bold"-->
+    <!--tools:layout_editor_absoluteX="55dp" />-->
+    <!--</LinearLayout>-->
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/functionLayout3"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:layout_below="@+id/functionLayout2"
+        android:layout_below="@+id/functionLayout1"
         android:baselineAligned="false"
         android:orientation="horizontal">
 
@@ -285,16 +285,15 @@
         android:id="@+id/homeListView"
         android:layout_width="wrap_content"
         android:layout_height="100dp"
-        android:layout_above="@+id/adView"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/textView22" />
 
-    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/adView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        ads:adSize="SMART_BANNER"
-        ads:adUnitId="ca-app-pub-3940256099942544/6300978111" />
+    <!--<com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"-->
+    <!--android:id="@+id/adView"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--ads:adSize="SMART_BANNER"-->
+    <!--ads:adUnitId="ca-app-pub-3940256099942544/6300978111" />-->
 </RelativeLayout>
