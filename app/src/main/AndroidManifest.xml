@@ -34,7 +34,6 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -76,8 +75,7 @@
             tools:replace="screenOrientation" />
         <activity
             android:name=".PurchaseHistory2"
-            android:label="@string/title_activity_purchase_history2"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_purchase_history2" />
         <activity
             android:name=".SellCurrency"
             android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />

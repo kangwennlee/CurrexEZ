@@ -183,7 +183,7 @@
     <string name="Enteramountyouwishtosell">Enter amount you wish to sell</string>
     <string name="date">Date</string>
     <string name="location">Location</string>
-    <string name="selectdepositpaymentmethod">Deposit balance into bank?</string>
+    <string name="selectdepositpaymentmethod">Credit balance into bank?</string>
     <string name="creditCard">Credit Card</string>
     <string name="banktitle">Select Your Bank Provider</string>
     <string name="enterBankAccNum">Enter your bank account number</string>
