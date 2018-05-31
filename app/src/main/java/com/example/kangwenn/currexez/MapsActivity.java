@@ -152,7 +152,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String getUrl(double latitude, double longitude, String placeType) {
         StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         googlePlaceUrl.append("location=" + latitude + ","+ longitude);
-        googlePlaceUrl.append("&radius=" + 10000);
+        googlePlaceUrl.append("&radius=" + 50000);
         googlePlaceUrl.append("&type="+ placeType);
         googlePlaceUrl.append("&sensor=true");
         googlePlaceUrl.append("&key=" + "AIzaSyCyOmbfQGcHs4DhRv9edOrAC-FnWG8iC3c");
