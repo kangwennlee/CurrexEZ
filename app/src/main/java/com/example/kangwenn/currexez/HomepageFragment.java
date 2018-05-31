@@ -218,6 +218,7 @@ public class HomepageFragment extends Fragment {
         String userID = mCurrentUser.getUid();
         DatabaseReference currentUser = databaseReference.child(userID);
         final ArrayList<String> arrayList = new ArrayList<>();
+        final ArrayList<String> arrayList1 = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy", Locale.US);
         todaydate = sdf.format(new Date());
 
@@ -236,11 +237,28 @@ public class HomepageFragment extends Fragment {
                         //String month = ds.getKey().toString().substring(4,5);
                         //String date = ds.getKey().toString().substring(6,7);
                         String time = ds1.getKey().substring(9, 11) + ":" + ds1.getKey().substring(11, 13) + ":" + ds1.getKey().substring(12, 14);
-                        String values = "Currency : " + purchase.getCurrency()
+                        String value = "Currency : " + purchase.getCurrency()
                                 + "\n" + ds.getKey() + " Amount : " + round(purchase.getAmount(), 2)
                                 + "\nCollection Date : " + purchase.getCollectionDate()
                                 + "\nCollection Location: " + purchase.getCollectionLocation();
-
+                        String values = "";
+                        if (ds.getKey().equals("Buy")) {
+                            values = "Currency purchased: " + purchase.getCurrency()
+                                    + "\nPurchase Amount : " + round(purchase.getAmount(), 2)
+                                    + "\nPurchase Amount In MYR : " + round(purchase.getAmountInRM(), 2)
+                                    + "\nPayment Method : " + purchase.getPayMethod()
+                                    + "\nTransaction Date : " + date + " " + time
+                                    + "\nCollection Date : " + purchase.getCollectionDate()
+                                    + "\nCollection Location: " + purchase.getCollectionLocation();
+                        } else {
+                            values = "Currency sold: " + purchase.getCurrency()
+                                    + "\nSell Amount : " + round(purchase.getAmount(), 2)
+                                    + "\nSell Amount In MYR : " + round(purchase.getAmountInRM(), 2)
+                                    + "\nPayment Method : " + purchase.getPayMethod()
+                                    + "\nTransaction Date : " + date + " " + time
+                                    + "\nCollection Date : " + purchase.getCollectionDate()
+                                    + "\nCollection Location: " + purchase.getCollectionLocation();
+                        }
                         Date collectionDate = dateToday; // to prevent using null to initialize the date variable
                         try {
                             collectionDate = new SimpleDateFormat("dd/MM/yy").parse(purchase.getCollectionDate());
@@ -248,9 +266,9 @@ public class HomepageFragment extends Fragment {
                             e.printStackTrace();
                         }
                         if (dateToday.before(collectionDate) || dateToday.equals(collectionDate)) {
-                            arrayList.add(values);
+                            arrayList.add(value);
+                            arrayList1.add(values);
                         }
-
                     }
                 }
                 adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, arrayList);
@@ -259,7 +277,7 @@ public class HomepageFragment extends Fragment {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Intent intent = new Intent(getContext(), SuccessPaymentActivity.class);
-                        String string = arrayList.get(i);
+                        String string = arrayList1.get(i);
                         intent.putExtra("purchase", string);
                         startActivity(intent);
                     }
