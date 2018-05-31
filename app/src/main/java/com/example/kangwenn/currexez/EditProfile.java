@@ -434,7 +434,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                 Toast.makeText(getApplicationContext(), "IC detected: IC Number: " + text, Toast.LENGTH_SHORT).show();
                 spNation.setSelection(1);
                 String dob = text.substring(0, 6);
-                myCalendar.set(Integer.parseInt(dob.substring(0, 2)), Integer.parseInt(dob.substring(2, 4)), Integer.parseInt(dob.substring(4, 6)));
+                myCalendar.set(Integer.parseInt("19" + dob.substring(0, 2)), Integer.parseInt(dob.substring(2, 4)) - 1, Integer.parseInt(dob.substring(4, 6)));
                 updateLabel();
             } else if (text.matches("([A-Z][A-Z]*)[\\s-]([A-Z][A-Z]*)[\\s-]([A-Z][A-Z]*)")) {
                 etName.setText(text);
