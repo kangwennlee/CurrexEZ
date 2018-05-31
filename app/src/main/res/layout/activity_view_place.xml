@@ -54,6 +54,7 @@
             <RatingBar
                 android:id="@+id/ratingBar"
                 android:max="5"
+                android:isIndicator="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

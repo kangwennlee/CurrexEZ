@@ -39,6 +39,7 @@ public class ViewPlace extends AppCompatActivity {
         service = Common.getGoogleAPIService();
 
         ratingBar = findViewById(R.id.ratingBar);
+
         opening_hours = findViewById(R.id.placeOpenHour);
         place_Address = findViewById(R.id.placeAddress);
         place_Name = findViewById(R.id.placeName);

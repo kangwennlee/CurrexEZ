@@ -186,7 +186,7 @@
     <string name="selectdepositpaymentmethod">Credit balance into bank?</string>
     <string name="creditCard">Credit Card</string>
     <string name="banktitle">Select Your Bank Provider</string>
-    <string name="enterBankAccNum">Enter your bank account number</string>
+    <string name="enterBankAccNum">Enter bank account number</string>
     <string name="transferIntoBankAcc">Yes</string>
     <string name="noTransfer">No</string>
     <string name="hintforAccNumEnter">Account Number</string>

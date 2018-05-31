@@ -32,7 +32,7 @@ public class accNumEnterDialog extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.layout_bankaccountdialog, null);
 
         builder.setView(view)
-                .setTitle(R.string.enterBankAccNum + "("+bankName+")")
+                .setTitle("Enter bank account number"+ "("+bankName+")")
                 .setPositiveButton("Comfirm",new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
