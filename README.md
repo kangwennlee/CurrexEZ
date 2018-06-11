@@ -1,5 +1,7 @@
 # [CurrexEZ](https://github.com/kangwennlee/CurrexEZ)
 
+![CurrexEZ Logo](https://github.com/kangwennlee/CurrexEZ/blob/master/app/src/main/res/drawable/logo.png)
+
 CurrexEZ is an app developed by Tunku Abdul Rahman University Students for SAS Fintech Challenge 2017-2018.<br>
 Our idea is to make currency exchange easier and convenient.
 
@@ -56,4 +58,6 @@ The **Kit** we are using are:
 
 ## Automated kiosk
 We're using a raspberry pi with a webcam, 1 motor, GroovePi, 2 LEDs, 1 buzzer, 1 dot-matrix screen installed, running a script with Zxing QR reader app that reads line by line. <br>
-The motor will move when there's more than 4 lines in the QR.
+The motor will move when there's more than 4 lines in the QR. <br>
+
+:octocat:
