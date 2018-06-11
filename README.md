@@ -23,7 +23,7 @@ We code the application using Java.
 * Nearby attractions
 * QR Scanner
 
-## Feature
+## API/Library used
 ### Firebase
 We're using [Firebase](https://firebase.google.com/) to deploy our backend infrastructure. We are using:
 
