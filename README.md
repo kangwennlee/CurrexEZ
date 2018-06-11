@@ -53,3 +53,7 @@ The **Kit** we are using are:
 * [card.io](https://github.com/card-io/card.io-Android-SDK) (Scan credit card using camera)
 * [Volley](https://github.com/google/volley) (Library to handle JSON/Image file)
 * [FingerprintManager](https://github.com/JesusM/FingerprintManager) (Library for fingerprint authentication)
+
+## Automated kiosk
+We're using a raspberry pi with a webcam, 1 motor, GroovePi, 2 LEDs, 1 buzzer, 1 dot-matrix screen installed, running a script with Zxing QR reader app that reads line by line. <br>
+The motor will move when there's more than 4 lines in the QR.
