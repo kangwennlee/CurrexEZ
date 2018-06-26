@@ -12,7 +12,18 @@ Download the **master branch** to run the project.<br>
 Please make sure you have the **latest** Android Studio installed on your computer.<br>
 We code the application using Java.
 
-## User Requirements
+## Procedures to replicate this project
+### Prerequisite
+* Valid Google account (for firebase)
+* Latest Android Studio
+
+1. Install Android Studio (For more info on how to install Android Studio, please refer [here](https://developer.android.com/studio/install)).
+2. Enter Firebase [console](https://console.firebase.google.com/)
+3. Create a Firebase project and add Firebase to the project. (For more info on how to create a Firebase project, please refer [here](https://firebase.google.com/docs/android/setup)).
+4. The app's package name will be the applicationId in build.gradle file (in this case, it's com.example.kangwenn.currexez)
+5. 
+
+## Functions
 * View latest currency rates
 * Rates calculator
 * Sell currency
