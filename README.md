@@ -17,8 +17,12 @@ This project is coded using Java.
 
 ## Steps to replicate this project
 
-1. Install Android Studio (For more info on how to install Android Studio, please refer [here](https://developer.android.com/studio/install)).
-2. [Download](https://github.com/kangwennlee/CurrexEZ/archive/master.zip) and extract this project onto your Desktop.
-3. Open and run the project in Android Studio.
+1. [Download](https://github.com/kangwennlee/CurrexEZ/archive/master.zip) and extract this project onto your Desktop.
+2. Install Android Studio (For more info on how to install Android Studio, please refer [here](https://developer.android.com/studio/install)).
+3. Run Android Studio.
+4. At the homescreen, select **Open an existing Android Studio project**.
+5. Select the project folder and press OK.
+6. Wait for it to build.
+7. Run the project by selecting the Run button on top. (Make sure you have Android phone with developer options turned on or Android simulator installed in your pc)
 
 :octocat:
