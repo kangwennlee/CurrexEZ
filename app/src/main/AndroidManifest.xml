@@ -64,7 +64,7 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="eb25c5c70eb677120f8140f0f730158908ccd8c4" />
+            android:value="" />
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="text,barcode" />
