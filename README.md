@@ -33,7 +33,6 @@ This project is coded using Java.
 * The firebase SDK is already added into the project, so this step can be skipped.
 * After you add the initialization code, **run your app** to send verification to the Firebase console that you've successfully installed Firebase.
 * For more info on how to create a Firebase project, please refer [here](https://firebase.google.com/docs/android/setup).
-6. You can register the 
 
 ## Functions
 * View latest currency rates
