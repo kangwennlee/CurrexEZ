@@ -13,7 +13,6 @@ Please make sure you have the **latest** Android Studio installed on your comput
 This project is coded using Java.
 
 ### Prerequisite
-* Valid Google account (for firebase)
 * Latest Android Studio
 
 ## Steps to replicate this project
@@ -21,53 +20,5 @@ This project is coded using Java.
 1. Install Android Studio (For more info on how to install Android Studio, please refer [here](https://developer.android.com/studio/install)).
 2. [Download](https://github.com/kangwennlee/CurrexEZ/archive/master.zip) and extract this project onto your Desktop.
 3. Open and run the project in Android Studio.
-
-## Functions
-* View latest currency rates
-* Rates calculator
-* Sell currency
-* Purchase currency
-* Sell Ringgit
-* Purchase Ringgit
-* Fingerprint authentication
-* Browse flight
-* Browse hotels
-* Nearby attractions
-* QR Scanner
-
-## API/Library used
-### Firebase
-We're using [Firebase](https://firebase.google.com/) to deploy our backend infrastructure. We are using:
-
-* [Firebase UI](https://github.com/firebase/FirebaseUI-Android)
-* Firebase Authentication (login and logout using Google/Email)
-* Firebase Real-time Database (store user's transaction data, user profile)
-* Firebase Crashlytics (view app crashes, performance)
-* Firebase Storage (store user's IC photos)
-* Firebase Analytics (analyze user's data in **REAL-TIME**)
-* Firebase ML Kit (text recognition to identify words in Identity Card)
-
-### Fabrics
-We're also using [Fabric](https://fabric.io/kits) to analyse user's app data in **REAL-TIME**.
-The **Kit** we are using are:
-
-* Answers (for **REAL-TIME** analytics)
-* Beta (for internal app publishing and testing)
-
-### Google Cloud
-
-* Google Maps API (for nearby attractions and location positioning)
-
-### Third Party Open-sourced Component
-
-* [Butterknife](https://github.com/JakeWharton/butterknife) (simplify android code)
-* [Fixer](https://github.com/fixerAPI/fixer) (Currency rates API)
-* [card.io](https://github.com/card-io/card.io-Android-SDK) (Scan credit card using camera)
-* [Volley](https://github.com/google/volley) (Library to handle JSON/Image file)
-* [FingerprintManager](https://github.com/JesusM/FingerprintManager) (Library for fingerprint authentication)
-
-## Automated kiosk
-We're using a raspberry pi with a webcam, 1 motor, GroovePi, 2 LEDs, 1 buzzer, 1 dot-matrix screen installed, running a script with Zxing QR reader app that reads line by line. <br>
-The motor will move when there's more than 4 lines in the QR. <br>
 
 :octocat:
